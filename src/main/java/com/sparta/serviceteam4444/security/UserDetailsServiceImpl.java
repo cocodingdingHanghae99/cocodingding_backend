@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.sparta.serviceteam4444.user.repository.UserRepository;
-import com.sparta.serviceteam4444.user.entity.User;
+import com.sparta.serviceteam4444.repository.UserRepository;
+import com.sparta.serviceteam4444.entity.User;
 
 @Service
 @RequiredArgsConstructor
