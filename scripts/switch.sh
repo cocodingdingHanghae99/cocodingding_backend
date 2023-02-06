@@ -1,22 +1,38 @@
-#!/usr/bin/env bash
-
 # switch.sh
-# nginx 연결 설정 스위치
 
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
-source ${ABSDIR}/profile.sh
+#!/bin/bash
 
-function switch_proxy() {
-    IDLE_PORT=$(find_idle_port)
+# service_url.inc 에서 현재 서비스를 하고 있는 WAS의 포트 번호 가져오기
+CURRENT_PORT=$(cat /home/ubuntu/service_url.inc  | grep -Po '[0-9]+' | tail -1)
+TARGET_PORT=0
 
-    echo "> 전환할 Port: $IDLE_PORT"
-    echo "> Port 전환"
-    # nginx와 연결한 주소 생성
-    # | sudo tee ~ : 앞에서 넘긴 문장을 service-url.inc에 덮어씀
-    echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" | sudo tee /etc/nginx/conf.d/service-url.inc
+echo "> Nginx currently proxies to ${CURRENT_PORT}."
 
-    echo "> 엔진엑스 Reload"
-    # nignx reload. restart와는 다르게 설정 값만 불러옴
-    sudo service nginx reload
-}
+if [ ${CURRENT_PORT} -eq 8081 ]; then
+    TARGET_PORT=8082
+elif [ ${CURRENT_PORT} -eq 8082 ]; then
+    TARGET_PORT=8081
+else
+    echo "> No WAS is connected to nginx"
+    exit 1
+fi
+
+# 위 커맨드들을 통해 현재 타겟포트 가져오기
+
+# $ service_url.inc 파일을 현재 바뀐 서버의 포트로 변경
+echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/service_url.inc
+
+echo "> Now Nginx proxies to ${TARGET_PORT}."
+
+# nginx를 reload 해준다.
+sudo service nginx reload
+
+echo "> Nginx reloaded."
+
+
+# -9 SIGKILL 은 서버를 바로 종료하므로
+# -15 SIGTERM  안전 종료인 SIGTERM을 사용 이전 포트 프로세스를 제거한다.
+
+CURRENT_PID=$(lsof -Fp -i TCP:${CURRENT_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+
+sudo kill -15 ${CURRENT_PID}
