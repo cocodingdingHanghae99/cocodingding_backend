@@ -79,8 +79,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name springboot-intro \
-        --deployment-group-name springboot-intro-deploy-group \
+        --application-name cocodingding \
+        --deployment-group-name cocodingding \
         --file-exists-behavior OVERWRITE \
-        --s3-location bucket=springboot-intro-build,bundleType=zip,key=springboot-intro-build.zip \
+        --s3-location bucket=cocodingding,bundleType=zip,key=cocodingding.zip \
         --region ap-northeast-2
