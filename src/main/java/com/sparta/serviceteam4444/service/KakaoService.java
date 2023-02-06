@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.dto.ResponseDto;
 import com.sparta.serviceteam4444.entity.User;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.UserRepository;
@@ -20,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public String kakaoLogin(String code) throws JsonProcessingException {
+    public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
 
@@ -39,11 +41,11 @@ public class KakaoService {
 
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
-
-        // 4. JWT 토큰 반환
         String createToken =  jwtUtil.createToken(kakaoUser.getNickname(), kakaoUser.getRole());
+        // 4. JWT 토큰 반환
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken);
         // 토큰 던져주기
-        return createToken;
+        return new ResponseDto(kakaoUser.getNickname() + " 님 카카오 로그인 완료");
     }
     // 1. "인가 코드"로 "액세스 토큰" 요청
     private String getToken(String code) throws JsonProcessingException {
@@ -54,7 +56,7 @@ public class KakaoService {
         // HTTP Body 생성 (상세히 적자면 코드 받은 값을 가지고 http 주소로 만들어줌)
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
+        body.add("client_id", "dca78b23ee6bbb566b637457b88b9de0");
         body.add("redirect_uri", "http://localhost:8080/user/kakao");
         body.add("code", code);
 

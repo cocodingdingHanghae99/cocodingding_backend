@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,10 +34,7 @@ public class UserController {
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
     @GetMapping("/kakao")    //카카오로부터 코드 받고, 다시 전달해서
     public ResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        String createToken = kakaoService.kakaoLogin(code);
-
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
-        return new ResponseDto("카카오 로그인 완료");
+        return kakaoService.kakaoLogin(code, response);
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
     @PostMapping("/login")
