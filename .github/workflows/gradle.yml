@@ -50,19 +50,19 @@ jobs:
 
     # Jar 파일 Copy
     - name: Copy Jar
-      run: cp ./build/libs/*.jar ./deploy/
+      run: cp ./build/libs/*.jar
 
     # appspec.yml Copy
     - name: Copy appspec
-      run: cp appspec.yml ./deploy/
+      run: cp appspec.yml
 
     # script file Copy
     - name: Copy shell
-      run: cp ./scripts/* ./deploy/
+      run: cp ./scripts/*
 
     # 압축파일 형태로 전달
     - name: Make zip file
-      run: zip -r -qq -j ./cocodingding.zip ./deploy
+      run: zip -r -qq -j ./cocodingding.zip
 
     # S3 Bucket으로 copy
     - name: Deliver to AWS S3
@@ -78,9 +78,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        aws deploy create-deployment \
-        --application-name cocodingding \
-        --deployment-group-name cocodingding \
-        --file-exists-behavior OVERWRITE \
-        --s3-location bucket=cocodingding,bundleType=zip,key=cocodingding.zip \
+        aws deploy create-deployment
+        --application-name cocodingding
+        --deployment-group-name cocodingding
+        --file-exists-behavior OVERWRITE
+        --s3-location bucket=cocodingding,bundleType=zip,key=cocodingding.zip
         --region ap-northeast-2
