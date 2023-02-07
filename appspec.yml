@@ -9,6 +9,8 @@ permissions:
     pattern: "**"
     owner: ubuntu
     group: ubuntu
+    id-token: write
+    contents: read
 
 hooks:
   ApplicationStart:
