@@ -42,7 +42,7 @@ jobs:
         shell: bash
 
       - name: Make zip file
-        run: zip -r ./dodo.zip .
+        run: zip -r ./cocodingding.zip .
         shell: bash
 
       - name: Configure AWS credentials
