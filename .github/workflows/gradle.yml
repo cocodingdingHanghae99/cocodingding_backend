@@ -18,10 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
       ## application.properties 파일 생성
       - name: make application.properties
@@ -48,28 +48,24 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-
-          # S3 Bucket으로 copy
-          #    - name: Deliver to AWS S3
-          #      env:
-          #        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          #        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          #      run: |
-          #        aws s3 cp --region ap-northeast-2 ./cocodingding.zip s3://cocodingding/
 
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./cocodingding.zip s3://$S3_BUCKET_NAME/
 
       - name: Code Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run:
           aws deploy create-deployment
           --application-name cocodingding
-          --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name cocodingding
+          --file-exists-behavior OVERWRITE
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=cocodingding.zip
+          --region ap-northeast-2
 
 
 
