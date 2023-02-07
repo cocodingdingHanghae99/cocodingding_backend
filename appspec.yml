@@ -4,11 +4,11 @@ files:
   - source: /
     destination: /home/ubuntu/app
 
-#permissions:
-#  - object: /
-#    pattern: "**"
-#    owner: ubuntu
-#    group: ubuntu
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
 
 hooks:
   ApplicationStart:
