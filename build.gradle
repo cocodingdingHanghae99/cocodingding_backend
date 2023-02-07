@@ -23,8 +23,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//security
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
+	//sql
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	//유효성 검사
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 
