@@ -10,7 +10,7 @@ hooks:
       timeout: 60
       runas: ubuntu
     - location: scripts/health_check.sh
-      timeout: 90
+      timeout: 60
       runas: ubuntu
     - location: scripts/switch.sh
       timeout: 60
