@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="cocodingding" uuid="29414491-3253-44a5-9687-52a3b0239c9b">
+    <data-source source="LOCAL" name="cocodingding" uuid="5ccdcf45-8b80-4808-abd5-5e2730ebc0ad">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
