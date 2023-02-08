@@ -21,6 +21,7 @@ public class Timestamp {
 
     @LastModifiedDate
     private String modifiedAt;
+
     @PrePersist
     public void onPrePersist(){
         this.createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
