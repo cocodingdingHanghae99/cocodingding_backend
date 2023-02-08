@@ -36,6 +36,7 @@ public class Member {
 //    @CreationTimestamp
 //    private Timestamp createTime;
     //
+    //
 
     @Builder
     public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
