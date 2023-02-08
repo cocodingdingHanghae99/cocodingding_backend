@@ -39,6 +39,7 @@ public class Member {
     //
     //
     //
+    //
 
     @Builder
     public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
