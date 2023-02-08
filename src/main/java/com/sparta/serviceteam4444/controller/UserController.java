@@ -31,8 +31,8 @@ public class UserController {
         return userService.signup(signupRequestDto);
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
-    @PostMapping("/kakao")    //카카오로부터 코드 받고, 다시 전달해서
-    public ResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    @RequestMapping(value = "/kakao", method = RequestMethod.GET)    //카카오로부터 코드 받고, 다시 전달해서
+    public ResponseDto kakaoLogin(@RequestParam(value="code") String code, HttpServletResponse response) throws JsonProcessingException {
         String createToken = kakaoService.kakaoLogin(code);
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
