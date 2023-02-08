@@ -35,7 +35,5 @@ public class SwaggerConfig {
                 .version("2.0")
                 .build();
 
-
-        // 완료가 되었으면 오른쪽 URL 로 접속 => http://localhost:8080/swagger-ui.html
     }
 }
