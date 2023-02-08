@@ -1,7 +1,7 @@
 package com.sparta.serviceteam4444.security;
 
-import com.sparta.serviceteam4444.user.entity.User;
-import com.sparta.serviceteam4444.user.entity.UserRoleEnum;
+import com.sparta.serviceteam4444.entity.User;
+import com.sparta.serviceteam4444.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

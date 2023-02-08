@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import com.sparta.serviceteam4444.security.UserDetailsServiceImpl;
-import com.sparta.serviceteam4444.user.entity.UserRoleEnum;
+import com.sparta.serviceteam4444.entity.UserRoleEnum;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
