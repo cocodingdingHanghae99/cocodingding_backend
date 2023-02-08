@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+	// Gson
+	implementation 'com.google.code.gson:gson:2.8.7'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
