@@ -39,7 +39,7 @@ public class UserController {
         return new ResponseDto("카카오 로그인 완료");
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
-    @PostMapping("/login")
+    @PostMapping("/login") //제발 가야된다...
     public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
