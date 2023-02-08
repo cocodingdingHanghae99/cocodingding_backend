@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin("http://cocodingding.shop")
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
