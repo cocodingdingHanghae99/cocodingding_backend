@@ -32,9 +32,9 @@ public class Member {
     @Column
     private String userRoleTest;
 
-    @Column
-    @CreationTimestamp
-    private Timestamp createTime;
+//    @Column
+//    @CreationTimestamp
+//    private Timestamp createTime;
 
     @Builder
     public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
