@@ -3,7 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/app
-    overwrite: yes
+#    overwrite: yes
 
 permissions:
   - object: /
@@ -13,15 +13,15 @@ permissions:
 
 hooks:
   ApplicationStart:
-    - location: scripts/deploy.sh
+#    - location: scripts/deploy.sh
+#      timeout: 60
+#      runas: ubuntu
+    - location: scripts/run_new_was.sh
       timeout: 60
       runas: ubuntu
-#    - location: scripts/run_new_was.sh
-#      timeout: 60
-#      runas: ubuntu
-#    - location: scripts/health_check.sh
-#      timeout: 60
-#      runas: ubuntu
-#    - location: scripts/switch.sh
-#      timeout: 60
-#      runas: ubuntu
+    - location: scripts/health_check.sh
+      timeout: 60
+      runas: ubuntu
+    - location: scripts/switch.sh
+      timeout: 60
+      runas: ubuntu
