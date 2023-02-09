@@ -73,7 +73,8 @@ jobs:
           --application-name cocodingding
           --deployment-group-name cocodingding
           --file-exists-behavior OVERWRITE
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=cocodingding.zip
+#          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=cocodingding.zip
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
           --region ap-northeast-2
 
 
