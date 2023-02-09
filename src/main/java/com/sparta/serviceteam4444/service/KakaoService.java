@@ -65,9 +65,8 @@ public class KakaoService {
 
         RestTemplate rt = new RestTemplate();
 
-        ResponseEntity<String> response = rt.exchange(
+        ResponseEntity<String> response = rt.postForEntity(
                 "https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
         );
