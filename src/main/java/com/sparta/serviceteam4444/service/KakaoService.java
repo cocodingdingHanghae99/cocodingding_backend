@@ -90,9 +90,8 @@ public class KakaoService {
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
+        ResponseEntity<String> response = rt.postForEntity(
                 "https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST,
                 kakaoUserInfoRequest,
                 String.class
         );
