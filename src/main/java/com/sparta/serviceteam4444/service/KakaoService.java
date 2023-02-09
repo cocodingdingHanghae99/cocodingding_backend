@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.dto.ResponseDto;
 import com.sparta.serviceteam4444.entity.User;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.UserRepository;
@@ -20,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public String kakaoLogin(String code) throws JsonProcessingException {
+    public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
 
@@ -40,10 +42,9 @@ public class KakaoService {
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
-        // 4. JWT 토큰 반환
-        String createToken =  jwtUtil.createToken(kakaoUser.getNickname(), kakaoUser.getRole());
         // 토큰 던져주기
-        return createToken;
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUser.getNickname(), kakaoUser.getRole()));
+        return new ResponseDto("카카오 로그인 완료");
     }
     // 1. "인가 코드"로 "액세스 토큰" 요청
     private String getToken(String code) throws JsonProcessingException {
@@ -64,9 +65,8 @@ public class KakaoService {
 
         RestTemplate rt = new RestTemplate();
 
-        ResponseEntity<String> response = rt.exchange(
+        ResponseEntity<String> response = rt.postForEntity(
                 "https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
         );
@@ -89,9 +89,8 @@ public class KakaoService {
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
+        ResponseEntity<String> response = rt.postForEntity(
                 "https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST,
                 kakaoUserInfoRequest,
                 String.class
         );

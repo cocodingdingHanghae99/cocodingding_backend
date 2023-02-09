@@ -32,15 +32,14 @@ public class UserController {
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
     @PostMapping("/kakao")    //카카오로부터 코드 받고, 다시 전달해서
-    public ResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        String createToken = kakaoService.kakaoLogin(code);
-
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
-        return new ResponseDto("카카오 로그인 완료");
+    public ResponseDto kakaoLogin(@RequestBody SocialCodeDto codeDto, HttpServletResponse response) throws JsonProcessingException {
+        System.out.println("잘들어와집니다.");
+        return kakaoService.kakaoLogin(codeDto.getCode(), response);
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
     @PostMapping("/login") //제발 가야된다...
     public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+
         return userService.login(loginRequestDto, response);
     }
     @ApiOperation(value = "로그인 유저 이름 반환", notes = "로그인 한 유저가 메인페이지를 요청할 때 유저의 이름 반환한다.")

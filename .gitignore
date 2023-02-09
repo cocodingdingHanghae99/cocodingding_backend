@@ -1,6 +1,4 @@
 HELP.md
-application-secret.properties
-application.yml
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -20,6 +18,10 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application.properties
+
+resources
+
 .idea
 *.iws
 *.iml
@@ -37,4 +39,3 @@ out/
 
 ### VS Code ###
 .vscode/
-

@@ -19,6 +19,11 @@ repositories {
 }
 
 dependencies {
+	// gson
+	implementation 'com.google.code.gson:gson:2.8.7'
+
+//	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.3'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -33,11 +38,14 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
 	//jwt 추가
 	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
 
 	//웹소켓 추가
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -51,6 +59,15 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.22.0'
 	implementation group: 'junit', name: 'junit', version: '4.13.1'
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.webjars.bower:bootstrap:4.3.1'
+	implementation 'org.webjars.bower:vue:2.5.16'
+	implementation 'org.webjars.bower:axios:0.17.1'
+	implementation 'org.webjars:sockjs-client:1.1.2'
+	implementation 'org.webjars:stomp-websocket:2.3.3-1'
+	implementation 'com.google.code.gson:gson:2.8.0'
 }
 
 tasks.named('test') {
