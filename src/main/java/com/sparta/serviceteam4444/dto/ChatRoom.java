@@ -13,12 +13,14 @@ import java.util.UUID;
 public class ChatRoom {
     private String roomId;
     private String roomName;
+    private String category;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
-    public static ChatRoom create(String roomName) {
+    public static ChatRoom create(String roomName, String category) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.roomName = roomName;
+        chatRoom.category = category;
         return chatRoom;
     }
 }

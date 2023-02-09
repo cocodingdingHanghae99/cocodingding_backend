@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Websocket Chat</title>
     <meta charset="utf-8">
@@ -25,6 +25,12 @@
         </div>
         <input type="text" class="form-control" v-model="room_roomName" @keyup.enter="createRoom">
         <div class="input-group-append">
+            <div class="input-group-prepend">
+                <label class="input-group-text">카테고리</label>
+            </div>
+        </div>
+        <input type="text" class="form-control" v-model="room_category" @keyup.enter="createRoom">
+        <div class="input-group-append">
             <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
         </div>
     </div>
@@ -44,6 +50,7 @@
         el: '#app',
         data: {
             room_roomName : '',
+            room_category: '',
             chatrooms: [
             ]
         },
@@ -52,7 +59,7 @@
         },
         methods: {
             findAllRoom: function() {
-                axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
+                axios.get('/main/rooms').then(response => { this.chatrooms = response.data; });
             },
             createRoom: function() {
                 if("" === this.room_roomName) {
@@ -61,11 +68,14 @@
                 } else {
                     var params = new URLSearchParams();
                     params.append("roomName",this.room_roomName);
-                    axios.post('/chat/room', params)
+                    params.append("category",this.room_category);
+                    axios.post('/main/rooms', params)
                         .then(
                             response => {
-                                alert(response.data.roomName+"방 개설에 성공하였습니다.")
+                                alert(response.data.roomName+"방 개설에 성공하였습니다.\n카테고리: "+response.data.category)
+
                                 this.room_roomName = '';
+                                this.room_category = '';
                                 this.findAllRoom();
                             }
                         )
@@ -73,10 +83,10 @@
                 }
             },
             enterRoom: function(roomId) {
-                var sender = prompt('대화명을 입력해 주세요.');
+                var sender = prompt('사용하실 이름을 입력해주세요.');
                 localStorage.setItem('wschat.sender',sender);
                 localStorage.setItem('wschat.roomId',roomId);
-                location.href="/chat/room/enter/"+roomId;
+                location.href="/main/room/enter/"+roomId;
             }
         }
     });
