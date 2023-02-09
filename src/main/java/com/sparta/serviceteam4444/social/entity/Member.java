@@ -1,12 +1,13 @@
 package com.sparta.serviceteam4444.social.entity;
 
+import com.sparta.serviceteam4444.timestamp.Timestamp;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.security.Timestamp;
 
 @Entity
 @Getter
@@ -32,14 +33,9 @@ public class Member {
     @Column
     private String userRoleTest;
 
-//    @Column
-//    @CreationTimestamp
-//    private Timestamp createTime;
-    //
-    //
-    //
-    //
-    //
+    @Column
+    @CreatedDate
+    private String createTime;
 
     @Builder
     public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
