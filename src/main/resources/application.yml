@@ -1,0 +1,13 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+
+    spring:
+      thymeleaf:
+        cache: false
+        prefix: classpath:/templates/

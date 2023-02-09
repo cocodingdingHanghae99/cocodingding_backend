@@ -8,10 +8,9 @@ import lombok.Setter;
 public class ChatMessage {
 
     // 메시지 타입 : 입장, 채팅
-    enum MessageType {
+    public enum MessageType {
             ENTER, TALK
     }
-
     private MessageType type; // 메시지 타입
     private String roomId; // 방번호
     private String roomName; // 방이름
