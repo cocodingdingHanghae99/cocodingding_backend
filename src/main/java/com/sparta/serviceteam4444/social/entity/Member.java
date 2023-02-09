@@ -41,14 +41,14 @@ public class Member {
     //
     //
 
-    @Builder
-    public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
-                String kakaoEmailTest, String userRoleTest) {
-
-        this.kakaoIdTest = kakaoIdTest;
-        this.kakaoProfileImgTest = kakaoProfileImgTest;
-        this.kakaoNicknameTest = kakaoNicknameTest;
-        this.kakaoEmailTest = kakaoEmailTest;
-        this.userRoleTest = userRoleTest;
-    }
+//    @Builder
+//    public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
+//                String kakaoEmailTest, String userRoleTest) {
+//
+//        this.kakaoIdTest = kakaoIdTest;
+//        this.kakaoProfileImgTest = kakaoProfileImgTest;
+//        this.kakaoNicknameTest = kakaoNicknameTest;
+//        this.kakaoEmailTest = kakaoEmailTest;
+//        this.userRoleTest = userRoleTest;
+//    }
 }
