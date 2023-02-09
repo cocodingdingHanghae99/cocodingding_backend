@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+	// gson
+	implementation 'com.google.code.gson:gson:2.8.7'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -34,11 +37,13 @@ dependencies {
 
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
 	//jwt 추가
 	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
 
 	//웹소켓 추가
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'

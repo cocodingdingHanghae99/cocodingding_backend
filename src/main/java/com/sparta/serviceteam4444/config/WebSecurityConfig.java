@@ -48,8 +48,13 @@ public class WebSecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/**").permitAll()
+        http.authorizeRequests()
+                .antMatchers("/**").permitAll()
+                //현우
+//                .antMatchers("/").permitAll()
+//                .antMatchers("/favicon.ico").permitAll()
                 .anyRequest().authenticated()
+                //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
