@@ -22,7 +22,7 @@ dependencies {
 	// gson
 	implementation 'com.google.code.gson:gson:2.8.7'
 
-	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.3'
+//	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.3'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
