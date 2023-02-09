@@ -1,50 +1,54 @@
 package com.sparta.serviceteam4444.social.entity;
 
-import com.sparta.serviceteam4444.timestamp.Timestamp;
-import lombok.Builder;
+import com.sparta.serviceteam4444.entity.UserRoleEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @NoArgsConstructor
+@Entity(name = "members")
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private Long id;
 
-    @Column
-    private Long kakaoIdTest;
+    // nullable: null 허용 여부
+    // unique: 중복 허용 여부 (false 일때 중복 허용)
+    @Column(nullable = false, unique = true)
+    private String membername;
 
-    @Column
-    private String kakaoProfileImgTest;
+    private Long kakaoId;
 
-    @Column
-    private String kakaoNicknameTest;
+    @Column(nullable = false)
+    private String password;
 
-    @Column
-    private String kakaoEmailTest;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column
-    private String userRoleTest;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
-    @Column
-    @CreatedDate
-    private String createTime;
+    public Member(String membername, String password, String email, UserRoleEnum role) {
+        this.membername = membername;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
-    @Builder
-    public Member(Long kakaoIdTest, String kakaoProfileImgTest, String kakaoNicknameTest,
-                String kakaoEmailTest, String userRoleTest) {
+    public Member(String membername, Long kakaoId, String password, String email, UserRoleEnum role) {
+        this.membername = membername;
+        this.kakaoId = kakaoId;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
 
-        this.kakaoIdTest = kakaoIdTest;
-        this.kakaoProfileImgTest = kakaoProfileImgTest;
-        this.kakaoNicknameTest = kakaoNicknameTest;
-        this.kakaoEmailTest = kakaoEmailTest;
-        this.userRoleTest = userRoleTest;
+    public Member kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 }
