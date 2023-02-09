@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                 //현우
                 .antMatchers("/").permitAll()
                 .antMatchers("/favicon.ico").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
@@ -63,9 +63,10 @@ public class WebSecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:3000"); //프론트가 3000번 포트를 사용함
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
