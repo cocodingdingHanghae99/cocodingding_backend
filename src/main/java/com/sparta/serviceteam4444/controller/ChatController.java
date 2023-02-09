@@ -1,23 +1,29 @@
 package com.sparta.serviceteam4444.controller;
 
-import com.sparta.serviceteam4444.dto.ChatMessage;
+import com.sparta.serviceteam4444.dto.ChatRoom;
+import com.sparta.serviceteam4444.service.ChatService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-// import 생략...
+import java.util.List;
+@Api(tags = {"main"})
 @RequiredArgsConstructor
-@Controller
+@RestController
+@RequestMapping("/main")
 public class ChatController {
 
-    private final SimpMessageSendingOperations messagingTemplate;
+    private final ChatService chatService;
+    @ApiOperation(value = "채팅방 파기", notes = "방 하나를 추가한다.")
+    @PostMapping("/rooms")
+    public ChatRoom createRoom(@RequestParam String roomName, String category) {
+        return chatService.createRoom(roomName, category);
+    }
 
-    @MessageMapping("/chat/message")
-    public void message(ChatMessage message) {
-        if (ChatMessage.MessageType.ENTER.equals(message.getType()))
-            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+    @ApiOperation(value = "방 조회", notes = "방 목록을 조회한다.")
+    @GetMapping("/rooms")
+    public List<ChatRoom> findAllRoom() {
+        return chatService.findAllRoom();
     }
 }
