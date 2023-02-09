@@ -54,8 +54,8 @@ public class KakaoService {
         // HTTP Body 생성 (상세히 적자면 코드 받은 값을 가지고 http 주소로 만들어줌)
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao");
+        body.add("client_id", "dca78b23ee6bbb566b637457b88b9de0");
+        body.add("redirect_uri", "http://cocodingding.shop/user/login/kakao");
         body.add("code", code);
 
         // HTTP 요청 보내기
