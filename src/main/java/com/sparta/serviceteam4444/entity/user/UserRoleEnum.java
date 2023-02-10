@@ -1,4 +1,4 @@
-package com.sparta.serviceteam4444.entity;
+package com.sparta.serviceteam4444.entity.user;
 
 public enum UserRoleEnum {
     USER(Authority.USER),  // 사용자 권한

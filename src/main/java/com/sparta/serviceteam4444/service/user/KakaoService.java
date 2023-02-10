@@ -1,19 +1,18 @@
-package com.sparta.serviceteam4444.service;
+package com.sparta.serviceteam4444.service.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.serviceteam4444.dto.KakaoUserInfoDto;
-import com.sparta.serviceteam4444.dto.ResponseDto;
-import com.sparta.serviceteam4444.entity.User;
+import com.sparta.serviceteam4444.dto.user.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.dto.user.ResponseDto;
+import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
-import com.sparta.serviceteam4444.repository.UserRepository;
+import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao");
+        body.add("redirect_uri", "https://localhost:3000/user/kakao");
         body.add("code", code);
 
         // HTTP 요청 보내기

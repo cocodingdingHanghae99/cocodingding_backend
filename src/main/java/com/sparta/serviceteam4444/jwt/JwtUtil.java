@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import com.sparta.serviceteam4444.security.UserDetailsServiceImpl;
-import com.sparta.serviceteam4444.entity.UserRoleEnum;
+import com.sparta.serviceteam4444.security.user.UserDetailsServiceImpl;
+import com.sparta.serviceteam4444.entity.user.UserRoleEnum;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
-package com.sparta.serviceteam4444.entity;
+package com.sparta.serviceteam4444.entity.user;
 
-import com.sparta.serviceteam4444.dto.SignupRequestDto;
+import com.sparta.serviceteam4444.dto.user.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

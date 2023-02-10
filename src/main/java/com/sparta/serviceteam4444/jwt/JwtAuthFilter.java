@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.sparta.serviceteam4444.dto.ResponseDto;
+import com.sparta.serviceteam4444.dto.user.ResponseDto;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
