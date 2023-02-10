@@ -62,11 +62,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public ResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         //이름, 비밀번호 대조를 위해 값을 뽑아놓음
-        String nickName = loginRequestDto.getNickname();
+        String nickname = loginRequestDto.getNickname();
         String password = loginRequestDto.getPassword();
 
         // 사용자 확인
-        User user = userRepository.findByNickname(nickName).orElseThrow(
+        User user = userRepository.findByNickname(nickname).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
         );
         // 비밀번호 확인

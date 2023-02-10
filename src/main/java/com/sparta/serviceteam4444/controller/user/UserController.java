@@ -31,13 +31,13 @@ public class UserController {
         return userService.signup(signupRequestDto);
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
-    @PostMapping("/kakao")    //카카오로부터 코드 받고, 다시 전달해서
+    @RequestMapping(value="/kakao" , method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseDto kakaoLogin(@RequestBody SocialCodeDto codeDto, HttpServletResponse response) throws JsonProcessingException {
         System.out.println("잘들어와집니다.");
         return kakaoService.kakaoLogin(codeDto.getCode(), response);
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
-    @PostMapping("/login") //제발 가야된다...
+    @RequestMapping(value="/login" , method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 
         return userService.login(loginRequestDto, response);
