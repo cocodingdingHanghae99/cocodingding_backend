@@ -6,11 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    NOT_VALIDATE_TOKEN(HttpStatus.BAD_REQUEST, "400", "토큰이 유효하지 않습니다."),
-    EXISTS_USER(HttpStatus.BAD_REQUEST, "400", "중복된 사용자가 존재합니다."),
-    NOT_EQUALS_PASSWORD(HttpStatus.BAD_REQUEST, "400", "비밀번호가 일치하지 않습니다."),
-    NOT_EXISTS_USER(HttpStatus.BAD_REQUEST,"400", "등록된 사용자가 없습니다."),
-    NOT_EQUALS_USER(HttpStatus.BAD_REQUEST, "400", "사용자가 일치하지 않습니다.");
+    PLEASE_LOGIN(HttpStatus.BAD_REQUEST,"400", "로그인 해주세요.");
+
 
     private final HttpStatus httpStatus;
     private final String errorCode;
