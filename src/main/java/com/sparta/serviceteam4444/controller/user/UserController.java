@@ -29,7 +29,7 @@ public class UserController {
         return userService.signup(signupRequestDto);
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
-    @GetMapping(value="/kakao")
+    @PostMapping(value="/kakao")
     public ResponseDto kakaoLogin(@RequestBody SocialCodeDto codeDto, HttpServletResponse response) throws JsonProcessingException {
         return kakaoService.kakaoLogin(codeDto.getCode(), response);
     }
