@@ -1,4 +1,4 @@
-package com.sparta.serviceteam4444.dto;
+package com.sparta.serviceteam4444.dto.chat;
 
 import lombok.Getter;
 import lombok.Setter;

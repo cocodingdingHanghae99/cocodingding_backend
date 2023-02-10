@@ -1,8 +1,8 @@
-package com.sparta.serviceteam4444.service;
+package com.sparta.serviceteam4444.service.user;
 
-import com.sparta.serviceteam4444.dto.*;
-import com.sparta.serviceteam4444.entity.User;
-import com.sparta.serviceteam4444.repository.UserRepository;
+import com.sparta.serviceteam4444.dto.user.*;
+import com.sparta.serviceteam4444.entity.user.User;
+import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;

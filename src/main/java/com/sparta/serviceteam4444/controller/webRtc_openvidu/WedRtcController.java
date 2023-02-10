@@ -2,7 +2,7 @@ package com.sparta.serviceteam4444.controller.webRtc_openvidu;
 
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
-import com.sparta.serviceteam4444.security.UserDetailsImpl;
+import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.WedRtcService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;

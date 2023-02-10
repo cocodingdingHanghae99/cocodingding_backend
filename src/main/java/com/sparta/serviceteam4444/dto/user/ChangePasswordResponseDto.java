@@ -1,6 +1,6 @@
-package com.sparta.serviceteam4444.dto;
+package com.sparta.serviceteam4444.dto.user;
 
-import com.sparta.serviceteam4444.entity.User;
+import com.sparta.serviceteam4444.entity.user.User;
 
 public class ChangePasswordResponseDto {
 

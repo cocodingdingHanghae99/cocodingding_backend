@@ -1,6 +1,6 @@
-package com.sparta.serviceteam4444.repository;
+package com.sparta.serviceteam4444.repository.chat;
 
-import com.sparta.serviceteam4444.dto.ChatRoom;
+import com.sparta.serviceteam4444.dto.chat.ChatRoom;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;

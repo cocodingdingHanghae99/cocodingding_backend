@@ -1,11 +1,10 @@
-package com.sparta.serviceteam4444.controller;
+package com.sparta.serviceteam4444.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta.serviceteam4444.dto.*;
-import com.sparta.serviceteam4444.jwt.JwtUtil;
-import com.sparta.serviceteam4444.security.UserDetailsImpl;
-import com.sparta.serviceteam4444.service.KakaoService;
-import com.sparta.serviceteam4444.service.UserService;
+import com.sparta.serviceteam4444.dto.user.*;
+import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
+import com.sparta.serviceteam4444.service.user.KakaoService;
+import com.sparta.serviceteam4444.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
-package com.sparta.serviceteam4444.controller;
+package com.sparta.serviceteam4444.controller.chat;
 
-import com.sparta.serviceteam4444.dto.ChatMessage;
-import io.swagger.annotations.Api;
+import com.sparta.serviceteam4444.dto.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;

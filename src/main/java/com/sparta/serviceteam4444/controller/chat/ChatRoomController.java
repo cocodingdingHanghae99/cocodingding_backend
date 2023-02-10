@@ -1,7 +1,7 @@
-package com.sparta.serviceteam4444.controller;
+package com.sparta.serviceteam4444.controller.chat;
 
-import com.sparta.serviceteam4444.dto.ChatRoom;
-import com.sparta.serviceteam4444.repository.ChatRoomRepository;
+import com.sparta.serviceteam4444.dto.chat.ChatRoom;
+import com.sparta.serviceteam4444.repository.chat.ChatRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
