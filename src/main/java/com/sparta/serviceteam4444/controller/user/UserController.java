@@ -29,9 +29,10 @@ public class UserController {
         return userService.signup(signupRequestDto);
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
-    @PostMapping(value="/kakao")
-    public ResponseDto kakaoLogin(@RequestBody SocialCodeDto codeDto, HttpServletResponse response) throws JsonProcessingException {
-        return kakaoService.kakaoLogin(codeDto.getCode(), response);
+    @GetMapping(value="/kakao")
+    public ResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+        return kakaoService.kakaoLogin(code, response);
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
     @RequestMapping(value="/login" , method = {RequestMethod.GET, RequestMethod.POST})
