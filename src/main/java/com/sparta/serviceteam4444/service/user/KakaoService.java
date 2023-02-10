@@ -98,18 +98,26 @@ public class KakaoService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        log.info(jsonNode.get("kakao_account").get("email").asText())   ;
-        log.info("코드 받음");
         //성분별로 쓰기 좋게 분리하기
-        Long id = jsonNode.get("id").asLong();
-        String nickName = jsonNode.get("properties").get("nickname").asText();
+        Long id;
+        try {
+            id  = jsonNode.get("id").asLong();
+        }catch(NullPointerException e){
+            id = Long.valueOf(400);
+        }
+        String nickname;
+        try {
+            nickname = jsonNode.get("properties").get("nickname").asText();
+        }catch(NullPointerException e){
+            nickname = "오징어게임~~";
+        }
         String email;
         try {
             email = jsonNode.get("kakao_account").get("email").asText();
         }catch(NullPointerException e){
             email = "";
         }
-        return new KakaoUserInfoDto(id, nickName, email);
+        return new KakaoUserInfoDto(id, nickname, email);
     }
     // 3. 필요시에 회원가입
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
