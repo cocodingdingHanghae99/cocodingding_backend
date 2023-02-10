@@ -60,7 +60,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public ResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public UserInfoDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         //이름, 비밀번호 대조를 위해 값을 뽑아놓음
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
@@ -75,7 +75,7 @@ public class UserService {
         }
         //토큰을 생성해서 유저에게 줌
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getNickname(), user.getRole()));
-        return new ResponseDto(user.getNickname() + " 님 로그인 완료");
+        return new UserInfoDto(user.getNickname(),user.getEmail());
     }
     @Transactional
     public UserInfoDto getInfo(HttpServletRequest request) {
@@ -87,7 +87,7 @@ public class UserService {
         User user =  userRepository.findByNickname(claims.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
-        return new UserInfoDto(user.getNickname(),user.getNickname());
+        return new UserInfoDto(user.getNickname(),user.getEmail());
     }
 
     @Transactional

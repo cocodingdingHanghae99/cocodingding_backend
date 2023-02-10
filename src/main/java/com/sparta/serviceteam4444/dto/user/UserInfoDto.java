@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserInfoDto {
-
-    private String username;
     private String nickname;
+    private String email;
 
-    public UserInfoDto(String username, String nickname) {
-        this.username= username;
+    public UserInfoDto(String nickname, String email) {
         this.nickname = nickname;
+        this.email = email;
     }
 }

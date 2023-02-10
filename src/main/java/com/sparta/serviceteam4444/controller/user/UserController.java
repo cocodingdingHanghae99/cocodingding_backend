@@ -38,7 +38,7 @@ public class UserController {
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
     @RequestMapping(value="/login" , method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public UserInfoDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 
         return userService.login(loginRequestDto, response);
     }
