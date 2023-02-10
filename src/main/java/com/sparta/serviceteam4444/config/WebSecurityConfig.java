@@ -67,6 +67,7 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000"); //프론트가 3000번 포트를 사용함
+        configuration.addAllowedOrigin("https://cocodingding.shop");
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

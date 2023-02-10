@@ -11,6 +11,7 @@ import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ public class KakaoService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    @Value("${kakao_client_id}")
+    private String kakaoClientId;
 
     public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -54,7 +57,7 @@ public class KakaoService {
         // HTTP Body 생성 (상세히 적자면 코드 받은 값을 가지고 http 주소로 만들어줌)
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
+        body.add("client_id", kakaoClientId);
         body.add("redirect_uri", "https://localhost:3000/user/kakao");
         body.add("code", code);
 
