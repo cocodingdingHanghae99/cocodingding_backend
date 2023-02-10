@@ -28,4 +28,5 @@ public class WedRtcController {
             OpenViduHttpException {
         return wedRtcService.createRoom(roomCreateRequestDto, userDetails);
     }
+    //
 }

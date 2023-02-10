@@ -49,6 +49,7 @@ public class WedRtcService {
                 .sessionId(newtoken.getSessionId())
                 .roomName(roomCreateRequestDto.getRoomName())
                 .masterUserNickname(user.getNickname())
+                .category(roomCreateRequestDto.getCategory())
                 .build();
         //체팅방 인원 빌드
         RoomMember roomMembers = RoomMember.builder()
@@ -81,6 +82,7 @@ public class WedRtcService {
                 .sessionId(newtoken.getSessionId())
                 .roomName(newtoken.getRoomName())
                 .masterNickname(user.getNickname())
+                .category(roomCreateRequestDto.getCategory())
                 .currentMember(currentMember)
                 .roomMemberResponseDtoList(roomMemberResponseDtoList)
                 .token(newtoken.getToken())

@@ -15,4 +15,5 @@ public class RoomCreateResponseDto {
     private List<RoomMemberResponseDto> roomMemberResponseDtoList; //맴버 리스트
     private String token;
     private Long currentMember;
+    private String category;
 }
