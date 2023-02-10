@@ -11,8 +11,10 @@ import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,12 @@ public class KakaoService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+
+    @Value("${kakao_client_id}")
+    private String kakaoClientId;
+
+    @Value("${kakao.redirectUri}")
+    private String kakaoCallbackUri;
 
     public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -54,28 +62,24 @@ public class KakaoService {
         // HTTP Body 생성 (상세히 적자면 코드 받은 값을 가지고 http 주소로 만들어줌)
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
-        body.add("redirect_uri", "https://localhost:3000/user/kakao");
+        body.add("client_id", kakaoClientId);
+        body.add("redirect_uri", kakaoCallbackUri);
         body.add("code", code);
 
         // HTTP 요청 보내기
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
-                new HttpEntity<>(body, headers);
-
-        RestTemplate rt = new RestTemplate();
-
-        ResponseEntity<String> response = rt.postForEntity(
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body,headers);
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> response = template.exchange(
                 "https://kauth.kakao.com/oauth/token",
+                HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
         );
-
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
         System.out.println("responseBody = " + responseBody);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-
         return jsonNode.get("access_token").asText();
     }
     // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
