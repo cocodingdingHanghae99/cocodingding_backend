@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
