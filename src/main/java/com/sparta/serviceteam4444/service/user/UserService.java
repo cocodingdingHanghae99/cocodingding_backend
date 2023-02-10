@@ -38,15 +38,10 @@ public class UserService {
         //이름, 비밀번호 대조를 위해 값을 뽑아놓음
         String email = signupRequestDto.getEmail();
         String pwcheck = signupRequestDto.getPassword();
-        String passwordCheck = signupRequestDto.getPasswordCheck();
         //비밀번호 조건 확인
         if (!Pattern.matches(ptt, pwcheck)) {
             throw new IllegalArgumentException(
                     "비밀번호는 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9), 특수문자 에 한해서 구성되어야합니다.");
-        }
-        if (!pwcheck.matches(passwordCheck)) {
-            throw new IllegalArgumentException(
-                    "비밀번호 입력을 다시 확인해주세요.");
         }
         // 회원 중복 확인
         Optional<User> found = userRepository.findByEmail(email);
@@ -94,6 +89,7 @@ public class UserService {
         );
         return new UserInfoDto(user.getNickname(),user.getNickname());
     }
+
     @Transactional
     public ResponseDto changePassword(String nickName, ChangePasswordRequestDto changePasswordRequestDto, User user) {
         Optional<User> found = userRepository.findByNickname(nickName);
@@ -115,7 +111,7 @@ public class UserService {
         return new ResponseDto("비밀번호가 변경되었습니다");
     }
 
-    @Transactional  // soft delete 이고 게시글 댓글도 지움
+    @Transactional  // soft delete
     public ResponseDto softDeleteId(String nickname, User user) {
         Optional<User> found = userRepository.findByNickname(nickname);
         if (found.isEmpty() || !found.get().isState()) {    //삭제된 상태에서 다시 삭제 방지
