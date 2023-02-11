@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WedRtcController {
 
     private final WedRtcService wedRtcService;
+
     //방 생성
     @PostMapping("/rooms")
     @ApiOperation(value = "방 생성 매소드")
