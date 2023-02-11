@@ -8,17 +8,16 @@ import com.sparta.serviceteam4444.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Slf4j
 @Api(tags = {"Users"})
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value="/user", produces = "application/json; charset=utf8")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -30,14 +29,14 @@ public class UserController {
         return userService.signup(signupRequestDto);
     }
     @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
-    @PostMapping("/kakao")    //카카오로부터 코드 받고, 다시 전달해서
-    public ResponseDto kakaoLogin(@RequestBody SocialCodeDto codeDto, HttpServletResponse response) throws JsonProcessingException {
-        System.out.println("잘들어와집니다.");
-        return kakaoService.kakaoLogin(codeDto.getCode(), response);
+    @GetMapping(value="/kakao")
+    public ResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+        return kakaoService.kakaoLogin(code, response);
     }
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
-    @PostMapping("/login") //제발 가야된다...
-    public ResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    @RequestMapping(value="/login" , method = {RequestMethod.GET, RequestMethod.POST})
+    public UserInfoDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 
         return userService.login(loginRequestDto, response);
     }
