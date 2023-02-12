@@ -1,9 +1,12 @@
 package com.sparta.serviceteam4444.dto.wedRtc_openvidu;
 
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.RoomMember;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoomMemberResponseDto {
     //체팅방에 참여할때 받는 id
     private Long roomMemberId;
