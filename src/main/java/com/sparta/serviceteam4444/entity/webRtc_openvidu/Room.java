@@ -2,12 +2,14 @@ package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,4 +32,5 @@ public class Room {
     public void updateCurrentMember(Long currentMember) {
         this.currentMember = currentMember;
     }
+
 }
