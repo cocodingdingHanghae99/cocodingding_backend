@@ -74,7 +74,10 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         //토큰을 생성해서 유저에게 줌
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getNickname(), user.getRole()));
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
+        log.info("Access토큰 값: "+jwtUtil.createAccessToken(user.getNickname()));
+        log.info("Refresh토큰 값: "+jwtUtil.createRefreshToken(user.getNickname()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
         return new UserInfoDto(user.getNickname(),user.getEmail());
     }
     @Transactional

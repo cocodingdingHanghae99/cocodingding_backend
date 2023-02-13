@@ -22,8 +22,6 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role = UserRoleEnum.USER;
     @Column(nullable = false)
     private boolean state = true;
     public User(String nickName, String email, String password) {
