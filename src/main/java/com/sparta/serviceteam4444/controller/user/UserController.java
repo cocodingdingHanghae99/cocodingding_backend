@@ -37,7 +37,6 @@ public class UserController {
     @ApiOperation(value = "로그인", notes = "입력받은 정보를 기반으로 로그인 작업을 수행한다.")
     @RequestMapping(value="/login" , method = {RequestMethod.GET, RequestMethod.POST})
     public UserInfoDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-
         return userService.login(loginRequestDto, response);
     }
     @ApiOperation(value = "로그인 유저 이름 반환", notes = "로그인 한 유저가 메인페이지를 요청할 때 유저의 이름 반환한다.")
