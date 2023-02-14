@@ -46,6 +46,7 @@ public class RoomService {
     private String OPENVIDU_SECRET;
 
     //Openvicu 객체에 url과 secret 키를 넣어주기
+    //한번만 적용
     @PostConstruct
     public OpenVidu openVidu(){
         return openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
