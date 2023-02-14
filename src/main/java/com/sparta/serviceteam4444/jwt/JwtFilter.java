@@ -23,15 +23,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 //        Session 의 토큰 값 가져오기
-        String token = jwtUtil.resolveToken(request); String tokken=jwtUtil.resolveRefreshToken(request);
-        log.info("토큰 값: " + token);
+        String token = jwtUtil.resolveAccessToken(request); String tokken=jwtUtil.resolveRefreshToken(request);
+//        log.info("토큰 값: " + token);
 
         if(token != null) {
             if(!jwtUtil.validateToken(token)){
-                log.info("토큰이 상했습니다.\n리프레쉬 토큰 값으로 바꿉니다.");
+                log.info("토큰이 상했습니다. 리프레쉬 토큰 값으로 바꿉니다.");
                 if(!jwtUtil.validateToken(tokken)) {
-                    log.info("리프레쉬 토큰: "+tokken);
-                    jwtExceptionHandler(response, "Token Error", HttpStatus.UNAUTHORIZED.value());
+//                    log.info("리프레쉬 토큰: "+tokken);
+                    jwtExceptionHandler(response, "Time runout. Please login again.", HttpStatus.UNAUTHORIZED.value());
                     return;
                 }
             }

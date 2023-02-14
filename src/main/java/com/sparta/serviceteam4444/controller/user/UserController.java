@@ -42,8 +42,13 @@ public class UserController {
     }
     @ApiOperation(value = "로그인 유저 이름 반환", notes = "로그인 한 유저가 메인페이지를 요청할 때 유저의 이름 반환한다.")
     @GetMapping("/info")
-    public UserInfoDto getUserName(HttpServletRequest request) {
-        return userService.getInfo(request);
+    public UserInfoDto getUserName(HttpServletRequest request, HttpServletResponse response) {
+        return userService.getInfo(request, response);
+    }
+    @ApiOperation(value = "로그인 유저 이름 반환", notes = "로그인 한 유저가 메인페이지를 요청할 때 유저의 이름 반환한다.")
+    @GetMapping("/info2")
+    public UserInfoDto getUserName2(HttpServletRequest request, HttpServletResponse response) {
+        return userService.getInfo2(request, response);
     }
     @ApiOperation(value = "비밀번호 변경", notes = "사용자의 비밀번호를 변경한다.")
     @PutMapping("/changepw/{username}")

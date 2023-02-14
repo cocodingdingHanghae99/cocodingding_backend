@@ -47,6 +47,7 @@ public class KakaoService {
 
         // 토큰 던져주기
         response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(kakaoUser.getNickname()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createAccessToken(kakaoUser.getNickname()));
         return new ResponseDto("카카오 로그인 완료");
     }
     // 1. "인가 코드"로 "액세스 토큰" 요청
