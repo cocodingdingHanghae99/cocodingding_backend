@@ -49,7 +49,7 @@ public class RoomService {
 
 
     public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto, HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException {
-        OpenVidu openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        OpenVidu openVidu = new OpenVidu("https://spasta-yj.shop/", "MY_SECRET");
 
         SessionProperties properties = new SessionProperties.Builder().build();
 
