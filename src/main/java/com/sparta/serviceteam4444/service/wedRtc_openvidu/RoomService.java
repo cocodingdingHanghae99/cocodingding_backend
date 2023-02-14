@@ -64,12 +64,11 @@ public class RoomService {
         //체팅방 빌드
         Room room = Room.builder()
                 .sessionId("test")
-                .roomName(createRoomRequestDto.getRoomName())
+                .roomTitle(createRoomRequestDto.getRoomName())
                 .masterUserNickname(user.getNickname())
-                .category(createRoomRequestDto.getCategory())
                 .build();
 
-        Room saveRoom = roomRepository.save(room);
+        roomRepository.save(room);
 
         //체팅방 인원 빌드
         RoomMember roomMembers = RoomMember.builder()
@@ -113,7 +112,6 @@ public class RoomService {
                 .sessionId("test")
                 .roomName(newToken.getRoomName())
                 .masterNickname(user.getNickname())
-                .category("test")
                 .currentMember(currentMember)
                 .roomMemberResponseDtoList(roomMemberResponseDtoList)
                 .token(newToken.getToken())
@@ -219,7 +217,10 @@ public class RoomService {
         String serverData = user.getNickname();
 
         //serverData를 사용해서 connectionProperties 객체 빌드
-        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).data(serverData).build();
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+                .type(ConnectionType.WEBRTC)
+                .data(serverData)
+                .build();
 
         //새로운 openvidu 세션(방) 생성
         Session session = openVidu.createSession();
@@ -238,7 +239,10 @@ public class RoomService {
         String serverData = user.getNickname();
 
         //serverData를 사용해서 connectionProperties 객체 빌드
-        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).data(serverData).build();
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+                .type(ConnectionType.WEBRTC)
+                .data(serverData)
+                .build();
 
         openVidu.fetch();
 
