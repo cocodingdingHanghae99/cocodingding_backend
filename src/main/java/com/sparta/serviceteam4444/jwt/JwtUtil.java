@@ -28,8 +28,8 @@ public class JwtUtil {
     public static final String REFRESH_HEADER = "Refresh";
     private static final String BEARER_PREFIX = "Bearer ";
 
-    private static final long ACCESS_TOKEN_TIME = 20 * 1000L;//20초
-    private static final long REFRESH_TOKEN_TIME = 40 * 1000L; //40초
+    private static final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;//30분
+    private static final long REFRESH_TOKEN_TIME = 24 * 60 * 60 * 1000L; //1일
 
     @Value("${jwt.secret.key}")
     private String secretKey;
