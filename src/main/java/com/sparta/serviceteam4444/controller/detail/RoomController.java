@@ -29,13 +29,13 @@ public class RoomController {
         return roomService.createRoom(createRoomRequestDto, request);
     }
 
-    //방 접속
-//    @PostMapping("/room/{roomId}")
-//    @ApiOperation(value = "일반 멤버 방 접속 메소드")
-//    public RoomMemberResponseDto enterRoom(@PathVariable String roomId,
-//                                           HttpServletRequest request,
-//                                           @RequestBody RoomPasswordRequestDto roomPasswordRequestDto)
-//            throws OpenViduJavaClientException, OpenViduHttpException{
-//        return roomService.enterRoom(roomId, request, roomPasswordRequestDto);
-//    }
+//    방 접속
+    @PostMapping("/room/{roomId}")
+    @ApiOperation(value = "일반 멤버 방 접속 메소드")
+    public RoomMemberResponseDto enterRoom(@PathVariable String roomId,
+                                           HttpServletRequest request,
+                                           @RequestBody RoomPasswordRequestDto roomPasswordRequestDto)
+            throws OpenViduJavaClientException, OpenViduHttpException{
+        return roomService.enterRoom(roomId, request, roomPasswordRequestDto);
+    }
 }
