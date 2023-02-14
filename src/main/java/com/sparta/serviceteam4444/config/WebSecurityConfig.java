@@ -62,9 +62,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
     //protected로 변경
-    protected CorsConfigurationSource corsConfigurationSource() {
+//    protected CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
