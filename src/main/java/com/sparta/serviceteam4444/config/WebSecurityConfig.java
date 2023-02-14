@@ -43,17 +43,23 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.cors().and()
-                //session 방식 사용 x jwt 방식 사용 위한 설정
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.cors().and()
+//                //session 방식 사용 x jwt 방식 사용 위한 설정
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.cors().configurationSource(corsConfigurationSource());
 
         http.authorizeRequests()
-                .antMatchers("/**").permitAll()
-                //현우
-                .antMatchers("/").permitAll()
-                .antMatchers("/favicon.ico").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+//                .antMatchers("/**").permitAll()
+//                //현우
+//                .antMatchers("/").permitAll()
+//                .antMatchers("/favicon.ico").permitAll()
+//                .anyRequest().authenticated()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
