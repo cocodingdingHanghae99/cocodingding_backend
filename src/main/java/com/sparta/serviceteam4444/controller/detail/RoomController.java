@@ -7,12 +7,14 @@ import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomPasswordRequestDto;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Api(tags = {"detail"})
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:3000")
