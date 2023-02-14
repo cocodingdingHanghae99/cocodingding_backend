@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    PLEASE_LOGIN(HttpStatus.BAD_REQUEST,"400", "로그인 해주세요."),
+    SUCCESS_CREATE_SESSION(HttpStatus.OK, "200", "방 생성 성공"),
+
+    PLEASE_LOGIN(HttpStatus.BAD_REQUEST, "400", "로그인 해주세요."),
 
     NOT_EXITS_ROOM(HttpStatus.BAD_REQUEST, "400", "방이 없습니다."),
 

@@ -43,17 +43,23 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.cors().and()
-                //session 방식 사용 x jwt 방식 사용 위한 설정
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.cors().and()
+//                //session 방식 사용 x jwt 방식 사용 위한 설정
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.cors().configurationSource(corsConfigurationSource());
 
         http.authorizeRequests()
-                .antMatchers("/**").permitAll()
-                //현우
-                .antMatchers("/").permitAll()
-                .antMatchers("/favicon.ico").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+//                .antMatchers("/**").permitAll()
+//                //현우
+//                .antMatchers("/").permitAll()
+//                .antMatchers("/favicon.ico").permitAll()
+//                .anyRequest().authenticated()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
@@ -63,17 +69,16 @@ public class WebSecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+    //protected로 변경
+//    protected CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("https://cocodingding.shop");
-        configuration.addAllowedOrigin("http://localhost:3000"); //프론트가 3000번 포트를 사용함
-        configuration.addAllowedOrigin("https://cocodingding.shop");
+        configuration.addAllowedOriginPattern("*");//프론트가 3000번 포트를 사용함
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
-        configuration.addAllowedOriginPattern("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
