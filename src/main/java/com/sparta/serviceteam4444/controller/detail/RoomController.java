@@ -29,7 +29,7 @@ import io.openvidu.java.client.SessionProperties;
 
 
 @Api(tags = {"detail"})
-@CrossOrigin(origins = "*")
+@CrossOrigin(originPatterns = "*")
 @RestController
 public class RoomController {
 
