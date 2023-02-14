@@ -75,8 +75,6 @@ public class UserService {
         }
         //토큰을 생성해서 유저에게 줌
         response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
-        log.info("Access토큰 값: "+jwtUtil.createAccessToken(user.getNickname()));
-        log.info("Refresh토큰 값: "+jwtUtil.createRefreshToken(user.getNickname()));
         String refresh=jwtUtil.createRefreshToken(user.getNickname());
         user.setRefreshToken(refresh);
         response.addHeader(JwtUtil.REFRESH_HEADER, refresh);

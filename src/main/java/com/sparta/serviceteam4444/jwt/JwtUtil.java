@@ -47,11 +47,20 @@ public class JwtUtil {
         String bearerToken = request.getHeader(ACCESS_HEADER);
 //        String beerToken = request.getHeader(REFRESH_HEADER);
         if (StringUtils.hasText(bearerToken)) {
+            log.info(bearerToken);
             return bearerToken;
         }
         return null;
     }
-
+    // header 토큰을 가져오기
+    public String resolveRefreshToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(REFRESH_HEADER);
+        if (StringUtils.hasText(bearerToken)) {
+            log.info(bearerToken);
+            return bearerToken;
+        }
+        return null;
+    }
     // 토큰 생성
     public String createAccessToken(String username) {
         Date date = new Date();
@@ -77,7 +86,7 @@ public class JwtUtil {
                         .compact();
     }
 
-    // 토큰 검증
+    // 토큰 에러에 대한 문구를 읽는 것
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
