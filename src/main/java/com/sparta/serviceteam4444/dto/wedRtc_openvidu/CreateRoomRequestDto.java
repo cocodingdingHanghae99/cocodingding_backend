@@ -10,4 +10,6 @@ public class CreateRoomRequestDto {
     private String roomTitle;
 
     private Long maxUser;
+
+    private String sessionId;
 }
