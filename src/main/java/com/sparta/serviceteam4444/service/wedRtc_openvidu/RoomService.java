@@ -57,54 +57,50 @@ public class RoomService {
     //방 생성
     public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
                                             User user) throws OpenViduJavaClientException, OpenViduHttpException{
-
-        CreateRoomResponseDto newToken = createNewToken(user);
+        //session생성 및 token받아오기
+        CreateRoomResponseDto newToken = createNewToken(user, createRoomRequestDto.getSessionId());
 
         System.out.println("newToken = " + newToken);
-
+        //newToken바탕으로 Room build
         Room room = Room.builder()
                 .sessionId(newToken.getSessionId())
-                .roomTitle(createRoomRequestDto.getRoomTitle())
                 .masterUserNickname(user.getNickname())
-                .maxUser(createRoomRequestDto.getMaxUser())
                 .build();
-
-        Room savedRoom = roomRepository.save(room);
 
         RoomMember roomMember = RoomMember.builder()
-                .sessionId(savedRoom.getSessionId())
-                .userEmail(user.getEmail())
+                .sessionId(newToken.getSessionId())
+//                .userEmail(user.getEmail())
+                .userId(user.getId())
                 .build();
-
+        //RoomMember 저장하기
         roomUserRepository.save(roomMember);
+//        //RoomMaster 권한 부여
+//        boolean roomMaster;
+//
+//        List<RoomMember> roomMemberList = roomUserRepository.findAllBySessionId(savedRoom.getSessionId());
+//
+//        List<RoomMemberResponseDto> roomUserResponseDtoList = new ArrayList<>();
+//
+//        for (RoomMember roomUser : roomMemberList){
+//
+//            if (user != null){
+//                roomMaster = Objects.equals(roomUser.getUserNickname(), user.getNickname());
+//            } else {
+//                roomMaster = false;
+//            }
+//
+//            roomUserResponseDtoList.add(new RoomMemberResponseDto(roomUser, roomMaster));
+//
+//        }
 
-        boolean roomMaster;
-
-        List<RoomMember> roomMemberList = roomUserRepository.findAllBySessionId(savedRoom.getSessionId());
-
-        List<RoomMemberResponseDto> roomUserResponseDtoList = new ArrayList<>();
-
-        for (RoomMember roomUser : roomMemberList){
-
-            if (user != null){
-                roomMaster = Objects.equals(roomUser.getUserNickname(), user.getNickname());
-            } else {
-                roomMaster = false;
-            }
-
-            roomUserResponseDtoList.add(new RoomMemberResponseDto(roomUser, roomMaster));
-
-        }
-
-        Long currentUser = roomUserRepository.countAllBySessionId(savedRoom.getSessionId());
+        Long currentUser = roomUserRepository.countAllBySessionId(newToken.getSessionId());
 
         room.updateCurrentMember(currentUser);
-
-        roomRepository.save(room);
+        //Room 저장하기
+        Room savedRoom = roomRepository.save(room);
 
         return CreateRoomResponseDto.builder()
                 .sessionId(savedRoom.getSessionId())
-                .roomTitle(savedRoom.getRoomTitle())
                 .masterNickname(savedRoom.getMasterUserNickname())
                 .maxUser(savedRoom.getMaxUser())
                 .currentMember(savedRoom.getCurrentMember())
@@ -112,15 +108,19 @@ public class RoomService {
                 .build();
     }
 
-    public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
-
+    public CreateRoomResponseDto createNewToken(User user, String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
+        //userNickname을 serverData로 받기
         String serverData = user.getNickname();
 
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .type(ConnectionType.WEBRTC).data(serverData).build();
-
-        Session session = openVidu.createSession();
-
+        //sessionId를 방 제목으로
+        Map<String, Object> params = new HashMap<>();
+        params.put("sessionId", sessionId);
+        SessionProperties sessionProperties = SessionProperties.fromJson(params).build();
+        //session만들기
+        Session session = openVidu.createSession(sessionProperties);
+        //토큰 받아오기
         String token = session.createConnection(connectionProperties).getToken();
 
         return CreateRoomResponseDto.builder()
@@ -228,7 +228,6 @@ public class RoomService {
         List<RoomResponseDto> createRoomResponseDtos = new ArrayList<>();
         for (Room room : roomList) {
             RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .roomTitle(room.getRoomTitle())
                     .masterNickname(room.getMasterUserNickname())
                     .sessionId(room.getSessionId())
                     .currentUser(room.getCurrentMember())
