@@ -28,12 +28,9 @@ import io.openvidu.java.client.Session;
 import io.openvidu.java.client.SessionProperties;
 
 
-@Api(tags = {"detail"})
 @CrossOrigin(originPatterns = "*")
 @RestController
 public class TestController {
-
-//    private final RoomService roomService;
 
     @Value("${openvidu.url}")
     private String OPENVIDU_URL;
@@ -79,29 +76,4 @@ public class TestController {
         Connection connection = session.createConnection(properties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
-
-//    @PostMapping("/room")
-//    public ResponseEntity<JsonObject> getToken(@RequestBody String sessionNameParam,
-//                                               HttpSession httpSession) throws ParseException {
-//        return roomService.getToken(sessionNameParam, httpSession);
-//    }
-
-
-    //방 생성
-//    @PostMapping("/room")
-//    @ApiOperation(value = "방 생성 메소드")
-//    public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto,
-//                                            HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException {
-//        return roomService.createRoom(createRoomRequestDto, request);
-//    }
-
-//    방 접속
-//    @PostMapping("/room/{roomId}")
-//    @ApiOperation(value = "일반 멤버 방 접속 메소드")
-//    public RoomMemberResponseDto enterRoom(@PathVariable String roomId,
-//                                           HttpServletRequest request,
-//                                           @RequestBody RoomPasswordRequestDto roomPasswordRequestDto)
-//            throws OpenViduJavaClientException, OpenViduHttpException{
-//        return roomService.enterRoom(roomId, request, roomPasswordRequestDto);
-//    }
 }

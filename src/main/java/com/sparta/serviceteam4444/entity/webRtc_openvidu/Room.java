@@ -26,6 +26,9 @@ public class Room {
     private String masterUserNickname;
 
     @Column
+    private Long maxUser;
+
+    @Column
     private Long currentMember;
 
     @OneToMany(mappedBy = "sessionId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
