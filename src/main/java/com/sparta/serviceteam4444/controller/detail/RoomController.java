@@ -1,9 +1,6 @@
 package com.sparta.serviceteam4444.controller.detail;
 
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateRoomRequestDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateRoomResponseDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.EnterRoomResponseDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomMemberResponseDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -15,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +37,12 @@ public class RoomController {
     public RoomMemberResponseDto enterRoom(@PathVariable String roomId,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException{
         return roomService.enterRoom(roomId, userDetails.getUser());
+    }
+
+    //방 전체 목록 조회
+    @GetMapping("/room")
+    @ApiOperation(value = "session 조회")
+    public List<RoomResponseDto> getAllRooms() {
+        return roomService.getAllRooms();
     }
 }

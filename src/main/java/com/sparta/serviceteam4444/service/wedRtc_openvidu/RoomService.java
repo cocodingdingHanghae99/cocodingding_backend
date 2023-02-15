@@ -2,10 +2,7 @@ package com.sparta.serviceteam4444.service.wedRtc_openvidu;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateRoomResponseDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateRoomRequestDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomMemberResponseDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomPasswordRequestDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.BenUser;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.Room;
@@ -219,4 +216,27 @@ public class RoomService {
         return session.createConnection(connectionProperties).getToken();
 
     }
+
+    //======================================================================================================//
+
+    //방 전체 조회
+    public List<RoomResponseDto> getAllRooms() {
+        List<Room> roomList = roomRepository.findAll();
+        if (roomList.isEmpty()) {
+            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+        }
+        List<RoomResponseDto> createRoomResponseDtos = new ArrayList<>();
+        for (Room room : roomList) {
+            RoomResponseDto roomResponseDto = RoomResponseDto.builder()
+                    .roomTitle(room.getRoomTitle())
+                    .masterNickname(room.getMasterUserNickname())
+                    .sessionId(room.getSessionId())
+                    .currentUser(room.getCurrentMember())
+                    .maxUser(room.getMaxUser())
+                    .build();
+            createRoomResponseDtos.add(roomResponseDto);
+        }
+        return createRoomResponseDtos;
+    }
+
 }
