@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import com.sparta.serviceteam4444.jwt.JwtAuthFilter;
+import com.sparta.serviceteam4444.jwt.JwtFilter;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 
 @Configuration
@@ -62,7 +62,7 @@ public class WebSecurityConfig {
 //                .anyRequest().authenticated()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
-                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -3,11 +3,13 @@ package com.sparta.serviceteam4444.entity.user;
 import com.sparta.serviceteam4444.dto.user.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity(name = "users")
 public class User {
 
@@ -22,10 +24,11 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role = UserRoleEnum.USER;
     @Column(nullable = false)
     private boolean state = true;
+
+    private String RefreshToken;
+
     public User(String nickName, String email, String password) {
         this.nickname = nickName;
         this.email = email;

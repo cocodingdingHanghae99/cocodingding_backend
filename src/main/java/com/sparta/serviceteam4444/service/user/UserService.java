@@ -6,6 +6,7 @@ import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,22 +75,36 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         //토큰을 생성해서 유저에게 줌
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getNickname(), user.getRole()));
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
         return new UserInfoDto(user.getNickname(),user.getEmail());
     }
     @Transactional
-    public UserInfoDto getInfo(HttpServletRequest request) {
-        // Request에서 Token 가져오기
-        String token = jwtUtil.resolveToken(request);
-        // 토큰에서 사용자 정보 가져오기
-        Claims claims = jwtUtil.getUserInfoFromToken(token);
+    public UserInfoDto getInfo(HttpServletRequest request, HttpServletResponse response) {
+        //토큰 검사
+        Claims claims = tokenCheck(request);
         // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
         User user =  userRepository.findByNickname(claims.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
+        //토큰 재부여
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
         return new UserInfoDto(user.getNickname(),user.getEmail());
     }
-
+    @Transactional
+    public UserInfoDto getInfo2(HttpServletRequest request, HttpServletResponse response) {
+        //토큰 검사
+        Claims claims = tokenCheck(request);
+        // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+        User user =  userRepository.findByNickname(claims.getSubject()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
+        //토큰 재부여
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
+        return new UserInfoDto(user.getNickname(),user.getEmail());
+    }
     @Transactional
     public ResponseDto changePassword(String nickName, ChangePasswordRequestDto changePasswordRequestDto, User user) {
         Optional<User> found = userRepository.findByNickname(nickName);
@@ -126,4 +141,18 @@ public class UserService {
         return new ResponseDto("아이디 삭제 완료");
     }
 
+    @Transactional
+    public Claims tokenCheck(HttpServletRequest request){
+        // 토큰에서 사용자 정보 가져오기
+        Claims claims;
+        try{
+            // Request에서 Access Token 가져오기
+            String token = jwtUtil.resolveAccessToken(request);
+            claims= jwtUtil.getUserInfoFromToken(token);
+        }catch (ExpiredJwtException e){
+            String tokken = jwtUtil.resolveRefreshToken(request);
+            claims = jwtUtil.getUserInfoFromToken(tokken);
+        }
+        return claims;
+    }
 }
