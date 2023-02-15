@@ -1,5 +1,6 @@
 package com.sparta.serviceteam4444.repository.socket;
 
+import com.sparta.serviceteam4444.dto.socket.ChatInfoDto;
 import com.sparta.serviceteam4444.dto.socket.ChatRoom;
 import org.springframework.stereotype.Repository;
 
@@ -27,8 +28,8 @@ public class ChatRoomRepository {
         return chatRoomMap.get(id);
     }
 
-    public ChatRoom createChatRoom(String roomName, String category) {
-        ChatRoom chatRoom = ChatRoom.create(roomName, category);
+    public ChatRoom createChatRoom(ChatInfoDto chatInfoDto) {
+        ChatRoom chatRoom = ChatRoom.create(chatInfoDto);
         chatRoomMap.put(chatRoom.getId(), chatRoom);
         return chatRoom;
     }

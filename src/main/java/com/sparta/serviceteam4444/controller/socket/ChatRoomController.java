@@ -1,5 +1,6 @@
 package com.sparta.serviceteam4444.controller.socket;
 
+import com.sparta.serviceteam4444.dto.socket.ChatInfoDto;
 import com.sparta.serviceteam4444.dto.socket.ChatRoom;
 import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import io.swagger.annotations.Api;
@@ -14,7 +15,7 @@ import java.util.List;
 @Api(tags = {"chat"})
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("chat")
+@RequestMapping(value="chat", produces = "application/json; charset=utf8")
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -28,15 +29,13 @@ public class ChatRoomController {
     @ApiOperation(value = "방 다 보여주기", notes = "방 목록들을 보여준다.")
     @GetMapping("rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
-    }
+    public List<ChatRoom> room() {return chatRoomRepository.findAllRoom();}
 
     @ApiOperation(value = "방 파기", notes = "채팅방 하나를 판다.")
     @PostMapping("rooms")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String roomName, String category) {
-        return chatRoomRepository.createChatRoom(roomName, category);
+    public ChatRoom createRoom(@RequestBody ChatInfoDto chatInfoDto) {
+        return chatRoomRepository.createChatRoom(chatInfoDto);
     }
 
     @ApiOperation(value = "실험용 입장 시 화면 페이지", notes = "무시해도 되며 프론트 작업 완료 시 삭제")
