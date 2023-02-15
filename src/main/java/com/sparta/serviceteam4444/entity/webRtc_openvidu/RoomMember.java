@@ -22,12 +22,15 @@ public class RoomMember {
     @Column
     private String sessionId;
 
+    @Column
+    private String userEmail;
+
     //userEntityId
     @Column
     private Long userId;
 
     @Column
-    private String nickname;
+    private String userNickname;
 
     //session 토큰
     @Column

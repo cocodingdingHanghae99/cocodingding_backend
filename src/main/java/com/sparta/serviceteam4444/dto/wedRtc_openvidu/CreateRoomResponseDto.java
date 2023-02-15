@@ -10,9 +10,11 @@ import java.util.List;
 public class CreateRoomResponseDto {
     private String sessionId;
 
-    private String roomName;
+    private String roomTitle;
 
     private String masterNickname;
+
+    private Long maxUser;
 
     private List<RoomMemberResponseDto> roomMemberResponseDtoList; //맴버 리스트
 

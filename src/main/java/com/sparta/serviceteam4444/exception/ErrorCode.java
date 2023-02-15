@@ -12,6 +12,8 @@ public enum ErrorCode {
 
     NOT_EXITS_ROOM(HttpStatus.BAD_REQUEST, "400", "방이 없습니다."),
 
+    ALREADY_ENTER_USER(HttpStatus.BAD_REQUEST, "400", "이미 입장한 유저입니다."),
+
     BEN_ROOM(HttpStatus.BAD_REQUEST, "400", "강퇴당한 방입니다.");
 
 

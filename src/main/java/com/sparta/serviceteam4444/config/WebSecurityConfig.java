@@ -54,12 +54,8 @@ public class WebSecurityConfig {
         http.cors().configurationSource(corsConfigurationSource());
 
         http.authorizeRequests()
-                .anyRequest().permitAll()
-//                .antMatchers("/**").permitAll()
-//                //현우
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/favicon.ico").permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/detail/**").authenticated()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

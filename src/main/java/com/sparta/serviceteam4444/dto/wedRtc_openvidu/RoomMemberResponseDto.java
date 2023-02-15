@@ -12,6 +12,9 @@ public class RoomMemberResponseDto {
     private Long roomMemberId;
     //체팅방의 아이디
     private String sessionId;
+
+    private String userEmail;
+
     //맴버의 유저 id
     private Long userId;
     //맴버의 닉네임
@@ -24,7 +27,7 @@ public class RoomMemberResponseDto {
         this.roomMemberId = roomMember.getRoomMemberId();
         this.sessionId = roomMember.getSessionId();
         this.userId = roomMember.getUserId();
-        this.userNickname = roomMember.getNickname();
+        this.userNickname = roomMember.getUserNickname();
         this.roomMaster = roomMaster;
         this.enterRoomToken = roomMember.getEnterRoomToken();
     }

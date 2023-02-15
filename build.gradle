@@ -39,6 +39,7 @@ dependencies {
 
 //	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+//	runtimeOnly 'mysql:mysql-connector-java'
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
 	//jwt 추가
