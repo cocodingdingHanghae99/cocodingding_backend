@@ -13,4 +13,7 @@ public class UserInfoDto {
         this.nickname = nickname;
         this.email = email;
     }
+    public UserInfoDto(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -75,8 +75,8 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         //토큰을 생성해서 유저에게 줌
-        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
-        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getEmail()));
         return new UserInfoDto(user.getNickname(),user.getEmail());
     }
     @Transactional
@@ -84,36 +84,45 @@ public class UserService {
         //토큰 검사
         Claims claims = tokenCheck(request);
         // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-        User user =  userRepository.findByNickname(claims.getSubject()).orElseThrow(
+        User user =  userRepository.findByEmail(claims.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
         //토큰 재부여
-        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
-        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getEmail()));
         return new UserInfoDto(user.getNickname(),user.getEmail());
     }
     @Transactional
-    public UserInfoDto getInfo2(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseDto changeNickname(UserInfoDto userinfoDto, HttpServletRequest request, HttpServletResponse response) {
         //토큰 검사
         Claims claims = tokenCheck(request);
         // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
-        User user =  userRepository.findByNickname(claims.getSubject()).orElseThrow(
+        User user =  userRepository.findByEmail(claims.getSubject()).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
+        //요청받은 닉네임 값 확인
+        String nnn = userinfoDto.getNickname();
+        if (nnn==null) {
+            throw new IllegalArgumentException(
+                    "닉네임을 작성해주세요.");
+        }
+        //닉네임을 업데이트
+        user.update(nnn);
+
         //토큰 재부여
-        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getNickname()));
-        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getNickname()));
-        return new UserInfoDto(user.getNickname(),user.getEmail());
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getEmail()));
+
+        return new ResponseDto("닉네임이 변경되었습니다");
     }
     @Transactional
-    public ResponseDto changePassword(String nickName, ChangePasswordRequestDto changePasswordRequestDto, User user) {
-        Optional<User> found = userRepository.findByNickname(nickName);
-        if (found.isEmpty() || !found.get().isState()) {    //삭제된 상태에서 비밀번호 변경 방지
-            throw new IllegalArgumentException("사용자가 없습니다.");
-        }
-        if(!user.getNickname().equals(nickName)){ //대리 삭제 방지
-            throw new IllegalArgumentException("다른 아이디 삭제는 안됩니다.");
-        }
+    public ResponseDto changePassword(ChangePasswordRequestDto changePasswordRequestDto, HttpServletRequest request, HttpServletResponse response) {
+        //토큰 검사
+        Claims claims = tokenCheck(request);
+        // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+        User user =  userRepository.findByEmail(claims.getSubject()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
         //요청받은 비번 값 확인
         String npw = changePasswordRequestDto.getPassword();
         if (!Pattern.matches(ptt, npw)) {
@@ -123,6 +132,10 @@ public class UserService {
         //저장을 바로 하면 안되고 encoding해서 저장하기
         String npww = passwordEncoder.encode(npw);
         user.update(npww);
+
+        //토큰 재부여
+        response.addHeader(JwtUtil.ACCESS_HEADER, jwtUtil.createAccessToken(user.getEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, jwtUtil.createRefreshToken(user.getEmail()));
         return new ResponseDto("비밀번호가 변경되었습니다");
     }
 
@@ -135,7 +148,6 @@ public class UserService {
         if(!user.getNickname().equals(nickname)){ //대리 삭제 방지
             throw new IllegalArgumentException("다른 아이디 삭제는 안됩니다.");
         }
-
         // 삭제를 database -> state true->false (휴먼계정)
         found.get().deleteUser();
         return new ResponseDto("아이디 삭제 완료");

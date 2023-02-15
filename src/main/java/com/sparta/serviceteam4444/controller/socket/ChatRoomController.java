@@ -40,15 +40,15 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "실험용 입장 시 화면 페이지", notes = "무시해도 되며 프론트 작업 완료 시 삭제")
-    @GetMapping("room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
+    @GetMapping("room/enter/{id}")
+    public String roomDetail(Model model, @PathVariable String id) {
+        model.addAttribute("id", id);
         return "chat/roomdetail";
     }
     @ApiOperation(value = "특정 채팅방 찾기", notes = "아이디 값으로 특정 채팅방 찾기")
-    @GetMapping("room/{roomId}")
+    @GetMapping("room/{id}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+    public ChatRoom roomInfo(@PathVariable String id) {
+        return chatRoomRepository.findRoomById(id);
     }
 }

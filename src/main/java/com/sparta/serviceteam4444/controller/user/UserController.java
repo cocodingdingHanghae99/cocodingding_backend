@@ -44,19 +44,19 @@ public class UserController {
     public UserInfoDto getUserName(HttpServletRequest request, HttpServletResponse response) {
         return userService.getInfo(request, response);
     }
-    @ApiOperation(value = "로그인 유저 이름 반환", notes = "로그인 한 유저가 메인페이지를 요청할 때 유저의 이름 반환한다.")
-    @GetMapping("/info2")
-    public UserInfoDto getUserName2(HttpServletRequest request, HttpServletResponse response) {
-        return userService.getInfo2(request, response);
+    @ApiOperation(value = "닉네임 변경", notes = "사용자의 닉네임를 변경한다.")
+    @PatchMapping("/changenn")
+    public ResponseDto changeNickname(@RequestBody UserInfoDto userinfoDto, HttpServletRequest request, HttpServletResponse response) {
+        return userService.changeNickname(userinfoDto, request, response);
     }
     @ApiOperation(value = "비밀번호 변경", notes = "사용자의 비밀번호를 변경한다.")
-    @PutMapping("/changepw/{username}")
-    public ResponseDto changePassword(@PathVariable String username, @RequestBody ChangePasswordRequestDto changePasswordRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.changePassword(username, changePasswordRequestDto, userDetails.getUser());
+    @PatchMapping("/changepw")
+    public ResponseDto changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto, HttpServletRequest request, HttpServletResponse response) {
+        return userService.changePassword(changePasswordRequestDto, request, response);
     }
     @ApiOperation(value = "계정 삭제", notes = "유저를 삭제한다.(자신 한정)")
-    @DeleteMapping("/delete/{username}")
-    public ResponseDto deleteBoard(@PathVariable String username,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.softDeleteId(username, userDetails.getUser());
+    @DeleteMapping("/delete/{nickname}")
+    public ResponseDto deleteBoard(@PathVariable String nickname,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.softDeleteId(nickname, userDetails.getUser());
     }
 }

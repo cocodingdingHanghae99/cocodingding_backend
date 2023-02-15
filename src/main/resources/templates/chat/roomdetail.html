@@ -49,23 +49,23 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            roomId: '',
+            id: '',
             room: {},
             sender: '',
             message: '',
             messages: []
         },
         created() {
-            this.roomId = localStorage.getItem('wschat.roomId');
+            this.id = localStorage.getItem('wschat.id');
             this.sender = localStorage.getItem('wschat.sender');
             this.findRoom();
         },
         methods: {
             findRoom: function() {
-                axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
+                axios.get('/chat/room/'+this.id).then(response => { this.room = response.data; });
             },
             sendMessage: function() {
-                ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}));
+                ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', id:this.id, sender:this.sender, message:this.message}));
                 this.message = '';
             },
             recvMessage: function(recv) {
@@ -75,11 +75,11 @@
     });
     // pub/sub event
     ws.connect({}, function(frame) {
-        ws.subscribe("/sub/chat/room/"+vm.$data.roomId, function(message) {
+        ws.subscribe("/sub/chat/room/"+vm.$data.id, function(message) {
             var recv = JSON.parse(message.body);
             vm.recvMessage(recv);
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', id:vm.$data.id, sender:vm.$data.sender}));
     }, function(error) {
         alert("error "+error);
     });
