@@ -1,5 +1,6 @@
 package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
+import com.sparta.serviceteam4444.timestamp.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,26 +11,16 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class RoomMember {
-    //체팅방에 참여할때 받는 id
+@AllArgsConstructor
+public class BenUser extends Timestamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomMemberId;
+    private Long benUserId;
 
-    // 채팅방
     @Column
-    private String sessionId;
+    private String roomId;
 
-    //userEntityId
     @Column
     private Long userId;
-
-    @Column
-    private String nickname;
-
-    //session 토큰
-    @Column
-    private String enterRoomToken;
 }
