@@ -55,12 +55,12 @@ public class RoomService {
         return openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-//    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
-//                                            HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException{
-//
-//
-//
-//    }
+    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
+                                            HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException{
+
+        return null;
+
+    }
 
 //    //SDK의 진입점인 OpenVidu 객체
 //    private OpenVidu openVidu;

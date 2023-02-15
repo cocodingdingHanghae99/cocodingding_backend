@@ -22,7 +22,6 @@ public class RoomController {
     @PostMapping("/room")
     public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto,
                                             HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException{
-//        return roomService.createRoom(createRoomRequestDto, request);
-        return null;
+        return roomService.createRoom(createRoomRequestDto, request);
     }
 }
