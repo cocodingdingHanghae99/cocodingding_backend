@@ -78,7 +78,8 @@ public class WebSecurityConfig {
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Access");
+        configuration.addExposedHeader("Refresh");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
