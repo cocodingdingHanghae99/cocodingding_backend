@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.controller.socket;
 
-import com.sparta.serviceteam4444.dto.socket.ChatInfoDto;
 import com.sparta.serviceteam4444.dto.socket.ChatRoom;
 import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import io.swagger.annotations.Api;
@@ -34,8 +33,8 @@ public class ChatRoomController {
     @ApiOperation(value = "방 파기", notes = "채팅방 하나를 판다.")
     @PostMapping("rooms")
     @ResponseBody
-    public ChatRoom createRoom(@RequestBody ChatInfoDto chatInfoDto) {
-        return chatRoomRepository.createChatRoom(chatInfoDto);
+    public ChatRoom createRoom(@RequestBody String roomName, String category) {
+        return chatRoomRepository.createChatRoom(roomName, category);
     }
 
     @ApiOperation(value = "실험용 입장 시 화면 페이지", notes = "무시해도 되며 프론트 작업 완료 시 삭제")
