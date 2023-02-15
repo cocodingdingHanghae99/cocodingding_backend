@@ -38,6 +38,30 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class RoomService {
 
+    private final RoomRepository roomRepository;
+
+    private final RoomUserRepository roomUserRepository;
+
+    private OpenVidu openVidu;
+
+    @Value("${openvidu.url}")
+    private String OPENVIDU_URL;
+
+    @Value("${openvidu.secret}")
+    private String OPENVIDU_SECRET;
+
+    @PostConstruct
+    public OpenVidu openVidu(){
+        return openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+    }
+
+    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
+                                            HttpServletRequest request) throws OpenViduJavaClientException, OpenViduHttpException{
+
+        return null;
+
+    }
+
 //    //SDK의 진입점인 OpenVidu 객체
 //    private OpenVidu openVidu;
 //
