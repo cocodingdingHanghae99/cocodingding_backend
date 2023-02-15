@@ -104,11 +104,11 @@ public class RoomService {
 
         return CreateRoomResponseDto.builder()
                 .sessionId(savedRoom.getSessionId())
-//                .roomTitle(savedRoom.getRoomTitle())
-//                .masterNickname(savedRoom.getMasterUserNickname())
-//                .maxUser(savedRoom.getMaxUser())
-//                .currentMember(savedRoom.getCurrentMember())
-//                .token(newToken.getToken())
+                .roomTitle(savedRoom.getRoomTitle())
+                .masterNickname(savedRoom.getMasterUserNickname())
+                .maxUser(savedRoom.getMaxUser())
+                .currentMember(savedRoom.getCurrentMember())
+                .token(newToken.getToken())
                 .build();
     }
 
