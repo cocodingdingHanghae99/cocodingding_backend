@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity(name = "users")
 public class User {
 
@@ -19,6 +18,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String userEmail;
+
 
     @Column(nullable = false, unique = true)
     private String userNickname;

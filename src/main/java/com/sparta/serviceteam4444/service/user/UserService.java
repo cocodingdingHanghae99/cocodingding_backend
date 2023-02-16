@@ -9,6 +9,7 @@ import com.sparta.serviceteam4444.exception.ErrorCode;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import com.sparta.serviceteam4444.jwt.JwtUtil;
+import com.sparta.serviceteam4444.service.email.EmailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
