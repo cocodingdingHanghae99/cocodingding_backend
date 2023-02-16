@@ -59,11 +59,11 @@ public class UserService {
         userRepository.save(user);
         //이메일 보내기
         log.info("작동 완료");
-        EmailMessage emailMessage = EmailMessage.builder()
-                                                .to(email)
-                                                .subject("똑똑똑")
-                                                .build();
-        emailService.sendMail(emailMessage, "email");
+//        EmailMessage emailMessage = EmailMessage.builder()
+//                                                .to(email)
+//                                                .subject("똑똑똑")
+//                                                .build();
+//        emailService.sendMail(emailMessage, "email");
         return new ResponseDto("가입 완료");
     }
 
