@@ -9,21 +9,26 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
+
     @Column
     private Long kakaoId;
+
     @Column(nullable = false)
     private String nickname;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private boolean state = true;
 

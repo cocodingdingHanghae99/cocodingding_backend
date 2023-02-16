@@ -23,9 +23,13 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+
     private final JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     @Value("${ADMIN_TOKEN}")
     // ADMIN_TOKEN(추후에 써먹을 것)
     private static String ADMIN_TOKEN;
