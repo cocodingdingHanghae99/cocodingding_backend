@@ -63,6 +63,8 @@ public class JwtUtil {
                         .compact();
     }
 
+    // refresh 토큰 생성
+
     // 토큰 검증
     public boolean validateToken(String token) {
         try {

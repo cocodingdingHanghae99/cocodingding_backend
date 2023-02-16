@@ -81,4 +81,9 @@ public class UserService {
         return new UserResponseDto(data, statucode, user.getUserEmail(), user.getUserNickname());
 
     }
+
+    //닉네임 변경
+
+
+
 }
