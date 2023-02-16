@@ -54,8 +54,8 @@ public class UserController {
         return userService.changePassword(changePasswordRequestDto, request, response);
     }
     @ApiOperation(value = "계정 삭제", notes = "유저를 삭제한다.(자신 한정)")
-    @DeleteMapping("/delete/{nickname}")
-    public ResponseDto deleteBoard(@PathVariable String nickname,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.softDeleteId(nickname, userDetails.getUser());
+    @DeleteMapping("/delete")
+    public ResponseDto deleteBoard(HttpServletRequest request) {
+        return userService.softDeleteId(request);
     }
 }

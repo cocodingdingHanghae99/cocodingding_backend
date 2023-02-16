@@ -140,16 +140,16 @@ public class UserService {
     }
 
     @Transactional  // soft delete
-    public ResponseDto softDeleteId(String nickname, User user) {
-        Optional<User> found = userRepository.findByNickname(nickname);
-        if (found.isEmpty() || !found.get().isState()) {    //삭제된 상태에서 다시 삭제 방지
+    public ResponseDto softDeleteId(HttpServletRequest request) {
+        //토큰 검사
+        Claims claims = tokenCheck(request);
+        // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+        Optional<User> user =  userRepository.findByEmail(claims.getSubject());
+        if (user.isEmpty() || !user.get().isState()) {    //삭제된 상태에서 다시 삭제 방지
             throw new IllegalArgumentException("사용자가 없습니다.");
         }
-        if(!user.getNickname().equals(nickname)){ //대리 삭제 방지
-            throw new IllegalArgumentException("다른 아이디 삭제는 안됩니다.");
-        }
         // 삭제를 database -> state true->false (휴먼계정)
-        found.get().deleteUser();
+        user.get().deleteUser();
         return new ResponseDto("아이디 삭제 완료");
     }
 
