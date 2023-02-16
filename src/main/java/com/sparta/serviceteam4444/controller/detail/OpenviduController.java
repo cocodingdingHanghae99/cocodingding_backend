@@ -3,7 +3,6 @@ package com.sparta.serviceteam4444.controller.detail;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
-import com.sparta.serviceteam4444.util.ResponseUtil;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +22,7 @@ import java.util.Map;
 @CrossOrigin(originPatterns = "*")
 @RequestMapping("/detail")
 @Api(tags = {"deatil"})
-public class RoomController {
+public class OpenviduController {
 
     private final RoomService roomService;
 
