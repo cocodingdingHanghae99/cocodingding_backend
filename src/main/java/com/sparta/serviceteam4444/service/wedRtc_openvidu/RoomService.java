@@ -65,7 +65,7 @@ public class RoomService {
         Room room = Room.builder()
                 .sessionId(newToken.getSessionId())
                 .roomTitle(createRoomRequestDto.getRoomTitle())
-                .masterUserNickname(user.getNickname())
+                .masterUserNickname(user.getUserNickname())
                 .maxUser(createRoomRequestDto.getMaxUser())
                 .build();
 
@@ -73,7 +73,7 @@ public class RoomService {
 
         RoomMember roomMember = RoomMember.builder()
                 .sessionId(savedRoom.getSessionId())
-                .userEmail(user.getEmail())
+                .userEmail(user.getUserEmail())
                 .build();
 
         roomUserRepository.save(roomMember);
@@ -87,7 +87,7 @@ public class RoomService {
         for (RoomMember roomUser : roomMemberList){
 
             if (user != null){
-                roomMaster = Objects.equals(roomUser.getUserNickname(), user.getNickname());
+                roomMaster = Objects.equals(roomUser.getUserNickname(), user.getUserNickname());
             } else {
                 roomMaster = false;
             }
@@ -114,7 +114,7 @@ public class RoomService {
 
     public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
 
-        String serverData = user.getNickname();
+        String serverData = user.getUserNickname();
 
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .type(ConnectionType.WEBRTC).data(serverData).build();
@@ -138,7 +138,7 @@ public class RoomService {
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
 
-        Optional<RoomMember> alreadyRoomUser = roomUserRepository.findBySessionIdAndUserNickname(sessionId, user.getNickname());
+        Optional<RoomMember> alreadyRoomUser = roomUserRepository.findBySessionIdAndUserNickname(sessionId, user.getUserNickname());
 
         if (alreadyRoomUser.isPresent()){
             throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
@@ -148,8 +148,8 @@ public class RoomService {
 
         RoomMember roomMember = RoomMember.builder()
                 .sessionId(room.getSessionId())
-                .userNickname(user.getNickname())
-                .userEmail(user.getEmail())
+                .userNickname(user.getUserNickname())
+                .userEmail(user.getUserEmail())
                 .enterRoomToken(enterRoomToken)
                 .build();
 
@@ -164,7 +164,7 @@ public class RoomService {
         for (RoomMember addRoomMember : roomMemberList){
 
             if (user != null){
-                roomMaster = Objects.equals(addRoomMember.getUserNickname(), user.getNickname());
+                roomMaster = Objects.equals(addRoomMember.getUserNickname(), user.getUserNickname());
             } else {
                 roomMaster = false;
             }
@@ -191,7 +191,7 @@ public class RoomService {
 
     private String enterRoomToken(User user, String sessionId) throws OpenViduHttpException, OpenViduJavaClientException {
 
-        String serverData = user.getNickname();
+        String serverData = user.getUserNickname();
 
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .type(ConnectionType.WEBRTC).data(serverData).build();
