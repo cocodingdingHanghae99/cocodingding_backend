@@ -72,7 +72,7 @@ public class RoomService {
     //======================================================================================================//
 
     //방 접속
-    public ResponseEntity<String> enterRoom(String sessionId, Map<String, Object> params, User user) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<String> enterRoom(String sessionId, Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException {
 
         Session session = openVidu.getActiveSession(sessionId);
 

@@ -3,6 +3,7 @@ package com.sparta.serviceteam4444.controller.detail;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
+import com.sparta.serviceteam4444.util.ResponseUtil;
 import io.openvidu.java.client.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,17 +30,17 @@ public class RoomController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public ResponseEntity<String> createRoom(@RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.createRoom(params);
+    public ResponseEntity<PrivateResponseBody> createRoom(@RequestBody(required = false) Map<String, Object> params)
+            throws OpenViduJavaClientException, OpenViduHttpException{
+        return new ResponseUtil<>().forSuccess(roomService.createRoom(params));
     }
 
     //방 접속
     @ApiOperation(value = "화상채팅방 접속")
     @PostMapping("/room/{sessionId}")
     public ResponseEntity<String> enterRoom(@PathVariable("sessionId") String sessionId,
-                                           @RequestBody(required = false) Map<String, Object> params,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.enterRoom(sessionId, params, userDetails.getUser());
+                                           @RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
+        return roomService.enterRoom(sessionId, params);
     }
 
     //방 전체 목록 조회
