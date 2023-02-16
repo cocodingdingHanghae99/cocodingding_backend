@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.repository.socket;
 
-import com.sparta.serviceteam4444.dto.socket.ChatInfo;
 import com.sparta.serviceteam4444.dto.socket.ChatRoom;
 import org.springframework.stereotype.Repository;
 

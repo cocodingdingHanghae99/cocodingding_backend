@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.controller.socket;
 
-import com.sparta.serviceteam4444.dto.socket.ChatInfo;
 import com.sparta.serviceteam4444.dto.socket.ChatRoom;
 import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import io.swagger.annotations.Api;
