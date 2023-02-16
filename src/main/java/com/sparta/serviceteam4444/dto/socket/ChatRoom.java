@@ -22,11 +22,11 @@ public class ChatRoom {
     private String category;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
-    public static ChatRoom create(String roomName, String category) {
+    public static ChatRoom create(ChatInfo chatInfo) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.id = UUID.randomUUID().toString();
-        chatRoom.roomName = roomName;
-        chatRoom.category = category;
+        chatRoom.roomName = chatInfo.getRoomName();
+        chatRoom.category = chatInfo.getCategory();
         return chatRoom;
     }
 
