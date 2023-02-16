@@ -29,9 +29,8 @@ public class RoomController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public ResponseEntity<String> createRoom(@RequestBody(required = false) Map<String, Object> params,
-                                     @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.createRoom(params, userDetails.getUser());
+    public ResponseEntity<String> createRoom(@RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
+        return roomService.createRoom(params);
     }
 
     //방 접속

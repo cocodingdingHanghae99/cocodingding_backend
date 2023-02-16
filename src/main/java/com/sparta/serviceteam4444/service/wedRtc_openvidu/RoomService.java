@@ -43,8 +43,7 @@ public class RoomService {
     }
 
     //방 생성
-    public ResponseEntity<String> createRoom(Map<String, Object> params,
-                                     User user) throws OpenViduJavaClientException, OpenViduHttpException{
+    public ResponseEntity<String> createRoom(Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
 
         SessionProperties properties = SessionProperties.fromJson(params).build();
 
