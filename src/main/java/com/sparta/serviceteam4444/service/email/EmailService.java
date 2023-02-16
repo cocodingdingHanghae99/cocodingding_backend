@@ -23,8 +23,6 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    private final UserService userService;
-
     public ResponseDto sendMail(EmailMessage emailMessage, String type) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();

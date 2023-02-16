@@ -30,15 +30,12 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    @Value("${ADMIN_TOKEN}")
-    // ADMIN_TOKEN(추후에 써먹을 것)
-    private static String ADMIN_TOKEN;
 
     String pt = "^[a-z\\\\d`~!@#$%^&*()-_=+]{4,10}$";
     String ptt = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,15}$";
 
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public ResponseDto signup(SignupRequestDto signupRequestDto) {
         //이름, 비밀번호 대조를 위해 값을 뽑아놓음
         String email = signupRequestDto.getEmail();
@@ -61,11 +58,12 @@ public class UserService {
         User user = new User(signupRequestDto,password);
         userRepository.save(user);
         //이메일 보내기
-//        EmailMessage emailMessage = EmailMessage.builder()
-//                                                .to(email)
-//                                                .subject("똑똑똑")
-//                                                .build();
-//        emailService.sendMail(emailMessage, "email");
+        log.info("작동 완료");
+        EmailMessage emailMessage = EmailMessage.builder()
+                                                .to(email)
+                                                .subject("똑똑똑")
+                                                .build();
+        emailService.sendMail(emailMessage, "email");
         return new ResponseDto("가입 완료");
     }
 
