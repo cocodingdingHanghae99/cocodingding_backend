@@ -55,7 +55,7 @@ public class WebSecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/user/**").permitAll()
-//                .antMatchers("/detail/**").authenticated()
+//                .antMatchers("/detail/**").authenticated()    임시로 주석처리 나중에 권한 변경 해야 함
                 .antMatchers("/detail/**").permitAll()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
