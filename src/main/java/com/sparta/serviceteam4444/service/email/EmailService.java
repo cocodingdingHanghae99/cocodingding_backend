@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.service.email;
 
-import com.sparta.serviceteam4444.dto.user.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,7 +22,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    public ResponseDto sendMail(EmailMessage emailMessage, String type) {
+    public String sendMail(EmailMessage emailMessage, String type) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
@@ -34,7 +33,7 @@ public class EmailService {
             mimeMessageHelper.setText(setContext(type), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
-            return new ResponseDto("Success");
+            return new String("Success");
 
         } catch (MessagingException e) {
             log.info("fail");
