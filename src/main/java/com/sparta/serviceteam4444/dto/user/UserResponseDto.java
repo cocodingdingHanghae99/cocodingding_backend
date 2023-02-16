@@ -22,4 +22,5 @@ public class UserResponseDto {
         this.data = data;
         this.statuscode = statuscode;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.sparta.serviceteam4444.service.user;
 
 import com.sparta.serviceteam4444.dto.user.UserLoginDto;
+import com.sparta.serviceteam4444.dto.user.UserRequestDto;
 import com.sparta.serviceteam4444.dto.user.UserResponseDto;
 import com.sparta.serviceteam4444.dto.user.UserSignupDto;
 import com.sparta.serviceteam4444.entity.user.User;
@@ -9,33 +10,28 @@ import com.sparta.serviceteam4444.exception.ErrorCode;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import com.sparta.serviceteam4444.jwt.JwtUtil;
-import com.sparta.serviceteam4444.service.email.EmailService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
-
+//============================================================================================================//
     private final JwtUtil jwtUtil;
 
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    //============================================================================================================//
 
     public void signup(UserSignupDto userSignupDto) {
 
@@ -57,6 +53,8 @@ public class UserService {
         userRepository.save(user);
 
     }
+
+    //============================================================================================================//
 
     public UserResponseDto login(UserLoginDto userLoginDto, HttpServletResponse response){
 
@@ -82,8 +80,20 @@ public class UserService {
 
     }
 
-    //닉네임 변경
+    //============================================================================================================//
 
+    public UserRequestDto updateNickname(String userEmail, UserRequestDto userRequestDto) {
 
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
+        );
+
+        if (user.getUserEmail().equals(userEmail)){
+            user.update(userRequestDto);
+        }
+
+        return new UserRequestDto(user);
+
+    }
 
 }

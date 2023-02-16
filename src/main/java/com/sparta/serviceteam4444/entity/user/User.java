@@ -1,8 +1,8 @@
 package com.sparta.serviceteam4444.entity.user;
 
+import com.sparta.serviceteam4444.dto.user.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -32,6 +32,9 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    public void update(UserRequestDto userRequestDto) {
+        this.userEmail = userRequestDto.getUserEmail();
+    }
 
 
 //    @Column

@@ -1,6 +1,7 @@
 package com.sparta.serviceteam4444.controller.user;
 
 import com.sparta.serviceteam4444.dto.user.UserLoginDto;
+import com.sparta.serviceteam4444.dto.user.UserRequestDto;
 import com.sparta.serviceteam4444.dto.user.UserResponseDto;
 import com.sparta.serviceteam4444.dto.user.UserSignupDto;
 import com.sparta.serviceteam4444.service.user.UserService;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Api(tags = {"Users"})
@@ -34,6 +34,13 @@ public class UserController {
     public UserResponseDto login(@RequestBody UserLoginDto userLoginDto,
                                  HttpServletResponse response){
         return userService.login(userLoginDto, response);
+    }
+
+    @ApiOperation(value = "닉네임 변경")
+    @PutMapping("/info/{userEmail}")
+    public UserRequestDto updateNickname(@PathVariable String userEmail,
+                                          @RequestBody UserRequestDto userRequestDto){
+        return userService.updateNickname(userEmail, userRequestDto);
     }
 
 //    @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
