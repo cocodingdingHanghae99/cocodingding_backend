@@ -32,6 +32,9 @@ public class User {
     @Column(nullable = false)
     private boolean state = true;
 
+    @Column
+    private Long userId= Long.valueOf(0);
+
     private String RefreshToken;
 
     public User(String nickName, String email, String password) {
