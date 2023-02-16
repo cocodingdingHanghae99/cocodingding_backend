@@ -1,10 +1,12 @@
 package com.sparta.serviceteam4444.service.user;
 
 import com.sparta.serviceteam4444.dto.user.*;
+import com.sparta.serviceteam4444.entity.email.EmailMessage;
 import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 
 import com.sparta.serviceteam4444.jwt.JwtUtil;
+import com.sparta.serviceteam4444.service.email.EmailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
     @Value("${ADMIN_TOKEN}")
     // ADMIN_TOKEN(추후에 써먹을 것)
     private static String ADMIN_TOKEN;
@@ -34,7 +38,7 @@ public class UserService {
     String ptt = "^[a-zA-Z\\\\d`~!@#$%^&*()-_=+]{8,15}$";
 
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public ResponseDto signup(SignupRequestDto signupRequestDto) {
         //이름, 비밀번호 대조를 위해 값을 뽑아놓음
         String email = signupRequestDto.getEmail();
@@ -56,6 +60,12 @@ public class UserService {
         //등록등록
         User user = new User(signupRequestDto,password);
         userRepository.save(user);
+        //이메일 보내기
+//        EmailMessage emailMessage = EmailMessage.builder()
+//                                                .to(email)
+//                                                .subject("똑똑똑")
+//                                                .build();
+//        emailService.sendMail(emailMessage, "email");
         return new ResponseDto("가입 완료");
     }
 
