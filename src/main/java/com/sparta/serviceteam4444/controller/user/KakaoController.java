@@ -1,7 +1,12 @@
 package com.sparta.serviceteam4444.controller.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.service.user.KakaoService;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -10,16 +15,18 @@ public class KakaoController {
 
     private KakaoService kakaoService;
 
-    @GetMapping(value = "/kakao")
-    public String kakaoLogin(@RequestParam (value = "code", required = false) String code) throws Exception {
+    @GetMapping("/kakao")
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
-        System.out.println("#########" + code);
+        String createToken = kakaoService.kakaoLogin(code, response);
 
-        String access_Token = kakaoService.getAccessToken(code);
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
 
-        System.out.println("###access_Token#### : " + access_Token);
+        cookie.setPath("/");
 
-        return access_Token;
+        response.addCookie(cookie);
+
+        return "redirect:/";
 
     }
 
