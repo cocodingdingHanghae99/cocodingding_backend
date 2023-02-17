@@ -22,9 +22,6 @@ public class RoomMember {
     @Column
     private String sessionId;
 
-    @Column
-    private String userEmail;
-
     //userEntityId
     @Column
     private Long userId;

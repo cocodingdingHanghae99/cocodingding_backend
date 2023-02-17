@@ -43,36 +43,65 @@ public class RoomService {
     }
 
     //방 생성
-    public ResponseEntity<String> createRoom(Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
+    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
+                                            User user) throws OpenViduJavaClientException, OpenViduHttpException{
+        //session생성 및 token받아오기
+        CreateRoomResponseDto newToken = createNewToken(user);
 
-        SessionProperties properties = SessionProperties.fromJson(params).build();
+        //newToken바탕으로 Room build
+        Room room = Room.builder()
+                .roomTitle(createRoomRequestDto.getRoomTitle())
+                .sessionId(newToken.getSessionId())
+                //방 만든사람이 masterUser
+                .masterUserNickname(user.getUserNickname())
+                .enterRoomToken(newToken.getToken())
+                .build();
 
-        Session session = openVidu.createSession(properties);
+        RoomMember roomMember = RoomMember.builder()
+                .sessionId(newToken.getSessionId())
+                .userId(user.getId())
+                .enterRoomToken(newToken.getToken())
+                .userNickname(user.getUserNickname())
+                .build();
+        //roomMember 저장하기
+        roomUserRepository.save(roomMember);
+        //방에 있는 인원 체크
+        Long currentUser = roomUserRepository.countAllBySessionId(newToken.getSessionId());
 
-        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+        room.updateCurrentMember(currentUser);
+        //Room 저장하기
+        Room savedRoom = roomRepository.save(room);
+
+        return CreateRoomResponseDto.builder()
+                .sessionId(savedRoom.getSessionId())
+                .masterNickname(savedRoom.getMasterUserNickname())
+                .maxUser(savedRoom.getMaxUser())
+                .currentMember(savedRoom.getCurrentMember())
+                .token(newToken.getToken())
+                .build();
     }
 
-//    public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
-//
-//        String serverData = user.getNickname();
-//
-//        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
-//                .type(ConnectionType.WEBRTC).data(serverData).build();
-//
-//        Session session = openVidu.createSession();
-//
-//        String token = session.createConnection(connectionProperties).getToken();
-//
-//        return CreateRoomResponseDto.builder()
-//                .sessionId(session.getSessionId())
-//                .token(token)
-//                .build();
-//    }
+    public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
+        //userNickname을 serverData로 받기
+        String serverData = user.getUserNickname();
+
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+                .type(ConnectionType.WEBRTC).data(serverData).build();
+        //session만들기
+        Session session = openVidu.createSession();
+        //토큰 받아오기
+        String token = session.createConnection(connectionProperties).getToken();
+
+        return CreateRoomResponseDto.builder()
+                .sessionId(session.getSessionId())
+                .token(token)
+                .build();
+    }
 
     //======================================================================================================//
 
     //방 접속
-    public ResponseEntity<String> enterRoom(String sessionId, Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<String> enterRoom(String sessionId, User user) throws OpenViduJavaClientException, OpenViduHttpException {
 
         Session session = openVidu.getActiveSession(sessionId);
 
@@ -80,8 +109,43 @@ public class RoomService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+        Room room = roomRepository.findById(sessionId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
 
+        RoomMember roomMember = RoomMember.builder()
+                .sessionId(room.getSessionId())
+                .userNickname(user.getUserNickname())
+                .userId(user.getId())
+                .enterRoomToken(room.getEnterRoomToken())
+                .build();
+
+        roomUserRepository.save(roomMember);
+
+        boolean roomMaster = false;
+
+        List<RoomMember> roomMemberList = roomUserRepository.findAllBySessionId(room.getSessionId());
+
+        List<RoomMemberResponseDto> roomMemberResponseDtoList = new ArrayList<>();
+
+        for (RoomMember addRoomMember : roomMemberList){
+
+            if (user != null){
+                roomMaster = Objects.equals(addRoomMember.getUserNickname(), user.getUserNickname());
+            } else {
+                roomMaster = false;
+            }
+
+            roomMemberResponseDtoList.add(new RoomMemberResponseDto(addRoomMember, roomMaster));
+
+        }
+
+        Long currentMember = roomUserRepository.countAllBySessionId(room.getSessionId());
+
+        room.updateCurrentMember(currentMember);
+
+        roomRepository.save(room);
+        ConnectionProperties properties = new ConnectionProperties.Builder().build();
         Connection connection = session.createConnection(properties);
 
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
@@ -126,7 +190,6 @@ public class RoomService {
         List<RoomResponseDto> createRoomResponseDtos = new ArrayList<>();
         for (Room room : roomList) {
             RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .roomTitle(room.getRoomTitle())
                     .masterNickname(room.getMasterUserNickname())
                     .sessionId(room.getSessionId())
                     .currentUser(room.getCurrentMember())
@@ -137,4 +200,14 @@ public class RoomService {
         return createRoomResponseDtos;
     }
 
+    public RoomResponseDto getRoom(String roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                ()-> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        return RoomResponseDto.builder()
+                .roomTitle(room.getRoomTitle())
+                .sessionId(room.getSessionId())
+                .enterRoomToken(room.getEnterRoomToken())
+                .build();
+    }
 }

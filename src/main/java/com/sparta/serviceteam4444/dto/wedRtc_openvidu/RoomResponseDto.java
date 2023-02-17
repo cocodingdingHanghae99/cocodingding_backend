@@ -11,4 +11,5 @@ public class RoomResponseDto {
     private String masterNickname;
     private Long currentUser;
     private Long maxUser;
+    private String enterRoomToken;
 }
