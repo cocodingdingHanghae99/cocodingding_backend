@@ -1,38 +1,38 @@
-//package com.sparta.serviceteam4444.service.user;
-//
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.JsonNode;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.sparta.serviceteam4444.entity.user.User;
-//import com.sparta.serviceteam4444.jwt.JwtUtil;
-//import com.sparta.serviceteam4444.repository.user.UserRepository;
-//
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.http.HttpEntity;
-//import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.stereotype.Service;
-//import org.springframework.util.LinkedMultiValueMap;
-//import org.springframework.util.MultiValueMap;
-//import org.springframework.web.client.RestTemplate;
-//
-//import javax.servlet.http.HttpServletResponse;
-//import java.util.UUID;
-//
-//@Slf4j
-//@Service
-//@RequiredArgsConstructor
-//public class KakaoService {
-//    private final PasswordEncoder passwordEncoder;
-//    private final UserRepository userRepository;
-//    private final JwtUtil jwtUtil;
-//    @Value("${kakao_client_id}")
-//    private String kakaoClientId;
-//
+package com.sparta.serviceteam4444.service.user;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.serviceteam4444.entity.user.User;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
+import com.sparta.serviceteam4444.repository.user.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class KakaoService {
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    @Value("${kakao_client_id}")
+    private String kakaoClientId;
+
 //    public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 //        // 1. "인가 코드"로 "액세스 토큰" 요청
 //        String accessToken = getToken(code);
@@ -142,5 +142,5 @@
 //        userRepository.save(kakaoUser);
 //        return kakaoUser;
 //    }
-//
-//}
+
+}
