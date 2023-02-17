@@ -31,7 +31,7 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public void update(UserRequestDto userRequestDto) {
+    public void updateNickname(UserRequestDto userRequestDto) {
         this.userNickname = userRequestDto.getUserNickname();
     }
 
