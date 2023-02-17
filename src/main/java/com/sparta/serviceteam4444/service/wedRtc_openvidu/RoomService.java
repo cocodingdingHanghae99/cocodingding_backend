@@ -1,35 +1,23 @@
 package com.sparta.serviceteam4444.service.wedRtc_openvidu;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.entity.user.User;
-import com.sparta.serviceteam4444.entity.webRtc_openvidu.BenUser;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.Room;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.RoomMember;
 import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.exception.ErrorCode;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
-import com.sparta.serviceteam4444.repository.wedRtc_openvidu.BenUserRepository;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomUserRepository;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomRepository;
-import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
-import com.sparta.serviceteam4444.security.user.UserDetailsServiceImpl;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -51,10 +39,11 @@ public class RoomService {
 
     @PostConstruct
     public OpenVidu openVidu(){
-        return openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        return this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
     //방 생성
+<<<<<<< HEAD
     public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
                                             User user) throws OpenViduJavaClientException, OpenViduHttpException{
         //session생성 및 token받아오기
@@ -109,24 +98,48 @@ public class RoomService {
                 .token(token)
                 .build();
     }
+=======
+    public ResponseEntity<String> createRoom(Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
+
+        SessionProperties properties = SessionProperties.fromJson(params).build();
+
+        Session session = openVidu.createSession(properties);
+
+        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+    }
+
+//    public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
+//
+//        String serverData = user.getNickname();
+//
+//        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+//                .type(ConnectionType.WEBRTC).data(serverData).build();
+//
+//        Session session = openVidu.createSession();
+//
+//        String token = session.createConnection(connectionProperties).getToken();
+//
+//        return CreateRoomResponseDto.builder()
+//                .sessionId(session.getSessionId())
+//                .token(token)
+//                .build();
+//    }
+>>>>>>> 75f202010a181ab20184b4504ed4a4e7d8e30e3f
 
     //======================================================================================================//
 
     //방 접속
-    public RoomMemberResponseDto enterRoom(String sessionId, User user) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<String> enterRoom(String sessionId, Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        Room room = roomRepository.findById(sessionId).orElseThrow(
-                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
-        );
+        Session session = openVidu.getActiveSession(sessionId);
 
-        Optional<RoomMember> alreadyRoomUser = roomUserRepository.findBySessionIdAndUserNickname(sessionId, user.getNickname());
-
-        if (alreadyRoomUser.isPresent()){
-            throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
+        if (session == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        String enterRoomToken = enterRoomToken(user, room.getSessionId());
+        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
 
+<<<<<<< HEAD
         RoomMember roomMember = RoomMember.builder()
                 .sessionId(room.getSessionId())
                 .userNickname(user.getNickname())
@@ -168,35 +181,40 @@ public class RoomService {
                 .enterRoomToken(roomMember.getEnterRoomToken())
                 .roomMaster(roomMaster)
                 .build();
+=======
+        Connection connection = session.createConnection(properties);
+
+        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+>>>>>>> 75f202010a181ab20184b4504ed4a4e7d8e30e3f
     }
 
-    private String enterRoomToken(User user, String sessionId) throws OpenViduHttpException, OpenViduJavaClientException {
-
-        String serverData = user.getNickname();
-
-        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
-                .type(ConnectionType.WEBRTC).data(serverData).build();
-
-        openVidu.fetch();
-
-        List<Session> activeSessionList = openVidu.getActiveSessions();
-
-        Session session = null; // 세션 초기화
-
-        for (Session getSession : activeSessionList) {
-            if (getSession.getSessionId().equals(sessionId)){
-                session = getSession;
-                break;
-            }
-        }
-
-        if (session == null){
-            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
-        }
-
-        return session.createConnection(connectionProperties).getToken();
-
-    }
+//    private String enterRoomToken(User user, String sessionId) throws OpenViduHttpException, OpenViduJavaClientException {
+//
+//        String serverData = user.getNickname();
+//
+//        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+//                .type(ConnectionType.WEBRTC).data(serverData).build();
+//
+//        openVidu.fetch();
+//
+//        List<Session> activeSessionList = openVidu.getActiveSessions();
+//
+//        Session session = null; // 세션 초기화
+//
+//        for (Session getSession : activeSessionList) {
+//            if (getSession.getSessionId().equals(sessionId)){
+//                session = getSession;
+//                break;
+//            }
+//        }
+//
+//        if (session == null){
+//            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+//        }
+//
+//        return session.createConnection(connectionProperties).getToken();
+//
+//    }
 
     //======================================================================================================//
 

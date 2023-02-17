@@ -33,7 +33,7 @@ public class ChatRoomController {
     @ApiOperation(value = "방 파기", notes = "채팅방 하나를 판다.")
     @PostMapping("rooms")
     @ResponseBody
-    public ChatRoom createRoom(@RequestBody String roomName, String category) {
+    public ChatRoom createRoom(@RequestParam String roomName, String category) {
         return chatRoomRepository.createChatRoom(roomName, category);
     }
 

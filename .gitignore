@@ -26,6 +26,8 @@ resources
 *.iml
 *.ipr
 out/
+application.properties
+application-secret.properties
 !**/src/main/**/out/
 !**/src/test/**/out/
 application.properties
