@@ -88,7 +88,7 @@ public class UserService {
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
         );
 
-        if (user.getUserEmail().equals(userNickname)){
+        if (user.getUserNickname().equals(userNickname)){
             user.update(userRequestDto);
         }
 
