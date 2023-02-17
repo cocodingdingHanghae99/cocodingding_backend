@@ -14,7 +14,7 @@ public class UserRequestDto {
     private String userNickname;
 
     public UserRequestDto(User user) {
-        this.userNickname = user.getUserEmail();
+        this.userNickname = user.getUserNickname();
     }
 
 }
