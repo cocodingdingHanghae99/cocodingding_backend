@@ -21,7 +21,7 @@ public class KakaoController {
 
         System.out.println("###access_Token#### : " + access_Token);
 
-        return "/";
+        return kakaoService.getAccessToken(code);
 
     }
 
