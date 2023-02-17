@@ -16,7 +16,7 @@ public class KakaoController {
     private KakaoService kakaoService;
 
     @GetMapping("/kakao")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws JsonProcessingException {
 
         String createToken = kakaoService.kakaoLogin(code, response);
 
