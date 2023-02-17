@@ -19,7 +19,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
-
     @Column(nullable = false, unique = true)
     private String userNickname;
 
@@ -33,7 +32,7 @@ public class User {
     }
 
     public void update(UserRequestDto userRequestDto) {
-        this.userEmail = userRequestDto.getUserEmail();
+        this.userNickname = userRequestDto.getUserNickname();
     }
 
 
