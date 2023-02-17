@@ -1,13 +1,11 @@
 package com.sparta.serviceteam4444.controller.user;
 
 import com.sparta.serviceteam4444.service.user.KakaoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user")
+@CrossOrigin("http://localhost:3000")
 public class KakaoController {
 
     private KakaoService kakaoService;
@@ -21,7 +19,7 @@ public class KakaoController {
 
         System.out.println("###access_Token#### : " + access_Token);
 
-        return kakaoService.getAccessToken(code);
+        return access_Token;
 
     }
 
