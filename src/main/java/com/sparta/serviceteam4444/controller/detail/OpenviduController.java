@@ -29,17 +29,18 @@ public class OpenviduController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public ResponseEntity<String> createRoom(@RequestBody(required = false) Map<String, Object> params)
+    public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.createRoom(params);
+        return roomService.createRoom(createRoomRequestDto, userDetails.getUser());
     }
 
     //방 접속
     @ApiOperation(value = "화상채팅방 접속")
     @PostMapping("/room/{sessionId}")
     public ResponseEntity<String> enterRoom(@PathVariable("sessionId") String sessionId,
-                                           @RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.enterRoom(sessionId, params);
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException{
+        return roomService.enterRoom(sessionId, userDetails.getUser());
     }
 
     //방 전체 목록 조회
@@ -48,7 +49,6 @@ public class OpenviduController {
     public List<RoomResponseDto> getAllRooms() {
         return roomService.getAllRooms();
     }
-<<<<<<< HEAD:src/main/java/com/sparta/serviceteam4444/controller/detail/RoomController.java
 
     //방 정보 get요청
     @GetMapping("/room/{roomId}")
@@ -57,6 +57,3 @@ public class OpenviduController {
         return roomService.getRoom(roomId);
     }
 }
-=======
-}
->>>>>>> 75f202010a181ab20184b4504ed4a4e7d8e30e3f:src/main/java/com/sparta/serviceteam4444/controller/detail/OpenviduController.java

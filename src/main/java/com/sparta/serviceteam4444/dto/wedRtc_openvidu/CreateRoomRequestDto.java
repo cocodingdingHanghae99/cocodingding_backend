@@ -7,11 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateRoomRequestDto {
     private String roomTitle;
-<<<<<<< HEAD
-=======
 
     private Long maxUser;
-
-    private String sessionId;
->>>>>>> 75f202010a181ab20184b4504ed4a4e7d8e30e3f
 }
