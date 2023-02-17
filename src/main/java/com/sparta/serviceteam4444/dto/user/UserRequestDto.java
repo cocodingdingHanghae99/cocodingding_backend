@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequestDto {
 
-    private String userEmail;
+    private String userNickname;
 
     public UserRequestDto(User user) {
-        this.userEmail = user.getUserEmail();
+        this.userNickname = user.getUserEmail();
     }
 
 }

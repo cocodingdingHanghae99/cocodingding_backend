@@ -82,13 +82,13 @@ public class UserService {
 
     //============================================================================================================//
 
-    public UserRequestDto updateNickname(String userEmail, UserRequestDto userRequestDto) {
+    public UserRequestDto updateNickname(String userNickname, UserRequestDto userRequestDto) {
 
-        User user = userRepository.findByUserEmail(userEmail).orElseThrow(
+        User user = userRepository.findByUserNickname(userNickname).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
         );
 
-        if (user.getUserEmail().equals(userEmail)){
+        if (user.getUserEmail().equals(userNickname)){
             user.update(userRequestDto);
         }
 

@@ -37,10 +37,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "닉네임 변경")
-    @PutMapping("/info/{userEmail}")
-    public UserRequestDto updateNickname(@PathVariable String userEmail,
+    @PutMapping("/info/{userNickname}")
+    public UserRequestDto updateNickname(@PathVariable String userNickname,
                                           @RequestBody UserRequestDto userRequestDto){
-        return userService.updateNickname(userEmail, userRequestDto);
+        return userService.updateNickname(userNickname, userRequestDto);
     }
 
 //    @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")
