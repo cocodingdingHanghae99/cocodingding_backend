@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CreateRoomRequestDto {
-    private String sessionId;
+    private String roomTitle;
 }

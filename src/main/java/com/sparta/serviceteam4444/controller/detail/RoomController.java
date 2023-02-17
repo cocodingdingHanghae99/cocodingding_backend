@@ -45,4 +45,11 @@ public class RoomController {
     public List<RoomResponseDto> getAllRooms() {
         return roomService.getAllRooms();
     }
+
+    //방 정보 get요청
+    @GetMapping("/room/{roomId}")
+    @ApiOperation(value = "방 정보 get")
+    public RoomResponseDto getRoom(@PathVariable String roomId){
+        return roomService.getRoom(roomId);
+    }
 }
