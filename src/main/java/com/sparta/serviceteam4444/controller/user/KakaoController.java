@@ -1,28 +1,33 @@
 package com.sparta.serviceteam4444.controller.user;
 
-import com.sparta.serviceteam4444.dto.user.kakao.KakaoLoginRequestDto;
-import com.sparta.serviceteam4444.dto.user.kakao.KakaoLoginResponseDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.service.user.KakaoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"Kakao"})
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user")
 @CrossOrigin("http://localhost:3000")
-@RequiredArgsConstructor
 public class KakaoController {
 
-    private final KakaoService kakaoService;
+    private KakaoService kakaoService;
 
-    @ApiOperation(value = "인가코드 받아오기")
-    @PostMapping("/kakao")
-    public ResponseEntity<KakaoLoginResponseDto> kakaoLogin(@RequestBody KakaoLoginRequestDto kakaoLoginRequestDto){
-//        return ResponseEntity.created(URI.create("/kakao")).body(kakaoService.kakaoLogin(kakaoLoginRequestDto));
-        return null;
+    @GetMapping("/kakao")
+    public String kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws JsonProcessingException {
+
+        String createToken = kakaoService.kakaoLogin(code, response);
+
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
+
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
+
+        return "redirect:/";
+
     }
 
 }

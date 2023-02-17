@@ -89,7 +89,7 @@ public class UserService {
         );
 
         if (user.getUserNickname().equals(userNickname)){
-            user.update(userRequestDto);
+            user.updateNickname(userRequestDto);
         }
 
         return new UserRequestDto(user);
