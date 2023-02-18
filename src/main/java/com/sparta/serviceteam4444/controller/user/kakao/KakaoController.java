@@ -20,6 +20,8 @@ public class KakaoController {
 
     @PostMapping("/user/kakao")
     public KakaoResponseDto kakaoLogin(@RequestBody String code, HttpServletResponse response) throws JsonProcessingException {
+        log.info("얍");
+        log.info(code + "코드");
         return kakaoService.kakaoLogin(code, response);
     }
 
