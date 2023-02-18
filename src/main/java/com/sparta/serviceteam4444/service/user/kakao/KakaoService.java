@@ -58,8 +58,10 @@ public class KakaoService {
                 String.class
         );
 
+        log.info("Request headers: {}", headers);
+        log.info("Request body: {}", body);
+        
         log.info(String.valueOf(response));
-        log.info(String.valueOf(kakaoTokenRequest));
 
         String responseBody = response.getBody();
         log.info(responseBody);
