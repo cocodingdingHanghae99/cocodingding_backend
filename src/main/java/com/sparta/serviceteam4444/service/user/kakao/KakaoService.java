@@ -24,11 +24,7 @@ public class KakaoService {
 
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
-        log.info(code);
-
         String accessToken = getAccessToken(code);
-
-        log.info(accessToken);
 
         return new KakaoResponseDto(accessToken);
 
@@ -38,45 +34,28 @@ public class KakaoService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        log.info(String.valueOf(headers));
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
         body.add("redirect_uri", "http://localhost:3000/user/kakao");
         body.add("client_secret", "WeulIUQTCQSHS7yMTh7oVjelhXR5ZowN");
-        //시크릿키가 있어야되나?
         body.add("code", code);
-
-        log.info(body.toString());
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
-        //여기서 바디랑 헤더값 찍어보기
         RestTemplate rt = new RestTemplate();
-        //rt 로그 찍어보기
         ResponseEntity<String> response = rt.exchange(
                 "https://kauth.kakao.com/oauth/token",
                 HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
-                //response 로그 찍어보기
         );
 
-        log.info("Request headers: {}", headers);
-        log.info("Request body: {}", body);
-
-        log.info(String.valueOf(response));
-
         String responseBody = response.getBody();
-        log.info(responseBody);
         ObjectMapper objectMapper = new ObjectMapper();
-        log.info(objectMapper.toString());
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        log.info(String.valueOf(jsonNode));
         return jsonNode.get("access_token").asText();
-        //mybestshop에서 asText null 오류 있는데 확인해 볼 것
-        //스파르타 코딩클럽 강의 자료 확인해볼 것
 
     }
 
