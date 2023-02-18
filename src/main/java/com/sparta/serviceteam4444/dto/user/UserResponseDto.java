@@ -2,6 +2,7 @@ package com.sparta.serviceteam4444.dto.user;
 
 import com.sparta.serviceteam4444.entity.user.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class UserResponseDto {
     private String userEmail;
 
     private String userNickname;
+
 
     public UserResponseDto(String data, int statuscode) {
         this.data = data;
