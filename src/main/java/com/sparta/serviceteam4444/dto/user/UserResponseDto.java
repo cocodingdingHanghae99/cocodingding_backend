@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserResponseDto {
 
     private String data;
@@ -20,17 +19,10 @@ public class UserResponseDto {
 
     private String userNickname;
 
-    private String token;
 
     public UserResponseDto(String data, int statuscode) {
         this.data = data;
         this.statuscode = statuscode;
     }
 
-    public UserResponseDto(String data, int statucode, String userEmail, String userNickname) {
-        this.data = data;
-        this.statuscode = statucode;
-        this.userNickname = userNickname;
-        this.userEmail = userEmail;
-    }
 }

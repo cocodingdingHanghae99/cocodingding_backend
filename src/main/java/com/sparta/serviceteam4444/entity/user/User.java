@@ -16,8 +16,6 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    private Long kakaoId;
-
     @Column(nullable = false, unique = true)
     private String userEmail;
 
@@ -36,19 +34,6 @@ public class User {
     public void updateNickname(UserRequestDto userRequestDto) {
         this.userNickname = userRequestDto.getUserNickname();
     }
-
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
-        return this;
-    }
-
-    public User(String userNickname, Long kakaoId, String userPassword, String userEmail){
-        this.userNickname = userNickname;
-        this.kakaoId = kakaoId;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-    }
-
 
 //    @Column
 //    private Long kakaoId;
