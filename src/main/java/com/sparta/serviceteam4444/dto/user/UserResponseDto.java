@@ -27,4 +27,10 @@ public class UserResponseDto {
         this.statuscode = statuscode;
     }
 
+    public UserResponseDto(String data, int statucode, String userEmail, String userNickname) {
+        this.data = data;
+        this.statuscode = statucode;
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+    }
 }
