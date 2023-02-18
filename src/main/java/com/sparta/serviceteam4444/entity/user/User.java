@@ -19,7 +19,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
-
     @Column(nullable = false, unique = true)
     private String userNickname;
 
@@ -32,10 +31,9 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public void update(UserRequestDto userRequestDto) {
-        this.userEmail = userRequestDto.getUserEmail();
+    public void updateNickname(UserRequestDto userRequestDto) {
+        this.userNickname = userRequestDto.getUserNickname();
     }
-
 
 //    @Column
 //    private Long kakaoId;

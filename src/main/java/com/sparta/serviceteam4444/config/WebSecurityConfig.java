@@ -26,6 +26,7 @@ import com.sparta.serviceteam4444.jwt.JwtUtil;
 public class WebSecurityConfig {
 
     public final JwtUtil jwtUtil;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
