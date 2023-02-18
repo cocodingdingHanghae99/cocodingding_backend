@@ -27,8 +27,6 @@ public class RoomService {
 
     private final RoomUserRepository roomUserRepository;
 
-    private final UserRepository userRepository;
-
     private OpenVidu openVidu;
 
     @Value("${openvidu.url}")
@@ -43,25 +41,25 @@ public class RoomService {
     }
 
     //방 생성
-    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto,
-                                            User user) throws OpenViduJavaClientException, OpenViduHttpException{
+    public CreateRoomResponseDto createRoom(CreateRoomRequestDto createRoomRequestDto
+                                            /*User user*/) throws OpenViduJavaClientException, OpenViduHttpException{
         //session생성 및 token받아오기
-        CreateRoomResponseDto newToken = createNewToken(user);
+        CreateRoomResponseDto newToken = createNewToken(/*user*/);
 
         //newToken바탕으로 Room build
         Room room = Room.builder()
                 .roomTitle(createRoomRequestDto.getRoomTitle())
                 .sessionId(newToken.getSessionId())
                 //방 만든사람이 masterUser
-                .masterUserNickname(user.getUserNickname())
+//                .masterUserNickname(user.getUserNickname())
                 .enterRoomToken(newToken.getToken())
                 .build();
 
         RoomMember roomMember = RoomMember.builder()
                 .sessionId(newToken.getSessionId())
-                .userId(user.getId())
+//                .userId(user.getId())
                 .enterRoomToken(newToken.getToken())
-                .userNickname(user.getUserNickname())
+//                .userNickname(user.getUserNickname())
                 .build();
         //roomMember 저장하기
         roomUserRepository.save(roomMember);
@@ -80,13 +78,13 @@ public class RoomService {
                 .token(newToken.getToken())
                 .build();
     }
-
-    public CreateRoomResponseDto createNewToken(User user) throws OpenViduJavaClientException, OpenViduHttpException{
-        //userNickname을 serverData로 받기
-        String serverData = user.getUserNickname();
+    //session 만들기 및 토큰 발급
+    public CreateRoomResponseDto createNewToken(/*User user*/) throws OpenViduJavaClientException, OpenViduHttpException{
+//        //userNickname을 serverData로 받기
+//        String serverData = user.getUserNickname();
 
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
-                .type(ConnectionType.WEBRTC).data(serverData).build();
+                .type(ConnectionType.WEBRTC)/*.data(serverData)*/.build();
         //session만들기
         Session session = openVidu.createSession();
         //토큰 받아오기
@@ -101,28 +99,35 @@ public class RoomService {
     //======================================================================================================//
 
     //방 접속
-    public ResponseEntity<String> enterRoom(String sessionId, User user) throws OpenViduJavaClientException, OpenViduHttpException {
-
+    public ResponseEntity<String> enterRoom(String sessionId/*, User user*/) throws OpenViduJavaClientException, OpenViduHttpException {
+        //session 가져오기
         Session session = openVidu.getActiveSession(sessionId);
-
+        //없으면 예외처리
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
+        //db에서 room 정보 찾기
         Room room = roomRepository.findById(sessionId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-
+        /*//룸에 있는 멤버인지 확인
+        Optional<RoomMember> alreadyExistMember = roomUserRepository.findBySessionIdAndUserNickname(sessionId, user.getUserNickname());
+        if(alreadyExistMember.isPresent()){
+            throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
+        }*/
+        //토큰 발급
+        String enterRoomToken = enterRoomCreateSession(/*user,*/ sessionId);
+        //roomMember 빌드
         RoomMember roomMember = RoomMember.builder()
                 .sessionId(room.getSessionId())
-                .userNickname(user.getUserNickname())
-                .userId(user.getId())
-                .enterRoomToken(room.getEnterRoomToken())
+//                .userNickname(user.getUserNickname())
+//                .userId(user.getId())
+                .enterRoomToken(enterRoomToken)
                 .build();
-
+        //roomMember 저장
         roomUserRepository.save(roomMember);
-
-        boolean roomMaster = false;
+/*        //roomMaster인지 판단.
+        boolean roomMaster;
 
         List<RoomMember> roomMemberList = roomUserRepository.findAllBySessionId(room.getSessionId());
 
@@ -138,46 +143,48 @@ public class RoomService {
 
             roomMemberResponseDtoList.add(new RoomMemberResponseDto(addRoomMember, roomMaster));
 
-        }
+        }*/
 
         Long currentMember = roomUserRepository.countAllBySessionId(room.getSessionId());
 
         room.updateCurrentMember(currentMember);
 
         roomRepository.save(room);
-        ConnectionProperties properties = new ConnectionProperties.Builder().build();
+
+        ConnectionProperties properties = new ConnectionProperties.Builder()
+                .type(ConnectionType.WEBRTC)
+//                .data(user.getUserNickname())
+                .build();
+
+        openVidu.fetch();
+
+        //오픈비두에 활성화된 세션을 모두 가져와 리스트에 담음
+        List<Session> activeSessionList = openVidu.getActiveSessions();
+
         Connection connection = session.createConnection(properties);
 
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 
-//    private String enterRoomToken(User user, String sessionId) throws OpenViduHttpException, OpenViduJavaClientException {
-//
-//        String serverData = user.getNickname();
-//
-//        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
-//                .type(ConnectionType.WEBRTC).data(serverData).build();
-//
-//        openVidu.fetch();
-//
-//        List<Session> activeSessionList = openVidu.getActiveSessions();
-//
-//        Session session = null; // 세션 초기화
-//
-//        for (Session getSession : activeSessionList) {
-//            if (getSession.getSessionId().equals(sessionId)){
-//                session = getSession;
-//                break;
-//            }
-//        }
-//
-//        if (session == null){
-//            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
-//        }
-//
-//        return session.createConnection(connectionProperties).getToken();
-//
-//    }
+    //방 입장 시 (입장하는 유저에 맞는) 토큰 생성
+    private String enterRoomCreateSession(/*User user, */String sessionId)throws
+            OpenViduJavaClientException, OpenViduHttpException{
+//        //user닉네임을 servserData로
+//        String serverData = user.getUserNickname();
+        //serverData을 사용하여 connectionProperties 객체를 빌드
+        ConnectionProperties properties = new ConnectionProperties.Builder()
+                .type(ConnectionType.WEBRTC)
+//                .data(serverData)
+                .build();
+
+        openVidu.fetch();
+        //openvidu에 sessionId와 맞는 활성화된 세션을 받아오기
+        Session activeSession = openVidu.getActiveSession(sessionId);
+        if(activeSession == null){
+            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+        }
+        return activeSession.createConnection(properties).getToken();
+    }
 
     //======================================================================================================//
 
