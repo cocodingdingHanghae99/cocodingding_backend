@@ -57,7 +57,12 @@ public class KakaoService {
                 kakaoTokenRequest,
                 String.class
         );
-        
+
+        log.info("Request headers: {}", headers);
+        log.info("Request body: {}", body);
+
+        log.info(String.valueOf(response));
+
         String responseBody = response.getBody();
         log.info(responseBody);
         ObjectMapper objectMapper = new ObjectMapper();
