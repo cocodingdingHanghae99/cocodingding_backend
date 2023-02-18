@@ -5,11 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class RoomResponseDto {
+public class GetRoomResponseDto {
     private String roomTitle;
     private String sessionId;
-    private String masterNickname;
-    private Long currentUser;
-    private Long maxUser;
-    private String enterRoomToken;
 }
