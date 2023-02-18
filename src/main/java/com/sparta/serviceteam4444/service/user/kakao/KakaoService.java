@@ -24,7 +24,11 @@ public class KakaoService {
 
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
+        log.info(code);
+
         String accessToken = getAccessToken(code);
+
+        log.info(accessToken);
 
         return new KakaoResponseDto(accessToken);
 
@@ -41,6 +45,8 @@ public class KakaoService {
         body.add("redirect_uri", "http://localhost:3000/user/kakao");
         body.add("code", code);
 
+        log.info(body.toString());
+
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
@@ -50,6 +56,8 @@ public class KakaoService {
                 kakaoTokenRequest,
                 String.class
         );
+
+        log.info(String.valueOf(kakaoTokenRequest));
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
