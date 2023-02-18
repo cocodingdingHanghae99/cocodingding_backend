@@ -38,6 +38,7 @@ public class KakaoService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        log.info(String.valueOf(headers));
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
@@ -56,6 +57,7 @@ public class KakaoService {
                 kakaoTokenRequest,
                 String.class
         );
+
         log.info(String.valueOf(response));
         log.info(String.valueOf(kakaoTokenRequest));
 
