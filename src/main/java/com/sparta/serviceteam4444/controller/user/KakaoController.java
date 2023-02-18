@@ -1,6 +1,8 @@
 package com.sparta.serviceteam4444.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.serviceteam4444.dto.user.ResponseDto;
+import com.sparta.serviceteam4444.dto.user.UserResponseDto;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.service.user.KakaoService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +20,10 @@ public class KakaoController {
     private KakaoService kakaoService;
 
     @GetMapping("/kakao")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-
-        //requestbody도 생각해볼 것
-
+    public ResponseDto<UserResponseDto> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        log.info("인가코드 받았나?");
         return kakaoService.kakaoLogin(code, response);
-        //
+
     }
 
 }

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.sparta.serviceteam4444.dto.user.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.dto.user.ResponseDto;
+import com.sparta.serviceteam4444.dto.user.UserResponseDto;
 import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
@@ -40,7 +42,7 @@ public class KakaoService {
 
     private final JwtUtil jwtUtil;
 
-    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException{
+    public ResponseDto<UserResponseDto> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException{
 
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
@@ -48,13 +50,23 @@ public class KakaoService {
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
+        String userEmail = kakaoUserInfoDto.getUserEmail();
+
+        String userNickname = kakaoUserInfoDto.getUserNickname();
+
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfoDto);
 
         // 4. JWT 토큰 반환
         String createToken =  jwtUtil.createToken(kakaoUser.getUserNickname());
 
-        return createToken;
+        return ResponseDto.success(
+                UserResponseDto.builder()
+                        .userEmail(userEmail)
+                        .userNickname(userNickname)
+                        .token(createToken)
+                        .build()
+        );
 
     }
 
