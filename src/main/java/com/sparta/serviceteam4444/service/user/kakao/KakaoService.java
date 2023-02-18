@@ -56,12 +56,15 @@ public class KakaoService {
                 kakaoTokenRequest,
                 String.class
         );
-
+        log.info(String.valueOf(response));
         log.info(String.valueOf(kakaoTokenRequest));
 
         String responseBody = response.getBody();
+        log.info(responseBody);
         ObjectMapper objectMapper = new ObjectMapper();
+        log.info(objectMapper.toString());
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+        log.info(String.valueOf(jsonNode));
         return jsonNode.get("access_token").asText();
 
     }
