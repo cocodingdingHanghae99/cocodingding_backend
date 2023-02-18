@@ -16,18 +16,10 @@ public class KakaoController {
     private KakaoService kakaoService;
 
     @GetMapping("/kakao")
-    public String kakaoLogin(@RequestBody String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         //requestbody도 생각해볼 것
 
-        String createToken = kakaoService.kakaoLogin(code, response);
-
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
-
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        return "redirect:/";
+        return kakaoService.kakaoLogin(code, response);
 
     }
 

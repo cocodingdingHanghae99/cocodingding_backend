@@ -80,8 +80,11 @@ public class KakaoService {
         );
 
         String responseBody = response.getBody();
+
         ObjectMapper objectMapper = new ObjectMapper();
+
         JsonNode jsonNode = objectMapper.readTree(responseBody);
+
         return jsonNode.get("access_token").asText();
 
     }
