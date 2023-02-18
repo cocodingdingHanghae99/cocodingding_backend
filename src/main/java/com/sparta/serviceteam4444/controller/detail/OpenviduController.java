@@ -29,18 +29,18 @@ public class OpenviduController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails)
+    public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto
+                                             /*@AuthenticationPrincipal UserDetailsImpl userDetails*/)
             throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.createRoom(createRoomRequestDto, userDetails.getUser());
+        return roomService.createRoom(createRoomRequestDto/*, userDetails.getUser()*/);
     }
 
     //방 접속
     @ApiOperation(value = "화상채팅방 접속")
     @PostMapping("/room/{sessionId}")
-    public ResponseEntity<String> enterRoom(@PathVariable("sessionId") String sessionId,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.enterRoom(sessionId, userDetails.getUser());
+    public ResponseEntity<String> enterRoom(@PathVariable("sessionId") String sessionId
+                                           /*@AuthenticationPrincipal UserDetailsImpl userDetails*/) throws OpenViduJavaClientException, OpenViduHttpException{
+        return roomService.enterRoom(sessionId/*, userDetails.getUser()*/);
     }
 
     //방 전체 목록 조회
