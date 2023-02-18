@@ -18,7 +18,7 @@ public class KakaoController {
     private KakaoService kakaoService;
 
     @PostMapping("/kakao")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(@RequestParam(value = "code") String code, HttpServletResponse response) throws JsonProcessingException {
         //requestbody도 생각해볼 것
 
         return kakaoService.kakaoLogin(code, response);
