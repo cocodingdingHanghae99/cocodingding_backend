@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
+import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -26,7 +27,9 @@ public class KakaoService {
 
         String accessToken = getAccessToken(code);
 
-        return new KakaoResponseDto(accessToken);
+        KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
+
+        return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
     }
 
@@ -56,6 +59,35 @@ public class KakaoService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         return jsonNode.get("access_token").asText();
+
+    }
+
+    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException{
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoUserInfoRequest,
+                String.class
+        );
+
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+
+        String email = jsonNode.get("kakao_account")
+                .get("email").asText();
+
+        return new KakaoUserInfoDto(nickname, email);
 
     }
 
