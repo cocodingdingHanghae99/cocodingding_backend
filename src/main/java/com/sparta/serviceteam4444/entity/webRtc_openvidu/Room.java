@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomId;
     @Column(nullable = false)
     private String roomTitle;
