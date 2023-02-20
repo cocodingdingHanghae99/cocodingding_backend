@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
+import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,15 +25,28 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class KakaoService {
 
-    public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    private final JwtUtil jwtUtil;
 
-        log.info(code);
+    @Value("${client_id}")
+    private String client_id;
+
+    @Value("${redirect_uri}")
+    private String redirect_uri;
+
+    @Value("${client_secret}")
+    private String client_secret;
+
+
+
+    public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
         String accessToken = getAccessToken(code);
 
-        log.info(accessToken);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
 
-        return new KakaoResponseDto(accessToken);
+        KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
+
+        return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
     }
 
@@ -38,45 +54,55 @@ public class KakaoService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        log.info(String.valueOf(headers));
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao");
-        body.add("client_secret", "WeulIUQTCQSHS7yMTh7oVjelhXR5ZowN");
-        //시크릿키가 있어야되나?
+        body.add("client_id", client_id);
+        body.add("redirect_uri", redirect_uri);
+        body.add("client_secret", client_secret);
         body.add("code", code);
-
-        log.info(body.toString());
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
-        //여기서 바디랑 헤더값 찍어보기
         RestTemplate rt = new RestTemplate();
-        //rt 로그 찍어보기
         ResponseEntity<String> response = rt.exchange(
                 "https://kauth.kakao.com/oauth/token",
                 HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
-                //response 로그 찍어보기
         );
 
-        log.info("Request headers: {}", headers);
-        log.info("Request body: {}", body);
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        return jsonNode.get("access_token").asText();
 
-        log.info(String.valueOf(response));
+    }
+
+    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException{
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoUserInfoRequest,
+                String.class
+        );
 
         String responseBody = response.getBody();
-        log.info(responseBody);
         ObjectMapper objectMapper = new ObjectMapper();
-        log.info(objectMapper.toString());
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        log.info(String.valueOf(jsonNode));
-        return jsonNode.get("access_token").asText();
-        //mybestshop에서 asText null 오류 있는데 확인해 볼 것
-        //스파르타 코딩클럽 강의 자료 확인해볼 것
+
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+        log.info(nickname);
+
+        return new KakaoUserInfoDto(nickname);
 
     }
 
