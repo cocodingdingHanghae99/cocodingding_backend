@@ -1,6 +1,7 @@
 package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateSessionResponseDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,9 +18,12 @@ public class Room {
     private String roomTitle;
     @Column(nullable = false)
     private String sessoinId;
+    @Column(nullable = false)
+    private String category;
 
-    public Room(CreateSessionResponseDto newToken, String roomTitle) {
-        this.roomTitle = roomTitle;
+    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto) {
+        this.roomTitle = roomCreateRequestDto.getRoomTitle();
         this.sessoinId = newToken.getSessionId();
+        this.category = roomCreateRequestDto.getCategory();
     }
 }

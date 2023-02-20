@@ -5,4 +5,5 @@ import lombok.Getter;
 @Getter
 public class RoomCreateRequestDto {
     private String roomTitle;
+    private String category;
 }
