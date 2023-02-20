@@ -61,18 +61,19 @@ public class RoomService {
     }
 
     //방 입장
-    public String enterRoom(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public RoomCreateResponseDto enterRoom(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        return createEnterRoomToken(room.getSessoinId());
+        String newEnterRoomToken = createEnterRoomToken(room.getSessoinId());
+        return new RoomCreateResponseDto(room, newEnterRoomToken);
     }
 
     //connection 생성 및 token 발급
     private String createEnterRoomToken(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
+        openVidu.fetch();
         //connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).build();
-        openVidu.fetch();
         //sessionId 를 이용하여 session 찾기
         Session session = openVidu.getActiveSession(sessionId);
         //session이 활성화가 안되어 있을때
@@ -81,30 +82,5 @@ public class RoomService {
         }
         //token 발급
         return session.createConnection(properties).getToken();
-    }
-    //방 전체 조회
-    public List<GetRoomResponseDto> getAllRooms() {
-        //db에 있는 모든 room 정보를 받아오기
-        List<Room> roomList = roomRepository.findAll();
-        List<GetRoomResponseDto> GetRoomResponseDtos = new ArrayList<>();
-        //List에 추가.
-        for(Room room: roomList){
-            GetRoomResponseDto getRoomResponseDto = GetRoomResponseDto.builder()
-                    .roomTitle(room.getRoomTitle())
-                    .sessionId(room.getSessoinId())
-                    .build();
-            GetRoomResponseDtos.add(getRoomResponseDto);
-        }
-        return GetRoomResponseDtos;
-    }
-
-    public GetRoomResponseDto getRoom(Long roomId) {
-        Room room = roomRepository.findById(roomId).orElseThrow(
-                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
-        );
-        return GetRoomResponseDto.builder()
-                .roomTitle(room.getRoomTitle())
-                .sessionId(room.getSessoinId())
-                .build();
     }
 }

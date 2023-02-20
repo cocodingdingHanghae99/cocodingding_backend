@@ -28,22 +28,10 @@ public class OpenviduController {
     public RoomCreateResponseDto createRoom(@RequestBody RoomCreateRequestDto roomCreateRequestDto) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.createRoom(roomCreateRequestDto);
     }
-    //방 입장
+    //방 입장 동시에 방 정보 return
     @ApiOperation(value = "방 입장")
     @PostMapping("/room/{roomId}")
-    public String enterRoom(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public RoomCreateResponseDto enterRoom(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.enterRoom(roomId);
-    }
-    //방 전체 목록 조회
-    @ApiOperation(value = "방 전체 목록 조회")
-    @GetMapping("/room")
-    public List<GetRoomResponseDto> getAllRooms(){
-        return roomService.getAllRooms();
-    }
-    //방정보 get
-    @ApiOperation(value = "방 정보 상세")
-    @GetMapping("/room/{roomid}")
-    public GetRoomResponseDto getRoom(@PathVariable Long roomid){
-        return roomService.getRoom(roomid);
     }
 }
