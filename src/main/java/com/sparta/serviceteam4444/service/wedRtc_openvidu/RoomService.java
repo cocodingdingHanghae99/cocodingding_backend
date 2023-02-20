@@ -67,6 +67,7 @@ public class RoomService {
 
     //방 입장
     public RoomCreateResponseDto enterRoom(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
@@ -75,16 +76,18 @@ public class RoomService {
     }
 
     //connection 생성 및 token 발급
-    private String createEnterRoomToken(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException {
-        openVidu.fetch();
-        //connection 생성
-        ConnectionProperties properties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).build();
+    private String createEnterRoomToken(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
+        if(openVidu.getActiveSessions().isEmpty()){
+            openVidu.fetch();
+        }
         //sessionId 를 이용하여 session 찾기
         Session session = openVidu.getActiveSession(sessionId);
         //session이 활성화가 안되어 있을때
         if(session == null){
             throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
         }
+        //connection 생성
+        ConnectionProperties properties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).build();
         //token 발급
         return session.createConnection(properties).getToken();
     }
