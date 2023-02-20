@@ -34,4 +34,10 @@ public class OpenviduController {
     public RoomCreateResponseDto enterRoom(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.enterRoom(roomId);
     }
+    //방 전체 보여주기
+    @ApiOperation(value = "방 전체 보여주기")
+    @GetMapping("/room")
+    public List<GetRoomResponseDto> getAllRooms(){
+        return roomService.getAllRooms();
+    }
 }
