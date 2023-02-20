@@ -102,12 +102,6 @@ public class KakaoService {
                 .get("nickname").asText();
         log.info(nickname);
 
-//        String email = jsonNode.get("kakao_account")
-//                .get("email").asText();
-//        log.info(email);
-//
-//        return new KakaoUserInfoDto(nickname, email);
-
         return new KakaoUserInfoDto(nickname);
 
     }
