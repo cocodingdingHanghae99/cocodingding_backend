@@ -47,10 +47,7 @@ public class RoomService {
         //room저장하기.
         roomRepository.save(room);
         //return
-        return RoomCreateResponseDto.builder()
-                .roomTitle(room.getRoomTitle())
-                .sessionId(room.getSessoinId())
-                .build();
+        return new RoomCreateResponseDto(room);
     }
 
     //session 생성 및 token 받아오기
