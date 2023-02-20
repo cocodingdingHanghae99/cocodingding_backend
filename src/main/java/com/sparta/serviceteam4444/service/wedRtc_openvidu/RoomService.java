@@ -83,4 +83,14 @@ public class RoomService {
         //token 발급
         return session.createConnection(properties).getToken();
     }
+
+    public List<GetRoomResponseDto> getAllRooms() {
+        List<Room> roomList = roomRepository.findAll();
+        List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
+        for(Room room : roomList){
+            GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
+            getRoomResponseDtos.add(getRoomResponseDto);
+        }
+        return getRoomResponseDtos;
+    }
 }

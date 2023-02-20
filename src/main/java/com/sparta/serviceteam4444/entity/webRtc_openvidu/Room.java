@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long roomId;
+    private Long openviduRoomId;
     @Column(nullable = false)
     private String roomTitle;
     @Column(nullable = false)

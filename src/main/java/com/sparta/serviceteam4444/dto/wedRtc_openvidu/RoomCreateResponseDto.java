@@ -7,13 +7,13 @@ import lombok.Getter;
 public class RoomCreateResponseDto {
     private String roomTitle;
     private String sessionId;
-    private Long roomId;
+    private Long openviduRoomId;
     private String enterRoomToken;
 
     public RoomCreateResponseDto(Room room, String enterRoomToken) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
-        this.roomId = room.getRoomId();
+        this.openviduRoomId = room.getOpenviduRoomId();
         this.enterRoomToken = enterRoomToken;
     }
 }
