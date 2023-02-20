@@ -34,7 +34,7 @@ public class KakaoService {
 
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
-        return new KakaoResponseDto(kakaoUserInfoDto);
+        return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
     }
 
@@ -88,9 +88,11 @@ public class KakaoService {
 
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
+        log.info(nickname);
 
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
+        log.info(email);
 
         return new KakaoUserInfoDto(nickname, email);
 
