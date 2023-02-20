@@ -8,10 +8,12 @@ public class RoomCreateResponseDto {
     private String roomTitle;
     private String sessionId;
     private Long roomId;
+    private String enterRoomToken;
 
-    public RoomCreateResponseDto(Room room) {
+    public RoomCreateResponseDto(Room room, String enterRoomToken) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.roomId = room.getRoomId();
+        this.enterRoomToken = enterRoomToken;
     }
 }
