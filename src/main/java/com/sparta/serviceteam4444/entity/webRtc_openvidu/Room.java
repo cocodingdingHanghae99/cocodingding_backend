@@ -1,7 +1,6 @@
 package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateSessionResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
-@Builder
-@AllArgsConstructor
 @Getter
 public class Room {
     @Id
@@ -20,4 +17,9 @@ public class Room {
     private String roomTitle;
     @Column(nullable = false)
     private String sessoinId;
+
+    public Room(CreateSessionResponseDto newToken, String roomTitle) {
+        this.roomTitle = roomTitle;
+        this.sessoinId = newToken.getSessionId();
+    }
 }

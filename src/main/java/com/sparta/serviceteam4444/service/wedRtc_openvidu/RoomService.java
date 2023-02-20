@@ -10,6 +10,7 @@ import com.sparta.serviceteam4444.exception.ErrorCode;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomRepository;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RoomService {
 
     private OpenVidu openVidu;
 
-    private RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
 
     @Value("${openvidu.url}")
     private String OPENVIDU_URL;
@@ -37,20 +39,15 @@ public class RoomService {
     }
     //방만들기
     public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto) throws OpenViduJavaClientException, OpenViduHttpException {
+        log.info(roomCreateRequestDto.getRoomTitle());
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken();
         //room build
-        Room room = Room.builder()
-                .roomTitle(roomCreateRequestDto.getRoomTitle())
-                .sessoinId(newToken.getSessionId())
-                .build();
+        Room room = new Room(newToken, roomCreateRequestDto.getRoomTitle());
         //room저장하기.
         roomRepository.save(room);
         //return
-        return RoomCreateResponseDto.builder()
-                .roomTitle(room.getRoomTitle())
-                .sessionId(room.getSessoinId())
-                .build();
+        return new RoomCreateResponseDto(room);
     }
 
     //session 생성 및 token 받아오기
@@ -60,11 +57,10 @@ public class RoomService {
         Session session = openVidu.createSession();
         //token 받아오기
         String token = session.createConnection(properties).getToken();
+        log.info(session.getSessionId());
+        log.info(token);
         //sessionId, token 리턴
-        return CreateSessionResponseDto.builder()
-                .sessionId(session.getSessionId())
-                .token(token)
-                .build();
+        return new CreateSessionResponseDto(session.getSessionId(), token);
     }
 
     //방 입장
