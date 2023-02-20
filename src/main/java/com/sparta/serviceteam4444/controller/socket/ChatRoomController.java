@@ -30,13 +30,6 @@ public class ChatRoomController {
     @ResponseBody
     public List<ChatRoom> room() {return chatRoomRepository.findAllRoom();}
 
-    @ApiOperation(value = "방 파기", notes = "채팅방 하나를 판다.")
-    @PostMapping("rooms")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String roomName, String category) {
-        return chatRoomRepository.createChatRoom(roomName, category);
-    }
-
     @ApiOperation(value = "실험용 입장 시 화면 페이지", notes = "무시해도 되며 프론트 작업 완료 시 삭제")
     @GetMapping("room/enter/{id}")
     public String roomDetail(Model model, @PathVariable String id) {

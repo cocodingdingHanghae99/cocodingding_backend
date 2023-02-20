@@ -7,6 +7,7 @@ import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.Room;
 import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.exception.ErrorCode;
+import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomRepository;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
+    private final ChatRoomRepository chatRoomRepository;
+
     @Value("${openvidu.url}")
     private String OPENVIDU_URL;
 
@@ -45,6 +48,8 @@ public class RoomService {
         Room room = new Room(newToken, roomCreateRequestDto);
         //room저장하기.
         roomRepository.save(room);
+        //채팅방도 같이 만들기
+        chatRoomRepository.createChatRoom(room.getOpenviduRoomId(), room.getRoomTitle(),room.getCategory());
         //return
         return new RoomCreateResponseDto(room, newToken.getToken());
     }
