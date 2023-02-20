@@ -30,7 +30,7 @@ public class KakaoService {
 
         String accessToken = getAccessToken(code);
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
+//        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
 
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
