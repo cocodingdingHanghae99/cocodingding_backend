@@ -10,6 +10,4 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @RequiredArgsConstructor
 public class CheckMemberDto {
-
-
 }
