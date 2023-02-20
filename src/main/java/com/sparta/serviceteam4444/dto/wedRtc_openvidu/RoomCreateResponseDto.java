@@ -1,7 +1,6 @@
 package com.sparta.serviceteam4444.dto.wedRtc_openvidu;
 
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.Room;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

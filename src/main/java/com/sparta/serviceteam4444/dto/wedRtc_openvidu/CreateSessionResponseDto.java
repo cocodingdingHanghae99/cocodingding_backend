@@ -4,8 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class CreateSessionResponseDto {
     private String sessionId;
     private String token;
+
+    public CreateSessionResponseDto(String sessionId, String token) {
+        this.sessionId = sessionId;
+        this.token = token;
+    }
 }
