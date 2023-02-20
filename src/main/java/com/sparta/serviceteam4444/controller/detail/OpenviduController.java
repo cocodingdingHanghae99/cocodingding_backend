@@ -1,21 +1,17 @@
 package com.sparta.serviceteam4444.controller.detail;
 
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
-import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.GetRoomResponseDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
-import io.openvidu.java.client.*;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,31 +25,25 @@ public class OpenviduController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public CreateRoomResponseDto createRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto
-                                             /*@AuthenticationPrincipal UserDetailsImpl userDetails*/)
-            throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.createRoom(createRoomRequestDto/*, userDetails.getUser()*/);
+    public RoomCreateResponseDto createRoom(@RequestBody RoomCreateRequestDto roomCreateRequestDto) throws OpenViduJavaClientException, OpenViduHttpException {
+        return roomService.createRoom(roomCreateRequestDto);
     }
-
-    //방 접속
-    @ApiOperation(value = "화상채팅방 접속")
-    @PostMapping("/room/{sessionId}")
-    public ResponseEntity<String> enterRoom(@PathVariable("sessionId") String sessionId
-                                           /*@AuthenticationPrincipal UserDetailsImpl userDetails*/) throws OpenViduJavaClientException, OpenViduHttpException{
-        return roomService.enterRoom(sessionId/*, userDetails.getUser()*/);
+    //방 입장
+    @ApiOperation(value = "방 입장")
+    @PostMapping("/room/{roomId}")
+    public String enterRoom(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+        return roomService.enterRoom(roomId);
     }
-
     //방 전체 목록 조회
+    @ApiOperation(value = "방 전체 목록 조회")
     @GetMapping("/room")
-    @ApiOperation(value = "session 조회")
-    public List<RoomResponseDto> getAllRooms() {
+    public List<GetRoomResponseDto> getAllRooms(){
         return roomService.getAllRooms();
     }
-
-    //방 정보 get요청
-    @GetMapping("/room/{roomId}")
-    @ApiOperation(value = "방 정보 get")
-    public RoomResponseDto getRoom(@PathVariable String roomId){
-        return roomService.getRoom(roomId);
+    //방정보 get
+    @ApiOperation(value = "방 정보 상세")
+    @GetMapping("/room/{roomid}")
+    public GetRoomResponseDto getRoom(@PathVariable Long roomid){
+        return roomService.getRoom(roomid);
     }
 }
