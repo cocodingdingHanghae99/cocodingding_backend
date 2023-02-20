@@ -42,7 +42,7 @@ public class RoomService {
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken();
         //room build
-        Room room = new Room(newToken, roomCreateRequestDto.getRoomTitle());
+        Room room = new Room(newToken, roomCreateRequestDto);
         //room저장하기.
         roomRepository.save(room);
         //return
