@@ -79,6 +79,9 @@ public class RoomService {
     private String createEnterRoomToken(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
         if(openVidu.getActiveSessions().isEmpty()){
             openVidu.fetch();
+        }else {
+            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+            openVidu.fetch();
         }
         //sessionId 를 이용하여 session 찾기
         Session session = openVidu.getActiveSession(sessionId);
