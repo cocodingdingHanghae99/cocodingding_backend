@@ -39,7 +39,6 @@ public class RoomService {
     }
     //방만들기
     public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto) throws OpenViduJavaClientException, OpenViduHttpException {
-        log.info(roomCreateRequestDto.getRoomTitle());
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken();
         //room build
@@ -47,7 +46,7 @@ public class RoomService {
         //room저장하기.
         roomRepository.save(room);
         //return
-        return new RoomCreateResponseDto(room);
+        return new RoomCreateResponseDto(room, newToken.getToken());
     }
 
     //session 생성 및 token 받아오기
@@ -57,8 +56,6 @@ public class RoomService {
         Session session = openVidu.createSession();
         //token 받아오기
         String token = session.createConnection(properties).getToken();
-        log.info(session.getSessionId());
-        log.info(token);
         //sessionId, token 리턴
         return new CreateSessionResponseDto(session.getSessionId(), token);
     }
