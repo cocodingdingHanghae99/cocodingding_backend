@@ -9,10 +9,7 @@ public class KakaoResponseDto {
 
     private String userNickname;
 
-    private String token;
-
-    public KakaoResponseDto(String accessToken, KakaoUserInfoDto kakaoUserInfoDto) {
-        this.token = accessToken;
+    public KakaoResponseDto(KakaoUserInfoDto kakaoUserInfoDto) {
         this.userEmail = kakaoUserInfoDto.getUserEmail();
         this.userNickname = kakaoUserInfoDto.getUserNickname();
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -23,13 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class KakaoService {
 
+    private final JwtUtil jwtUtil;
+
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
         String accessToken = getAccessToken(code);
 
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
+
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
-        return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
+        return new KakaoResponseDto(kakaoUserInfoDto);
 
     }
 
