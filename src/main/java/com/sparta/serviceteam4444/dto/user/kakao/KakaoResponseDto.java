@@ -16,4 +16,5 @@ public class KakaoResponseDto {
         this.userEmail = kakaoUserInfoDto.getUserEmail();
         this.userNickname = kakaoUserInfoDto.getUserNickname();
     }
+
 }

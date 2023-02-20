@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,9 +25,24 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class KakaoService {
 
+    private final JwtUtil jwtUtil;
+
+    @Value("${client_id}")
+    private String client_id;
+
+    @Value("${redirect_uri}")
+    private String redirect_uri;
+
+    @Value("${client_secret}")
+    private String client_secret;
+
+
+
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
         String accessToken = getAccessToken(code);
+
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
 
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
@@ -40,9 +57,9 @@ public class KakaoService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "306c476f21776ce73e2df07d1ca45995");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao");
-        body.add("client_secret", "WeulIUQTCQSHS7yMTh7oVjelhXR5ZowN");
+        body.add("client_id", client_id);
+        body.add("redirect_uri", redirect_uri);
+        body.add("client_secret", client_secret);
         body.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
@@ -83,11 +100,9 @@ public class KakaoService {
 
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
+        log.info(nickname);
 
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
-
-        return new KakaoUserInfoDto(nickname, email);
+        return new KakaoUserInfoDto(nickname);
 
     }
 
