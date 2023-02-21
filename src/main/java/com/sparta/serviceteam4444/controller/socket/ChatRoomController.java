@@ -5,6 +5,7 @@ import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/chat")
 public class ChatRoomController {
 
@@ -27,6 +29,7 @@ public class ChatRoomController {
     //채팅방 생성
     @PostMapping("/room")
     public ChatRoom creatRoom(@RequestParam String name){
+        log.info(name);
         return chatRoomRepository.createChatRoom(name);
     }
 
