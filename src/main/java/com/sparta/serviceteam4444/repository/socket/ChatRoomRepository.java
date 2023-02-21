@@ -27,9 +27,9 @@ public class ChatRoomRepository {
         return chatRoomMap.get(id);
     }
 
-    public ChatRoom createChatRoom(String roomName, String category) {
-        ChatRoom chatRoom = ChatRoom.create(roomName, category);
-        chatRoomMap.put(chatRoom.getId(), chatRoom);
+    public ChatRoom createChatRoom(String name) {
+        ChatRoom chatRoom = ChatRoom.create(name);
+        chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
 }
