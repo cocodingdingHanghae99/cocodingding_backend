@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.dto.socket;
 
-import com.sparta.serviceteam4444.service.chat.ChatService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
