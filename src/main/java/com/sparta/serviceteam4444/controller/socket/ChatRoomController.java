@@ -28,7 +28,7 @@ public class ChatRoomController {
 
     //채팅방 생성
     @PostMapping("/room")
-    public ChatRoom creatRoom(@RequestParam(defaultValue = "값이 넘어오지 않아요") String name){
+    public ChatRoom creatRoom(@RequestParam String name){
         log.info(name);
         return chatRoomRepository.createChatRoom(name);
     }
