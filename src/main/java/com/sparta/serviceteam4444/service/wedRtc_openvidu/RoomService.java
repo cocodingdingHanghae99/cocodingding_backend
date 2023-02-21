@@ -100,5 +100,4 @@ public class RoomService {
         }
         return getRoomResponseDtos;
     }
-    
 }
