@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import com.sparta.serviceteam4444.entity.email.EmailMessage;
-import com.sparta.serviceteam4444.service.user.UserService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Random;
 
 @Slf4j
 @Service
@@ -33,7 +31,7 @@ public class EmailService {
             mimeMessageHelper.setText(setContext(type), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
-            return new String("Success");
+            return "Success";
 
         } catch (MessagingException e) {
             log.info("fail");
