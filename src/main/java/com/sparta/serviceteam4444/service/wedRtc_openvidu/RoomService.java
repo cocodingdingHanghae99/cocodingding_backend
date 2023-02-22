@@ -87,6 +87,10 @@ public class RoomService {
     //방 입장
     public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        //userDetails 가 null일때.
+        if(userDetails == null){
+            throw new CheckApiException(ErrorCode.NOT_EXITS_USER);
+        }
         //roomId를 이용해서 room 찾기.
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
