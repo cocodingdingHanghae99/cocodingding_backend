@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class RoomService {
     private String OPENVIDU_SECRET;
 
     @PostConstruct
-    @Transactional
     public OpenVidu openVidu(){
         return this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
@@ -86,7 +84,6 @@ public class RoomService {
         return new CreateSessionResponseDto(session.getSessionId(), token);
     }
 
-    @Transactional
     //방 입장
     public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -100,14 +97,16 @@ public class RoomService {
         );
         //방장인지 아닌지 판단 및 중복입장 처리.
         RoomMember roomMember = new RoomMember();
-        String newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
+        String newEnterRoomToken = "";
         //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
-            //중복입장 이라면 토큰만 바꿔서 내보내기.
-            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())) {
-                checkRoomMember.updateToken(newEnterRoomToken);
+            //중복입장 이라면 원래 토큰 보내주기
+            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())){
                 return new RoomCreateResponseDto(room, checkRoomMember);
+            }else {
+                //아니라면 토큰 만들기.
+                newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
             }
         }
         //roomMaster 와 nickname이 일치하면 roomMaster = true;
@@ -121,7 +120,6 @@ public class RoomService {
                 //일치한다면 이미 만들어져있는 roomMember를 불러오자.
                 roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
                         room.getSessoinId());
-                roomMember.updateToken(newEnterRoomToken);
                 break;
             }
         }
