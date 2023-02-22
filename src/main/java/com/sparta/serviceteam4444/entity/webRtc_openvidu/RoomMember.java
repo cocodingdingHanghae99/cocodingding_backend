@@ -18,10 +18,13 @@ public class RoomMember {
     private boolean roomMaster;
     @Column(nullable = false)
     private String sessionId;
+    @Column(nullable = false)
+    private String token;
 
-    public RoomMember(String userNickname, boolean roomMaster, String sessionId) {
+    public RoomMember(String userNickname, boolean roomMaster, String sessionId, String token) {
         this.userNickname = userNickname;
         this.roomMaster = roomMaster;
         this.sessionId = sessionId;
+        this.token = token;
     }
 }

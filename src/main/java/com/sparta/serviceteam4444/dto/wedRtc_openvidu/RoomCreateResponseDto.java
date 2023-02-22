@@ -13,11 +13,11 @@ public class RoomCreateResponseDto {
     private String roomMemberNickname;
     private boolean roomMaster;
 
-    public RoomCreateResponseDto(Room room, String enterRoomToken, RoomMember roomMember) {
+    public RoomCreateResponseDto(Room room, RoomMember roomMember) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
-        this.enterRoomToken = enterRoomToken;
+        this.enterRoomToken = roomMember.getToken();
         this.roomMemberNickname = roomMember.getUserNickname();
         this.roomMaster = roomMember.isRoomMaster();
     }
