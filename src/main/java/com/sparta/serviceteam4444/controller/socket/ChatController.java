@@ -21,4 +21,5 @@ public class ChatController {
     public void message(ChatMessage message){
         messagingTemplate.convertAndSend("/sub/chat/room" + message.getRoomId(), message);
     }
+
 }
