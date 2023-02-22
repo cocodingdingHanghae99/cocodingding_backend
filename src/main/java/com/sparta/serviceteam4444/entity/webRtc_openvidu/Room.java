@@ -20,10 +20,19 @@ public class Room {
     private String sessoinId;
     @Column(nullable = false)
     private String category;
+    @Column(nullable = false)
+    private String roomMasterNickname;
 
-    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto) {
+    private Long currentMember;
+
+    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, String roomMasterNickname) {
         this.roomTitle = roomCreateRequestDto.getRoomTitle();
         this.sessoinId = newToken.getSessionId();
         this.category = roomCreateRequestDto.getCategory();
+        this.roomMasterNickname = roomMasterNickname;
+    }
+
+    public void updateCRTMember(Long currentMember) {
+        this.currentMember = currentMember;
     }
 }
