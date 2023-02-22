@@ -53,7 +53,8 @@ public class RoomService {
         //room build
         Room room = new Room(newToken, roomCreateRequestDto, roomMasterNickname);
         //roomMember 저장하기.
-        RoomMember roomMember = new RoomMember(userDetails.getUser().getUserNickname(), roomMaster, room.getSessoinId());
+        RoomMember roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
+                roomMaster, room.getSessoinId(), newToken.getToken());
         roomMemberRepository.save(roomMember);
         //현제 인원 불러오기
         Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
@@ -64,7 +65,7 @@ public class RoomService {
         //채팅방도 같이 만들기
         chatRoomRepository.createChatRoom(room.getOpenviduRoomId(), room.getRoomTitle(),room.getCategory());
         //return
-        return new RoomCreateResponseDto(room, newToken.getToken(), roomMember);
+        return new RoomCreateResponseDto(room, roomMember);
     }
 
     //session 생성 및 token 받아오기
@@ -92,12 +93,16 @@ public class RoomService {
         );
         //방장인지 아닌지 판단 및 중복입장 에러처리.
         RoomMember roomMember = new RoomMember();
+        String newEnterRoomToken = "";
         //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
             //중복입장 이라면 에러처리.
             if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())){
                 throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
+            }else {
+                //아니라면 토큰 만들기.
+                newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
             }
         }
         //roomMaster 와 nickname이 일치하면 roomMaster = true;
@@ -105,7 +110,8 @@ public class RoomService {
             if(!checkRoomMaster.getUserNickname().equals(userDetails.getUser().getUserNickname())){
                 //일치하지 않는다면 새로운 roomMember를 저장하자.
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
-                        false, room.getSessoinId());
+                        false, room.getSessoinId(), newEnterRoomToken);
+                log.info(newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
             }else {
                 //일치한다면 이미 만들어져있는 roomMember를 불러오자.
@@ -114,8 +120,7 @@ public class RoomService {
                 break;
             }
         }
-        String newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
-        return new RoomCreateResponseDto(room, newEnterRoomToken, roomMember);
+        return new RoomCreateResponseDto(room, roomMember);
     }
 
     //connection 생성 및 token 발급
