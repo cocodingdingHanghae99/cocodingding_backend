@@ -95,15 +95,15 @@ public class RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        //방장인지 아닌지 판단 및 중복입장 에러처리.
+        //방장인지 아닌지 판단 및 중복입장 처리.
         RoomMember roomMember = new RoomMember();
         String newEnterRoomToken = "";
         //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
-            //중복입장 이라면 에러처리.
+            //중복입장 이라면 원래 토큰 보내주기
             if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())){
-                throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
+                return new RoomCreateResponseDto(room, checkRoomMember);
             }else {
                 //아니라면 토큰 만들기.
                 newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
@@ -115,7 +115,6 @@ public class RoomService {
                 //일치하지 않는다면 새로운 roomMember를 저장하자.
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
                         false, room.getSessoinId(), newEnterRoomToken);
-                log.info(newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
             }else {
                 //일치한다면 이미 만들어져있는 roomMember를 불러오자.
