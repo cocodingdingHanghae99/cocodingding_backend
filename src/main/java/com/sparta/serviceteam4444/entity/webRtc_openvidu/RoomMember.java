@@ -27,4 +27,8 @@ public class RoomMember {
         this.sessionId = sessionId;
         this.token = token;
     }
+
+    public void updateToken(String newEnterRoomToken) {
+        this.token = newEnterRoomToken;
+    }
 }
