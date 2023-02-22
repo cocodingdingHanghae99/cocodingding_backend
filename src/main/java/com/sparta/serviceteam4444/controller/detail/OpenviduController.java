@@ -1,14 +1,17 @@
 package com.sparta.serviceteam4444.controller.detail;
 
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.ExitRoomDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.GetRoomResponseDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
+import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +28,9 @@ public class OpenviduController {
     //방 생성
     @ApiOperation(value = "화상채팅방 생성")
     @PostMapping("/room")
-    public RoomCreateResponseDto createRoom(@RequestBody RoomCreateRequestDto roomCreateRequestDto) throws OpenViduJavaClientException, OpenViduHttpException {
-        return roomService.createRoom(roomCreateRequestDto);
+    public RoomCreateResponseDto createRoom(@RequestBody RoomCreateRequestDto roomCreateRequestDto,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
+        return roomService.createRoom(roomCreateRequestDto, userDetails);
     }
     //방 입장 동시에 방 정보 return
     @ApiOperation(value = "방 입장")
@@ -40,4 +44,10 @@ public class OpenviduController {
     public List<GetRoomResponseDto> getAllRooms(){
         return roomService.getAllRooms();
     }
+//    //일반 맴버 방 나가기
+//    @ApiOperation(value = "일반 맴버 방 나가기")
+//    @PostMapping("/room/roomMember/{roomId}")
+//    public ExitRoomDto memberExitRoom(@PathVariable Long roomId){
+//        return roomService.memberExitRoom(roomId);
+//    }
 }
