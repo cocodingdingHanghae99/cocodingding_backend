@@ -35,8 +35,9 @@ public class OpenviduController {
     //방 입장 동시에 방 정보 return
     @ApiOperation(value = "방 입장")
     @PostMapping("/room/{roomId}")
-    public RoomCreateResponseDto enterRoom(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
-        return roomService.enterRoom(roomId);
+    public RoomCreateResponseDto enterRoom(@PathVariable Long roomId,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
+        return roomService.enterRoom(roomId, userDetails);
     }
     //방 전체 보여주기
     @ApiOperation(value = "방 전체 보여주기")

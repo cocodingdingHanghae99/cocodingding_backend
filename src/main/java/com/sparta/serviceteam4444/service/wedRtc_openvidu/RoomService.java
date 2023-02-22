@@ -43,7 +43,8 @@ public class RoomService {
         return this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
     //방만들기
-    public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto, UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
+    public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto, UserDetailsImpl userDetails)
+            throws OpenViduJavaClientException, OpenViduHttpException {
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken(userDetails.getUser().getUserNickname());
         //방을 만든 사람의 닉네임을 roomMaster로
@@ -67,7 +68,8 @@ public class RoomService {
     }
 
     //session 생성 및 token 받아오기
-    private CreateSessionResponseDto createNewToken(String userNickname) throws OpenViduJavaClientException, OpenViduHttpException {
+    private CreateSessionResponseDto createNewToken(String userNickname)
+            throws OpenViduJavaClientException, OpenViduHttpException {
         //userNickname을 serverData로 session과 connection 만들기
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
@@ -82,18 +84,43 @@ public class RoomService {
     }
 
     //방 입장
-    public RoomCreateResponseDto enterRoom(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
-
+    public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails)
+            throws OpenViduJavaClientException, OpenViduHttpException {
+        //roomId를 이용해서 room 찾기.
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        String newEnterRoomToken = createEnterRoomToken(room.getSessoinId());
-        return null;
-//        return new RoomCreateResponseDto(room, newEnterRoomToken);
+        //방장인지 아닌지 판단 및 중복입장 에러처리.
+        RoomMember roomMember = new RoomMember();
+        //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
+        List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
+        for(RoomMember checkRoomMember: roomMemberList){
+            //중복입장 이라면 에러처리.
+            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())){
+                throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
+            }
+        }
+        //roomMaster 와 nickname이 일치하면 roomMaster = true;
+        for(RoomMember checkRoomMaster: roomMemberList){
+            if(!checkRoomMaster.getUserNickname().equals(userDetails.getUser().getUserNickname())){
+                //일치하지 않는다면 새로운 roomMember를 저장하자.
+                roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
+                        false, room.getSessoinId());
+                roomMemberRepository.save(roomMember);
+            }else {
+                //일치한다면 이미 만들어져있는 roomMember를 불러오자.
+                roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
+                        room.getSessoinId());
+                break;
+            }
+        }
+        String newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
+        return new RoomCreateResponseDto(room, newEnterRoomToken, roomMember);
     }
 
     //connection 생성 및 token 발급
-    private String createEnterRoomToken(String sessionId) throws OpenViduJavaClientException, OpenViduHttpException{
+    private String createEnterRoomToken(String sessionId, String userNickname)
+            throws OpenViduJavaClientException, OpenViduHttpException{
         openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
         openVidu.fetch();
         //sessionId 를 이용하여 session 찾기
@@ -102,8 +129,11 @@ public class RoomService {
         if(session == null){
             throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
         }
-        //connection 생성
-        ConnectionProperties properties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).build();
+        //userNickname을 serverData로 connection 생성
+        ConnectionProperties properties = new ConnectionProperties.Builder()
+                .data(userNickname)
+                .type(ConnectionType.WEBRTC)
+                .build();
         //token 발급
         return session.createConnection(properties).getToken();
     }
