@@ -161,6 +161,7 @@ public class RoomService {
         return getRoomResponseDtos;
     }
     //방 나가기
+    @Transactional
     public String exitRoom(Long roomId, UserDetailsImpl userDetails) {
         //roomId에 맞는 방 찾기
         Room room = roomRepository.findById(roomId).orElseThrow(
