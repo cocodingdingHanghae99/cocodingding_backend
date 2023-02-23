@@ -117,6 +117,9 @@ public class RoomService {
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
                         false, room.getSessoinId(), newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
+                Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
+                //현제 인원을 room에 저장.
+                room.updateCRTMember(currentMember);
             }else {
                 //일치한다면 이미 만들어져있는 roomMember를 불러오자.
                 roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
@@ -157,11 +160,27 @@ public class RoomService {
         }
         return getRoomResponseDtos;
     }
-//    //일반 맴버 방 나가기
-//    public ExitRoomDto memberExitRoom(Long roomId) {
-//        Room room = roomRepository.findById(roomId).orElseThrow(
-//                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
-//        );
-//        openVidu.getActiveSession(room.getSessoinId());
-//    }
+    //방 나가기
+    public String exitRoom(Long roomId, UserDetailsImpl userDetails) {
+        //roomId에 맞는 방 찾기
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        //user가 방장인지 확인
+        if(roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname()
+                ,room.getSessoinId()).isRoomMaster()){
+            //방장이라면 방 멤버와 방을 삭제
+            roomMemberRepository.deleteBySessionId(room.getSessoinId());
+            roomRepository.delete(room);
+            return "체팅방이 삭제되었습니다";
+        }else {
+            //방장이 아니라면 방 멤버만 삭제
+            roomMemberRepository.deleteBySessionIdAndUserNickname(room.getSessoinId(),
+                    userDetails.getUser().getUserNickname());
+            //현제 인원을 room에 저장.
+            Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
+            room.updateCRTMember(currentMember);
+        }
+        return "방을 나갔습니다.";
+    }
 }
