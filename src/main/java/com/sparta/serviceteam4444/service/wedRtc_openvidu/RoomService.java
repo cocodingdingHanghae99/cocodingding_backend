@@ -198,4 +198,16 @@ public class RoomService {
         }
         return "방을 나갔습니다.";
     }
+    //방에 있는 모든 사람 닉네임 가져오기.
+    public AllRoomMemberDto getAllRoomMember(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
+        List<String> roomMemberNicknameList = new ArrayList<>();
+        for(RoomMember roomMember: roomMemberList){
+            roomMemberNicknameList.add(roomMember.getUserNickname());
+        }
+        return new AllRoomMemberDto(roomMemberNicknameList);
+    }
 }
