@@ -48,7 +48,7 @@ public class OpenviduController {
     @ApiOperation(value = "방 나가기")
     @PostMapping("/room/exit/{roomId}")
     public String exitRoom(@PathVariable Long roomId,
-                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.exitRoom(roomId, userDetails);
     }
 }
