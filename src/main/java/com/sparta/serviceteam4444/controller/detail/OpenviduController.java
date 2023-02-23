@@ -1,5 +1,6 @@
 package com.sparta.serviceteam4444.controller.detail;
 
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.AllRoomMemberDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.GetRoomResponseDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
@@ -9,6 +10,7 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +50,13 @@ public class OpenviduController {
     @ApiOperation(value = "방 나가기")
     @PostMapping("/room/exit/{roomId}")
     public String exitRoom(@PathVariable Long roomId,
-                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.exitRoom(roomId, userDetails);
+    }
+    //방 안에 있는 사람의 닉네임 전부 가져오기
+    @ApiOperation(value = "방 안에 있는 사람의 닉네임 전부 가져오기")
+    @GetMapping("/roomMember/{roomId}")
+    public AllRoomMemberDto getAllRoomMember(@PathVariable Long roomId){
+        return roomService.getAllRoomMember(roomId);
     }
 }
