@@ -80,12 +80,10 @@ public class RoomService {
                 .build();
         //새로운 openvidu 체팅방 생성
         Session session = openVidu.createSession();
-        //token 받아오기
-        String token = session.createConnection(properties).getToken();
-        //connectionId
-        String connectionId = session.createConnection(properties).getConnectionId();
+        //connection
+        Connection connection = session.createConnection(properties);
         //sessionId, token 리턴
-        return new CreateSessionResponseDto(session.getSessionId(), token, connectionId);
+        return new CreateSessionResponseDto(session.getSessionId(), connection);
     }
 
     @Transactional
@@ -149,10 +147,10 @@ public class RoomService {
                 .data(userNickname)
                 .type(ConnectionType.WEBRTC)
                 .build();
-        String connectionId = session.createConnection(properties).getConnectionId();
-        String newEnterRoomToken = session.createConnection(properties).getToken();
+        //connection
+        Connection connection = session.createConnection(properties);
         //token 발급
-        return new CreateEnterRoomTokenDto(connectionId, newEnterRoomToken);
+        return new CreateEnterRoomTokenDto(connection);
     }
     //전체 방 목록 보여주기
     public List<GetRoomResponseDto> getAllRooms() {
@@ -197,7 +195,6 @@ public class RoomService {
             //현제 인원을 room에 저장.
             Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
             room.updateCRTMember(currentMember);
-
         }
         return "방을 나갔습니다.";
     }
