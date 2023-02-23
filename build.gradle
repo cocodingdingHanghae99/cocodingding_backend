@@ -78,6 +78,8 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.1.2'
 	implementation 'org.webjars:stomp-websocket:2.3.3-1'
 	implementation 'com.google.code.gson:gson:2.8.0'
+	implementation 'org.webjars:webjars-locator-core'
+	implementation 'org.webjars:jquery:3.1.1-1'
 }
 
 tasks.named('test') {
