@@ -1,6 +1,5 @@
 package com.sparta.serviceteam4444.controller.detail;
 
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.ExitRoomDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.GetRoomResponseDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
@@ -45,10 +44,11 @@ public class OpenviduController {
     public List<GetRoomResponseDto> getAllRooms(){
         return roomService.getAllRooms();
     }
-//    //일반 맴버 방 나가기
-//    @ApiOperation(value = "일반 맴버 방 나가기")
-//    @PostMapping("/room/roomMember/{roomId}")
-//    public ExitRoomDto memberExitRoom(@PathVariable Long roomId){
-//        return roomService.memberExitRoom(roomId);
-//    }
+    //방 나가기
+    @ApiOperation(value = "방 나가기")
+    @PostMapping("/room/exit/{roomId}")
+    public String exitRoom(@PathVariable Long roomId,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomService.exitRoom(roomId, userDetails);
+    }
 }
