@@ -3,6 +3,8 @@ package com.sparta.serviceteam4444.entity.user;
 import com.sparta.serviceteam4444.dto.user.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.support.EncodedResource;
 
 import javax.persistence.*;
 
@@ -25,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String userPassword;
 
+    @Column(unique = true)
+    private String refreshToken;
+
     public User(String userEmail, String userNickname, String userPassword) {
         this.userEmail = userEmail;
         this.userNickname = userNickname;
@@ -33,6 +38,10 @@ public class User {
 
     public void updateNickname(UserRequestDto userRequestDto) {
         this.userNickname = userRequestDto.getUserNickname();
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 //    @Column
