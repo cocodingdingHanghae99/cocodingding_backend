@@ -101,18 +101,21 @@ public class UserService {
 
     //============================================================================================================//
 
-    public RefreshTokenDto refreshToken(String refreshToken, String userEmail){
+    public void refreshToken(String refreshToken, String userEmail, HttpServletResponse response){
 
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(
                         () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
                 );
 
+        String refresh = jwtUtil.createRefreshToken();
+
         if (refreshToken.equals(user.getRefreshToken())){
-            user.updateRefreshToken(jwtUtil.createRefreshToken());
+            user.updateRefreshToken(refresh);
         }
 
-        return new RefreshTokenDto(user.getUserEmail(), jwtUtil.createToken(user.getUserEmail()), user.getRefreshToken());
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, refresh);
 
     }
 
