@@ -5,7 +5,6 @@ import com.sparta.serviceteam4444.entity.webRtc_openvidu.Room;
 import com.sparta.serviceteam4444.entity.webRtc_openvidu.RoomMember;
 import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.exception.ErrorCode;
-import com.sparta.serviceteam4444.repository.socket.ChatRoomRepository;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomMemberRepository;
 import com.sparta.serviceteam4444.repository.wedRtc_openvidu.RoomRepository;
 import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
@@ -29,7 +28,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    private final ChatRoomRepository chatRoomRepository;
+//    private final ChatRoomRepository chatRoomRepository;
 
     private final RoomMemberRepository roomMemberRepository;
 
@@ -64,8 +63,8 @@ public class RoomService {
         room.updateCRTMember(currentMember);
         //room저장하기.
         roomRepository.save(room);
-        //채팅방도 같이 만들기
-        chatRoomRepository.createChatRoom(room.getOpenviduRoomId(), room.getRoomTitle(),room.getCategory());
+        //채팅방도 같이 만들기, 임시 주석 처리
+//        chatRoomRepository.createChatRoom(room.getOpenviduRoomId(), room.getRoomTitle(),room.getCategory());
         //return
         return new RoomCreateResponseDto(room, roomMember);
     }
