@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class RoomService {
     private String OPENVIDU_SECRET;
 
     @PostConstruct
+    @Transactional
     public OpenVidu openVidu(){
         return this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
@@ -53,7 +55,7 @@ public class RoomService {
         Room room = new Room(newToken, roomCreateRequestDto, roomMasterNickname);
         //roomMember 저장하기.
         RoomMember roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
-                roomMaster, room.getSessoinId(), newToken.getToken());
+                roomMaster, room.getSessoinId(), newToken.getToken(), newToken.getConnectionId());
         roomMemberRepository.save(roomMember);
         //현제 인원 불러오기
         Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
@@ -77,31 +79,34 @@ public class RoomService {
                 .build();
         //새로운 openvidu 체팅방 생성
         Session session = openVidu.createSession();
-        //token 받아오기
-        String token = session.createConnection(properties).getToken();
+        //connection
+        Connection connection = session.createConnection(properties);
         //sessionId, token 리턴
-        return new CreateSessionResponseDto(session.getSessionId(), token);
+        return new CreateSessionResponseDto(session.getSessionId(), connection);
     }
 
+    @Transactional
     //방 입장
     public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        //userDetails 가 null일때.
+        if(userDetails == null){
+            throw new CheckApiException(ErrorCode.NOT_EXITS_USER);
+        }
         //roomId를 이용해서 room 찾기.
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        //방장인지 아닌지 판단 및 중복입장 에러처리.
+        //방장인지 아닌지 판단 및 중복입장 처리.
         RoomMember roomMember = new RoomMember();
-        String newEnterRoomToken = "";
+        CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
         //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
-            //중복입장 이라면 에러처리.
-            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())){
-                throw new CheckApiException(ErrorCode.ALREADY_ENTER_USER);
-            }else {
-                //아니라면 토큰 만들기.
-                newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
+            //중복입장 이라면 토큰만 바꿔서 내보내기.
+            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())) {
+                checkRoomMember.updateToken(newEnterRoomToken.getNewEnterRoomToken());
+                return new RoomCreateResponseDto(room, checkRoomMember);
             }
         }
         //roomMaster 와 nickname이 일치하면 roomMaster = true;
@@ -110,12 +115,15 @@ public class RoomService {
                 //일치하지 않는다면 새로운 roomMember를 저장하자.
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
                         false, room.getSessoinId(), newEnterRoomToken);
-                log.info(newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
+                Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
+                //현제 인원을 room에 저장.
+                room.updateCRTMember(currentMember);
             }else {
                 //일치한다면 이미 만들어져있는 roomMember를 불러오자.
                 roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
                         room.getSessoinId());
+                roomMember.updateToken(newEnterRoomToken.getNewEnterRoomToken());
                 break;
             }
         }
@@ -123,7 +131,7 @@ public class RoomService {
     }
 
     //connection 생성 및 token 발급
-    private String createEnterRoomToken(String sessionId, String userNickname)
+    private CreateEnterRoomTokenDto createEnterRoomToken(String sessionId, String userNickname)
             throws OpenViduJavaClientException, OpenViduHttpException{
         openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
         openVidu.fetch();
@@ -138,8 +146,10 @@ public class RoomService {
                 .data(userNickname)
                 .type(ConnectionType.WEBRTC)
                 .build();
+        //connection
+        Connection connection = session.createConnection(properties);
         //token 발급
-        return session.createConnection(properties).getToken();
+        return new CreateEnterRoomTokenDto(connection);
     }
     //전체 방 목록 보여주기
     public List<GetRoomResponseDto> getAllRooms() {
@@ -151,11 +161,52 @@ public class RoomService {
         }
         return getRoomResponseDtos;
     }
-//    //일반 맴버 방 나가기
-//    public ExitRoomDto memberExitRoom(Long roomId) {
-//        Room room = roomRepository.findById(roomId).orElseThrow(
-//                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
-//        );
-//        openVidu.getActiveSession(room.getSessoinId());
-//    }
+    //방 나가기
+    @Transactional
+    public String exitRoom(Long roomId, UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
+        //roomId에 맞는 방 찾기
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        //user가 방장인지 확인
+        if(roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname()
+                ,room.getSessoinId()).isRoomMaster()){
+            //방장이라면 방 멤버와 방을 삭제
+            roomMemberRepository.deleteBySessionId(room.getSessoinId());
+            roomRepository.delete(room);
+            //openVidu session 삭제
+            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+            openVidu.fetch();
+            Session session = openVidu.getActiveSession(room.getSessoinId());
+            session.close();
+            return "체팅방이 삭제되었습니다";
+        }else {
+            //openVidu 연결 끊기
+            RoomMember roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
+                    room.getSessoinId());
+            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+            openVidu.fetch();
+            Session session = openVidu.getActiveSession(room.getSessoinId());
+            session.forceDisconnect(roomMember.getConnectionId());
+            //방장이 아니라면 방 멤버만 삭제
+            roomMemberRepository.deleteBySessionIdAndUserNickname(room.getSessoinId(),
+                    userDetails.getUser().getUserNickname());
+            //현제 인원을 room에 저장.
+            Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
+            room.updateCRTMember(currentMember);
+        }
+        return "방을 나갔습니다.";
+    }
+    //방에 있는 모든 사람 닉네임 가져오기.
+    public AllRoomMemberDto getAllRoomMember(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
+        List<String> roomMemberNicknameList = new ArrayList<>();
+        for(RoomMember roomMember: roomMemberList){
+            roomMemberNicknameList.add(roomMember.getUserNickname());
+        }
+        return new AllRoomMemberDto(roomMemberNicknameList);
+    }
 }
