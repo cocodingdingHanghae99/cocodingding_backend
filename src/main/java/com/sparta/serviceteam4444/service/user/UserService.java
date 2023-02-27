@@ -77,7 +77,7 @@ public class UserService {
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
         response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
 
-        user.updateRefreshToken(refreshToken.substring(7));
+        user.updateRefreshToken(refreshToken);
 
         return new UserResponseDto(data, statucode, user.getUserEmail(), user.getUserNickname());
 
@@ -108,14 +108,20 @@ public class UserService {
                         () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
                 );
 
-        String refresh = jwtUtil.createRefreshToken();
-
         if (refreshToken.equals(user.getRefreshToken())){
-            user.updateRefreshToken(refresh);
-        }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
-        response.addHeader(JwtUtil.REFRESH_HEADER, refresh);
+            String refresh = jwtUtil.createRefreshToken();
+
+            user.updateRefreshToken(refresh);
+
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
+            response.addHeader(JwtUtil.REFRESH_HEADER, refresh);
+
+        } else {
+
+            throw new CheckApiException(ErrorCode.NOT_MATCH_TOKEN);
+
+        }
 
     }
 

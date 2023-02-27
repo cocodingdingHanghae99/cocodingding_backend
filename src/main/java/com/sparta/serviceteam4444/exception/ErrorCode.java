@@ -8,6 +8,8 @@ public enum ErrorCode {
 
     SUCCESS_CREATE_SESSION(HttpStatus.OK, 200, "방 생성 성공."),
 
+    NOT_MATCH_TOKEN(HttpStatus.BAD_REQUEST, 400, "토큰값이 일치하지 않습니다."),
+
     PLEASE_LOGIN(HttpStatus.BAD_REQUEST, 400, "로그인 해주세요."),
 
     EXITS_EMAIL(HttpStatus.BAD_REQUEST, 400, "이미 가입되어있는 이메일 입니다."),

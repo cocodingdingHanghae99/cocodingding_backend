@@ -5,6 +5,7 @@ import com.sparta.serviceteam4444.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value="/user")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -46,6 +48,8 @@ public class UserController {
     public ResponseEntity<?> refreshToken(@RequestHeader(value = "Refresh") String refreshToken,
                                         @RequestParam String userEmail,
                                         HttpServletResponse response){
+        log.info(refreshToken);
+        log.info(userEmail);
         userService.refreshToken(refreshToken, userEmail, response);
         String data = "재발급 성공";
         return ResponseEntity.ok(new UserResponseDto(data, 200));
