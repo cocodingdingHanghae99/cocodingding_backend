@@ -45,12 +45,12 @@ public class UserController {
 
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestHeader("Refresh") String refreshToken,
+    public ResponseEntity<?> refreshToken(@RequestHeader String refresh,
                                         @RequestParam String userEmail,
                                         HttpServletResponse response){
-        log.info(refreshToken);
+        log.info(refresh);
         log.info(userEmail);
-        userService.refreshToken(refreshToken, userEmail, response);
+        userService.refreshToken(refresh, userEmail, response);
         String data = "재발급 성공";
         return ResponseEntity.ok(new UserResponseDto(data, 200));
     }
