@@ -1,13 +1,11 @@
 package com.sparta.serviceteam4444.controller.user;
 
-import com.sparta.serviceteam4444.dto.user.UserLoginDto;
-import com.sparta.serviceteam4444.dto.user.UserRequestDto;
-import com.sparta.serviceteam4444.dto.user.UserResponseDto;
-import com.sparta.serviceteam4444.dto.user.UserSignupDto;
+import com.sparta.serviceteam4444.dto.user.*;
 import com.sparta.serviceteam4444.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value="/user")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
+
     private final UserService userService;
 
     @ApiOperation(value = "회원가입")
@@ -41,6 +41,18 @@ public class UserController {
     public UserRequestDto updateNickname(@PathVariable String userNickname,
                                           @RequestBody UserRequestDto userRequestDto){
         return userService.updateNickname(userNickname, userRequestDto);
+    }
+
+    @ApiOperation(value = "토큰 재발급")
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestHeader(value = "Refresh") String refreshToken,
+                                        @RequestParam String userEmail,
+                                        HttpServletResponse response){
+        log.info(refreshToken);
+        log.info(userEmail);
+        userService.refreshToken(refreshToken, userEmail, response);
+        String data = "재발급 성공";
+        return ResponseEntity.ok(new UserResponseDto(data, 200));
     }
 
 //    @ApiOperation(value = "카카오 로그인", notes = "이것은 카카오 로그인 버튼을 누름을 통해서 수행된다.")

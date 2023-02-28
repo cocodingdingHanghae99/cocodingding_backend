@@ -1,9 +1,6 @@
 package com.sparta.serviceteam4444.service.user;
 
-import com.sparta.serviceteam4444.dto.user.UserLoginDto;
-import com.sparta.serviceteam4444.dto.user.UserRequestDto;
-import com.sparta.serviceteam4444.dto.user.UserResponseDto;
-import com.sparta.serviceteam4444.dto.user.UserSignupDto;
+import com.sparta.serviceteam4444.dto.user.*;
 import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.exception.ErrorCode;
@@ -16,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -74,7 +72,12 @@ public class UserService {
             throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
         }
 
+        String refreshToken = jwtUtil.createRefreshToken();
+
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
+        response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
+
+        user.updateRefreshToken(refreshToken);
 
         return new UserResponseDto(data, statucode, user.getUserEmail(), user.getUserNickname());
 
@@ -93,6 +96,32 @@ public class UserService {
         }
 
         return new UserRequestDto(user);
+
+    }
+
+    //============================================================================================================//
+
+    public void refreshToken(String refreshToken, String userEmail, HttpServletResponse response){
+
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(
+                        () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
+                );
+
+        if (refreshToken.equals(user.getRefreshToken())){
+
+            String refresh = jwtUtil.createRefreshToken();
+
+            user.updateRefreshToken(refresh);
+
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
+            response.addHeader(JwtUtil.REFRESH_HEADER, refresh);
+
+        } else {
+
+            throw new CheckApiException(ErrorCode.NOT_MATCH_TOKEN);
+
+        }
 
     }
 

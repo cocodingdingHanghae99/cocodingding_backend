@@ -80,6 +80,8 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.0'
 	implementation 'org.webjars:webjars-locator-core'
 	implementation 'org.webjars:jquery:3.1.1-1'
+
+	implementation 'org.mockito:mockito-android:5.1.1'
 }
 
 tasks.named('test') {
