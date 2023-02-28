@@ -45,7 +45,7 @@ public class UserController {
 
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestHeader(value = "Refresh") String refreshToken,
+    public ResponseEntity<?> refreshToken(@RequestHeader("Refresh") String refreshToken,
                                         @RequestParam String userEmail,
                                         HttpServletResponse response){
         log.info(refreshToken);

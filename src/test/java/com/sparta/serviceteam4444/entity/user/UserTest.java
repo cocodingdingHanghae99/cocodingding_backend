@@ -30,4 +30,22 @@ class UserTest {
 
     }
 
+    @Test
+    @DisplayName("엣지 케이스")
+    public void createEdge() throws Exception{
+
+        //given
+        String userEmail = null;
+        String userNickname = "test";
+        String userPassword = "test";
+
+        //when
+        User user = new User(userEmail, userNickname, userPassword);
+
+        //then
+        assertEquals(userEmail, user.getUserEmail());
+        assertEquals(userNickname, user.getUserNickname());
+        assertEquals(userPassword, user.getUserPassword());
+    }
+
 }
