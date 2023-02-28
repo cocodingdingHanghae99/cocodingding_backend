@@ -72,7 +72,7 @@ public class UserService {
             throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
         }
 
-        String refreshToken = jwtUtil.createRefreshToken().substring(7);
+        String refreshToken = jwtUtil.createRefreshToken();
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserEmail()));
         response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
@@ -110,7 +110,7 @@ public class UserService {
 
         if (refreshToken.equals(user.getRefreshToken())){
 
-            String refresh = jwtUtil.createRefreshToken().substring(7);
+            String refresh = jwtUtil.createRefreshToken();
 
             user.updateRefreshToken(refresh);
 
