@@ -12,6 +12,7 @@ public class RoomCreateResponseDto {
     private String enterRoomToken;
     private String roomMemberNickname;
     private boolean roomMaster;
+    private Long currentMember;
 
     public RoomCreateResponseDto(Room room, RoomMember roomMember) {
         this.roomTitle = room.getRoomTitle();
@@ -20,5 +21,6 @@ public class RoomCreateResponseDto {
         this.enterRoomToken = roomMember.getToken();
         this.roomMemberNickname = roomMember.getUserNickname();
         this.roomMaster = roomMember.isRoomMaster();
+        this.currentMember = room.getCurrentMember();
     }
 }
