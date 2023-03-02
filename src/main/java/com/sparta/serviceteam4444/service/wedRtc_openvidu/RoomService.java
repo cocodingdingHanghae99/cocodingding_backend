@@ -13,6 +13,8 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,8 +155,12 @@ public class RoomService {
         return new CreateEnterRoomTokenDto(connection);
     }
     //전체 방 목록 보여주기
-    public List<GetRoomResponseDto> getAllRooms() {
-        List<Room> roomList = roomRepository.findAll();
+    public List<GetRoomResponseDto> getAllRooms(int page) {
+        PageRequest pageable = PageRequest.of(page - 1, 8);
+        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
+        if(roomList.isEmpty()){
+            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+        }
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
         for(Room room : roomList){
             GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);

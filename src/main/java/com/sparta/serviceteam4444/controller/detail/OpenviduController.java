@@ -10,7 +10,6 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +41,9 @@ public class OpenviduController {
     }
     //방 전체 보여주기
     @ApiOperation(value = "방 전체 보여주기")
-    @GetMapping("/room")
-    public List<GetRoomResponseDto> getAllRooms(){
-        return roomService.getAllRooms();
+    @GetMapping("/room/{page}")
+    public List<GetRoomResponseDto> getAllRooms(@PathVariable int page){
+        return roomService.getAllRooms(page);
     }
     //방 나가기
     @ApiOperation(value = "방 나가기")

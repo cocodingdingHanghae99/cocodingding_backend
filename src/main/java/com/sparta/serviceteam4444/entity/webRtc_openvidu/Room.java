@@ -2,6 +2,7 @@ package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateSessionResponseDto;
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
+import com.sparta.serviceteam4444.timestamp.Timestamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Room {
+public class Room extends Timestamp {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long openviduRoomId;
