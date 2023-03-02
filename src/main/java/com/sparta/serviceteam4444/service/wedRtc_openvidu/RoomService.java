@@ -119,6 +119,10 @@ public class RoomService {
         for(RoomMember checkRoomMaster: roomMemberList){
             if(!checkRoomMaster.getUserNickname().equals(userDetails.getUser().getUserNickname())){
                 //일치하지 않는다면 새로운 roomMember를 저장하자.
+                //4명 이상이면 예외처리
+                if(roomMemberRepository.countAllBySessionId(roomMember.getSessionId()) == 4){
+                    throw new CheckApiException(ErrorCode.ALREADY_FULL_ROOM);
+                }
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
                         false, room.getSessoinId(), newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
