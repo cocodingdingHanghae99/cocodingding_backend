@@ -6,4 +6,6 @@ import lombok.Getter;
 public class RoomCreateRequestDto {
     private String roomTitle;
     private String category;
+    private boolean status;
+    private String password;
 }

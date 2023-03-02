@@ -1,9 +1,6 @@
 package com.sparta.serviceteam4444.controller.detail;
 
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.AllRoomMemberDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.GetRoomResponseDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateRequestDto;
-import com.sparta.serviceteam4444.dto.wedRtc_openvidu.RoomCreateResponseDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.*;
 import com.sparta.serviceteam4444.security.user.UserDetailsImpl;
 import com.sparta.serviceteam4444.service.wedRtc_openvidu.RoomService;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -36,8 +33,9 @@ public class OpenviduController {
     @ApiOperation(value = "방 입장")
     @PostMapping("/room/{roomId}")
     public RoomCreateResponseDto enterRoom(@PathVariable Long roomId,
+                                           @RequestBody EnterRoomDto enterRoomDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
-        return roomService.enterRoom(roomId, userDetails);
+        return roomService.enterRoom(roomId, userDetails, enterRoomDto);
     }
     //방 전체 보여주기
     @ApiOperation(value = "방 전체 보여주기")

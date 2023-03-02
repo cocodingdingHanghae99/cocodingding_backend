@@ -23,7 +23,8 @@ public class Room extends Timestamp {
     private String category;
     @Column(nullable = false)
     private String roomMasterNickname;
-
+    private boolean status;
+    private String password;
     private Long currentMember;
 
     public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, String roomMasterNickname) {
@@ -31,6 +32,8 @@ public class Room extends Timestamp {
         this.sessoinId = newToken.getSessionId();
         this.category = roomCreateRequestDto.getCategory();
         this.roomMasterNickname = roomMasterNickname;
+        this.status = roomCreateRequestDto.isStatus();
+        this.password = roomCreateRequestDto.getPassword();
     }
 
     public void updateCRTMember(Long currentMember) {

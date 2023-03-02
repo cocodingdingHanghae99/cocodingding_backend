@@ -22,6 +22,8 @@ public enum ErrorCode {
 
     ALREADY_ENTER_USER(HttpStatus.BAD_REQUEST, 400, "이미 입장한 유저입니다."),
 
+    EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, 400, "방 비밀번호를 입력하세요"),
+
     BEN_ROOM(HttpStatus.BAD_REQUEST, 400, "강퇴당한 방입니다.");
 
 
