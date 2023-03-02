@@ -28,7 +28,8 @@ public class JwtUtil {
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 30 * 60 * 1000L;
-//    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 24 * 7 * 1000L;
+    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 24 * 7 * 1000L;
+    public static final String REFRESH_HEADER = "Refresh";
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -65,6 +66,16 @@ public class JwtUtil {
     }
 
     // refresh 토큰 생성
+    public String createRefreshToken(){
+        Date date = new Date();
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setIssuedAt(date)
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
 
     // 토큰 검증
     public boolean validateToken(String token) {

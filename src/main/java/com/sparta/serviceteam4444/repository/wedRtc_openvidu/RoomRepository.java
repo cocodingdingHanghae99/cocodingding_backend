@@ -6,5 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
+<<<<<<< HEAD
     Page<Room> findByOrderByModifiedAtDesc(PageRequest pageable);
+=======
+
+
+
+    //===========================================================================================================//
+    //webSocket//
+
+
+
+>>>>>>> main
 }
