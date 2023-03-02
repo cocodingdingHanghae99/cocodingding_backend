@@ -12,6 +12,8 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +48,10 @@ public class RoomService {
     //방만들기
     public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto, UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        //방 비밀번호가 비어있으면 예외처리.
+        if(roomCreateRequestDto.isStatus() && roomCreateRequestDto.getPassword() == null){
+            throw new CheckApiException(ErrorCode.EMPTY_PASSWORD);
+        }
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken(userDetails.getUser().getUserNickname());
         //방을 만든 사람의 닉네임을 roomMaster로
@@ -87,16 +93,16 @@ public class RoomService {
 
     @Transactional
     //방 입장
-    public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails)
+    public RoomCreateResponseDto enterRoom(Long roomId, UserDetailsImpl userDetails, EnterRoomDto enterRoomDto)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        //userDetails 가 null일때.
-        if(userDetails == null){
-            throw new CheckApiException(ErrorCode.NOT_EXITS_USER);
-        }
         //roomId를 이용해서 room 찾기.
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
+        //비밀번호 틀리면 예외처리.
+        if(room.isStatus() && !room.getPassword().equals(enterRoomDto.getPassword())){
+            throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
+        }
         //방장인지 아닌지 판단 및 중복입장 처리.
         RoomMember roomMember = new RoomMember();
         CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
@@ -113,6 +119,10 @@ public class RoomService {
         for(RoomMember checkRoomMaster: roomMemberList){
             if(!checkRoomMaster.getUserNickname().equals(userDetails.getUser().getUserNickname())){
                 //일치하지 않는다면 새로운 roomMember를 저장하자.
+                //4명 이상이면 예외처리
+                if(roomMemberRepository.countAllBySessionId(roomMember.getSessionId()) == 4){
+                    throw new CheckApiException(ErrorCode.ALREADY_FULL_ROOM);
+                }
                 roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
                         false, room.getSessoinId(), newEnterRoomToken);
                 roomMemberRepository.save(roomMember);
@@ -152,8 +162,12 @@ public class RoomService {
         return new CreateEnterRoomTokenDto(connection);
     }
     //전체 방 목록 보여주기
-    public List<GetRoomResponseDto> getAllRooms() {
-        List<Room> roomList = roomRepository.findAll();
+    public List<GetRoomResponseDto> getAllRooms(int page) {
+        PageRequest pageable = PageRequest.of(page - 1, 8);
+        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
+        if(roomList.isEmpty()){
+            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+        }
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
         for(Room room : roomList){
             GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
