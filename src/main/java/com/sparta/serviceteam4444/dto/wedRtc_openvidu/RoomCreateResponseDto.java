@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class RoomCreateResponseDto {
-    private String roomTitle;
-    private String sessionId;
-    private Long openviduRoomId;
-    private String enterRoomToken;
-    private String roomMemberNickname;
-    private boolean roomMaster;
-    private Long currentMember;
+    private final String roomTitle;
+    private final String sessionId;
+    private final Long openviduRoomId;
+    private final String enterRoomToken;
+    private final String roomMemberNickname;
+    private final boolean roomMaster;
+    private final Long currentMember;
 
     public RoomCreateResponseDto(Room room, RoomMember roomMember) {
         this.roomTitle = room.getRoomTitle();
