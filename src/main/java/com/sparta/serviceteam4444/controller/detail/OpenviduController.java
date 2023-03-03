@@ -33,7 +33,7 @@ public class OpenviduController {
     @ApiOperation(value = "방 입장")
     @PostMapping("/room/{roomId}")
     public RoomCreateResponseDto enterRoom(@PathVariable Long roomId,
-                                           @RequestBody EnterRoomDto enterRoomDto,
+                                           @RequestBody(required = false) EnterRoomDto enterRoomDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
         return roomService.enterRoom(roomId, userDetails, enterRoomDto);
     }
