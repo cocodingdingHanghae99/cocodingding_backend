@@ -7,29 +7,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Timestamp {
     @CreatedDate
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private String modifiedAt;
-
-    @PrePersist
-    public void onPrePersist(){
-        this.createdAt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.modifiedAt = this.createdAt;
-    }
-
-    @PreUpdate
-    public void onPreUpdate(){
-        this.modifiedAt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
+    private LocalDateTime modifiedAt;
 }
