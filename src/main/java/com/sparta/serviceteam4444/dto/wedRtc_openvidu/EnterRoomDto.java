@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class EnterRoomDto {
-    String password;
+    private String password;
 }

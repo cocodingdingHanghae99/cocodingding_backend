@@ -22,16 +22,16 @@ public class Room extends Timestamp {
     @Column(nullable = false)
     private String category;
     @Column(nullable = false)
-    private String roomMasterNickname;
+    private Long roomMasterId;
     private boolean status;
     private String password;
     private Long currentMember;
 
-    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, String roomMasterNickname) {
+    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, Long roomMemberId) {
         this.roomTitle = roomCreateRequestDto.getRoomTitle();
         this.sessoinId = newToken.getSessionId();
         this.category = roomCreateRequestDto.getCategory();
-        this.roomMasterNickname = roomMasterNickname;
+        this.roomMasterId = roomMemberId;
         this.status = roomCreateRequestDto.isStatus();
         this.password = roomCreateRequestDto.getPassword();
     }
