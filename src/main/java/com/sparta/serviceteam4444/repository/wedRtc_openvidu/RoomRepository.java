@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Page<Room> findByOrderByModifiedAtDesc(PageRequest pageable);
+    //Page<Room> findByOrderByModifiedAt(PageRequest pageable);
 }
