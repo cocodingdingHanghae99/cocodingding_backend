@@ -9,11 +9,13 @@ public class GetRoomResponseDto {
     private String sessionId;
     private Long openviduRoomId;
     private String category;
+    private Long currentmember;
 
     public GetRoomResponseDto(Room room) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
         this.category = room.getCategory();
+        this.currentmember = room.getCurrentMember();
     }
 }

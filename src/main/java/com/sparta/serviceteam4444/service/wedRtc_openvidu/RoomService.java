@@ -163,7 +163,7 @@ public class RoomService {
     }
     //전체 방 목록 보여주기
     public List<GetRoomResponseDto> getAllRooms(int page) {
-        PageRequest pageable = PageRequest.of(page - 1, 8);
+        PageRequest pageable = PageRequest.of(page - 1, 6);
         Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
         if(roomList.isEmpty()){
             throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
