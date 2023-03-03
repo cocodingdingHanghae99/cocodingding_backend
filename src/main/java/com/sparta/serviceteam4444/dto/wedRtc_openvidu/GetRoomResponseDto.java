@@ -5,15 +5,17 @@ import lombok.Getter;
 
 @Getter
 public class GetRoomResponseDto {
-    private String roomTitle;
-    private String sessionId;
-    private Long openviduRoomId;
-    private String category;
+    private final String roomTitle;
+    private final String sessionId;
+    private final Long openviduRoomId;
+    private final String category;
+    private final Long currentMember;
 
     public GetRoomResponseDto(Room room) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
         this.category = room.getCategory();
+        this.currentMember = room.getCurrentMember();
     }
 }
