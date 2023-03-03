@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
+import com.sparta.serviceteam4444.entity.user.User;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
+import com.sparta.serviceteam4444.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 public class KakaoService {
 
     private final JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
 
     @Value("${client_id}")
     private String client_id;
@@ -46,6 +51,12 @@ public class KakaoService {
 
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
+        //로그인시 user 정보 저장하기.(예외를 처리하지 않고 optional로 받기)
+        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getUserEmail());
+        //저장되어있는 user정보가 없다면 저장을 하자.
+        if(userDemo.isEmpty()){
+            User user = new User(kakaoUserInfoDto);
+        }
         return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
     }

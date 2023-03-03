@@ -1,6 +1,8 @@
 package com.sparta.serviceteam4444.entity.webRtc_openvidu;
 
 import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateEnterRoomTokenDto;
+import com.sparta.serviceteam4444.dto.wedRtc_openvidu.CreateSessionResponseDto;
+import com.sparta.serviceteam4444.entity.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +15,9 @@ public class RoomMember {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomMemberId;
-    @Column(nullable = false)
-    private String userNickname;
+    @OneToOne
+    @JoinColumn(name = "USER_Id")
+    private User user;
     @Column(nullable = false)
     private boolean roomMaster;
     @Column(nullable = false)
@@ -24,18 +27,18 @@ public class RoomMember {
     @Column(nullable = false)
     private String connectionId;
 
-    public RoomMember(String userNickname, boolean roomMaster, String sessoinId, String token, String connectionId) {
-        this.userNickname = userNickname;
+    public RoomMember(User user, boolean roomMaster, CreateSessionResponseDto newToken) {
+        this.user = user;
         this.roomMaster = roomMaster;
-        this.sessionId = sessoinId;
-        this.token = token;
-        this.connectionId = connectionId;
+        this.sessionId = newToken.getSessionId();
+        this.token = newToken.getToken();
+        this.connectionId = newToken.getConnectionId();
     }
 
-    public RoomMember(String userNickname, boolean roomMaster, String sessoinId, CreateEnterRoomTokenDto newEnterRoomToken) {
-        this.userNickname = userNickname;
+    public RoomMember(User user, boolean roomMaster, CreateEnterRoomTokenDto newEnterRoomToken, String sessionId) {
+        this.user = user;
         this.roomMaster = roomMaster;
-        this.sessionId = sessoinId;
+        this.sessionId = sessionId;
         this.token = newEnterRoomToken.getNewEnterRoomToken();
         this.connectionId = newEnterRoomToken.getConnectionId();
     }

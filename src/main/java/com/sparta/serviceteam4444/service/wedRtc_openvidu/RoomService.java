@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,6 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-//    private final ChatRoomRepository chatRoomRepository;
-
     private final RoomMemberRepository roomMemberRepository;
 
     @Value("${openvidu.url}")
@@ -41,10 +40,10 @@ public class RoomService {
     private String OPENVIDU_SECRET;
 
     @PostConstruct
-    @Transactional
     public OpenVidu openVidu(){
         return this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
+    @Transactional
     //방만들기
     public RoomCreateResponseDto createRoom(RoomCreateRequestDto roomCreateRequestDto, UserDetailsImpl userDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -54,23 +53,17 @@ public class RoomService {
         }
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken(userDetails.getUser().getUserNickname());
-        //방을 만든 사람의 닉네임을 roomMaster로
-        String roomMasterNickname = userDetails.getUser().getUserNickname();
-        boolean roomMaster = true;
-        //room build
-        Room room = new Room(newToken, roomCreateRequestDto, roomMasterNickname);
-        //roomMember 저장하기.
-        RoomMember roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
-                roomMaster, room.getSessoinId(), newToken.getToken(), newToken.getConnectionId());
-        roomMemberRepository.save(roomMember);
+        //roomMember 저장하기(방장권한을 true로)
+        RoomMember roomMember = new RoomMember(userDetails.getUser(), true, newToken);
+        roomMember = roomMemberRepository.save(roomMember);
+        //방을 만든 사람의 userId를 roomMaster로 room 빌드
+        Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
+        //room 저장
+        room = roomRepository.save(room);
         //현제 인원 불러오기
         Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
         //현제 인원을 room에 저장.
         room.updateCRTMember(currentMember);
-        //room저장하기.
-        roomRepository.save(room);
-        //채팅방도 같이 만들기, 임시 주석 처리
-//        chatRoomRepository.createChatRoom(room.getOpenviduRoomId(), room.getRoomTitle(),room.getCategory());
         //return
         return new RoomCreateResponseDto(room, roomMember);
     }
@@ -103,40 +96,28 @@ public class RoomService {
         if(room.isStatus() && !room.getPassword().equals(enterRoomDto.getPassword())){
             throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
         }
-        //방장인지 아닌지 판단 및 중복입장 처리.
-        RoomMember roomMember = new RoomMember();
+        //새로운 토큰.
         CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
-        //room에 맞는 sessionId를 가진 roomMember 전부 찾기.
+        //중복 입장 처리.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
-            //중복입장 이라면 토큰만 바꿔서 내보내기.
-            if(checkRoomMember.getUserNickname().equals(userDetails.getUser().getUserNickname())) {
+            //중복입장이라면 토큰만 새로 발급 (다른방을 갔다가 왔을수도 있기때문에)
+            if(Objects.equals(checkRoomMember.getUser().getId(), userDetails.getUser().getId())){
                 checkRoomMember.updateToken(newEnterRoomToken.getNewEnterRoomToken());
                 return new RoomCreateResponseDto(room, checkRoomMember);
             }
         }
-        //roomMaster 와 nickname이 일치하면 roomMaster = true;
-        for(RoomMember checkRoomMaster: roomMemberList){
-            if(!checkRoomMaster.getUserNickname().equals(userDetails.getUser().getUserNickname())){
-                //일치하지 않는다면 새로운 roomMember를 저장하자.
-                //4명 이상이면 예외처리
-                if(roomMemberRepository.countAllBySessionId(roomMember.getSessionId()) == 4){
-                    throw new CheckApiException(ErrorCode.ALREADY_FULL_ROOM);
-                }
-                roomMember = new RoomMember(userDetails.getUser().getUserNickname(),
-                        false, room.getSessoinId(), newEnterRoomToken);
-                roomMemberRepository.save(roomMember);
-                Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
-                //현제 인원을 room에 저장.
-                room.updateCRTMember(currentMember);
-            }else {
-                //일치한다면 이미 만들어져있는 roomMember를 불러오자.
-                roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
-                        room.getSessoinId());
-                roomMember.updateToken(newEnterRoomToken.getNewEnterRoomToken());
-                break;
-            }
+        //중복입장이 아니라면 새로 roomMember 저장하기
+        //4명 이상이라면 예외처리.
+        if(roomMemberRepository.countAllBySessionId(room.getSessoinId()) == 4){
+            throw new CheckApiException(ErrorCode.ALREADY_FULL_ROOM);
         }
+        RoomMember roomMember = new RoomMember(userDetails.getUser(), false, newEnterRoomToken, room.getSessoinId());
+        roomMemberRepository.save(roomMember);
+        //현재 인원 불러오기
+        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
+        //현재 인원을 room에 저장.
+        room.updateCRTMember(currentMember);
         return new RoomCreateResponseDto(room, roomMember);
     }
 
@@ -182,8 +163,8 @@ public class RoomService {
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
         //user가 방장인지 확인
-        if(roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname()
-                ,room.getSessoinId()).isRoomMaster()){
+        if(roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
+                room.getSessoinId()).isRoomMaster()){
             //방장이라면 방 멤버와 방을 삭제
             roomMemberRepository.deleteBySessionId(room.getSessoinId());
             roomRepository.delete(room);
@@ -195,15 +176,15 @@ public class RoomService {
             return "체팅방이 삭제되었습니다";
         }else {
             //openVidu 연결 끊기
-            RoomMember roomMember = roomMemberRepository.findByUserNicknameAndSessionId(userDetails.getUser().getUserNickname(),
+            RoomMember roomMember = roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
                     room.getSessoinId());
             openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
             openVidu.fetch();
             Session session = openVidu.getActiveSession(room.getSessoinId());
             session.forceDisconnect(roomMember.getConnectionId());
             //방장이 아니라면 방 멤버만 삭제
-            roomMemberRepository.deleteBySessionIdAndUserNickname(room.getSessoinId(),
-                    userDetails.getUser().getUserNickname());
+            roomMemberRepository.deleteBySessionIdAndUser(room.getSessoinId(),
+                    userDetails.getUser());
             //현제 인원을 room에 저장.
             Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
             room.updateCRTMember(currentMember);
@@ -218,7 +199,7 @@ public class RoomService {
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         List<String> roomMemberNicknameList = new ArrayList<>();
         for(RoomMember roomMember: roomMemberList){
-            roomMemberNicknameList.add(roomMember.getUserNickname());
+            roomMemberNicknameList.add(roomMember.getUser().getUserNickname());
         }
         return new AllRoomMemberDto(roomMemberNicknameList);
     }

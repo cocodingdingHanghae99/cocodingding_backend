@@ -19,7 +19,7 @@ public class RoomCreateResponseDto {
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
         this.enterRoomToken = roomMember.getToken();
-        this.roomMemberNickname = roomMember.getUserNickname();
+        this.roomMemberNickname = roomMember.getUser().getUserNickname();
         this.roomMaster = roomMember.isRoomMaster();
         this.currentMember = room.getCurrentMember();
     }

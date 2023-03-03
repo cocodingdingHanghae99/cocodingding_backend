@@ -1,6 +1,7 @@
 package com.sparta.serviceteam4444.entity.user;
 
 import com.sparta.serviceteam4444.dto.user.UserRequestDto;
+import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,11 @@ public class User {
         this.userEmail = userEmail;
         this.userNickname = userNickname;
         this.userPassword = userPassword;
+    }
+
+    public User(KakaoUserInfoDto kakaoUserInfoDto) {
+        this.userEmail = kakaoUserInfoDto.getUserEmail();
+        this.userNickname = kakaoUserInfoDto.getUserNickname();
     }
 
     public void updateNickname(UserRequestDto userRequestDto) {
