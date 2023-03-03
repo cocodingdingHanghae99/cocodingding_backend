@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class CreateEnterRoomTokenDto {
-    private String newEnterRoomToken;
-    private String connectionId;
+    private final String newEnterRoomToken;
+    private final String connectionId;
 
     public CreateEnterRoomTokenDto(Connection connection) {
         this.newEnterRoomToken = connection.getToken();
