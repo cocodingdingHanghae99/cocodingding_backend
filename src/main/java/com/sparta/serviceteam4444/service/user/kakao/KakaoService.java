@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
 import com.sparta.serviceteam4444.entity.user.User;
+import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,15 +48,16 @@ public class KakaoService {
 
         String accessToken = getAccessToken(code);
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
-
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUserInfoDto.getEmail()));
+
         //로그인시 user 정보 저장하기.(예외를 처리하지 않고 optional로 받기)
-        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getUserEmail());
+        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
         //저장되어있는 user정보가 없다면 저장을 하자.
         if(userDemo.isEmpty()){
             User user = new User(kakaoUserInfoDto);
+            userRepository.save(user);
         }
         return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
@@ -112,9 +114,9 @@ public class KakaoService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         log.info(nickname);
+        String email = jsonNode.get("kakao_account").get("email").asText();
 
-        return new KakaoUserInfoDto(nickname);
+        return new KakaoUserInfoDto(nickname, email);
 
     }
-
 }

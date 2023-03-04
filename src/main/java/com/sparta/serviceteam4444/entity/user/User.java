@@ -22,13 +22,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String userNickname;
 
-    @Column(nullable = false)
     private String userPassword;
 
-    @Column(unique = true)
     private String refreshToken;
 
     public User(String userEmail, String userNickname, String userPassword) {
@@ -38,7 +36,7 @@ public class User {
     }
 
     public User(KakaoUserInfoDto kakaoUserInfoDto) {
-        this.userEmail = kakaoUserInfoDto.getUserEmail();
+        this.userEmail = kakaoUserInfoDto.getEmail();
         this.userNickname = kakaoUserInfoDto.getUserNickname();
     }
 

@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -35,5 +36,11 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {CheckApiException.class})
     public ResponseEntity<Object> handleApiRequestException(CheckApiException ex) {
         return ResponseEntity.status(ex.getErrorCode().getHttpStatus()).body(new RestApiException(ex.getErrorCode()));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUnexpectedExceptionV2(Exception exception) {
+        return ResponseEntity.internalServerError().body(exception.getMessage());
     }
 }

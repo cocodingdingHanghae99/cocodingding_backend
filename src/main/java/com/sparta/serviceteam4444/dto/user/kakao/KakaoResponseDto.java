@@ -13,7 +13,7 @@ public class KakaoResponseDto {
 
     public KakaoResponseDto(String accessToken, KakaoUserInfoDto kakaoUserInfoDto) {
         this.token = accessToken;
-        this.userEmail = kakaoUserInfoDto.getUserEmail();
+        this.userEmail = kakaoUserInfoDto.getEmail();
         this.userNickname = kakaoUserInfoDto.getUserNickname();
     }
 
