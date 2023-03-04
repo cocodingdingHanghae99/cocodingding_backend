@@ -52,7 +52,7 @@ public class KakaoService {
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
         //로그인시 user 정보 저장하기.(예외를 처리하지 않고 optional로 받기)
-        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getUserEmail());
+        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
         //저장되어있는 user정보가 없다면 저장을 하자.
         if(userDemo.isEmpty()){
             User user = new User(kakaoUserInfoDto);
@@ -113,8 +113,10 @@ public class KakaoService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         log.info(nickname);
+        String email = jsonNode.get("properties")
+                .get("email").asText();
 
-        return new KakaoUserInfoDto(nickname);
+        return new KakaoUserInfoDto(nickname, email);
 
     }
 
