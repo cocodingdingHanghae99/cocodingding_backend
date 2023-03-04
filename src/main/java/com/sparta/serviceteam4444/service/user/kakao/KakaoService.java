@@ -117,5 +117,4 @@ public class KakaoService {
         return new KakaoUserInfoDto(nickname);
 
     }
-
 }
