@@ -56,7 +56,7 @@ public class KakaoService {
         //저장되어있는 user정보가 없다면 저장을 하자.
         if(userDemo.isEmpty()){
             User user = new User(kakaoUserInfoDto);
-//            userRepository.save(user);
+            userRepository.save(user);
         }
         return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
@@ -113,7 +113,7 @@ public class KakaoService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         log.info(nickname);
-        String email = jsonNode.get("email").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
 
         return new KakaoUserInfoDto(nickname, email);
 
