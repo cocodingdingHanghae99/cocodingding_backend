@@ -27,7 +27,7 @@ public class User {
 
     private String userPassword;
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String refreshToken;
 
     public User(String userEmail, String userNickname, String userPassword) {
