@@ -48,9 +48,9 @@ public class KakaoService {
 
         String accessToken = getAccessToken(code);
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(accessToken));
-
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
+
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUserInfoDto.getEmail()));
 
         //로그인시 user 정보 저장하기.(예외를 처리하지 않고 optional로 받기)
         Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
