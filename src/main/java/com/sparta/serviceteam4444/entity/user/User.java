@@ -19,15 +19,14 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String userEmail;
 
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String userNickname;
 
     private String userPassword;
 
-//    @Column(unique = true)
     private String refreshToken;
 
     public User(String userEmail, String userNickname, String userPassword) {
