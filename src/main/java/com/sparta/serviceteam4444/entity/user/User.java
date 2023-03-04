@@ -24,7 +24,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String userNickname;
-    
+
     private String userPassword;
 
     @Column(unique = true)
