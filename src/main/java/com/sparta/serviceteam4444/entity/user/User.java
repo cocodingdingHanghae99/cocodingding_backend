@@ -37,7 +37,7 @@ public class User {
     }
 
     public User(KakaoUserInfoDto kakaoUserInfoDto) {
-        this.userEmail = kakaoUserInfoDto.getUserEmail();
+        this.userEmail = kakaoUserInfoDto.getEmail();
         this.userNickname = kakaoUserInfoDto.getUserNickname();
     }
 
