@@ -11,8 +11,7 @@ public class KakaoUserInfoDto {
 
     private String email;
 
-    public KakaoUserInfoDto(String nickname, String email) {
+    public KakaoUserInfoDto(String nickname) {
         this.userNickname = nickname;
-        this.email = email;
     }
 }
