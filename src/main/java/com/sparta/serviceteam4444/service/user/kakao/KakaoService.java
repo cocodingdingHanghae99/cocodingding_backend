@@ -113,8 +113,6 @@ public class KakaoService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         log.info(nickname);
-        String email = jsonNode.get("properties")
-                .get("email").asText();
 
         return new KakaoUserInfoDto(nickname);
 
