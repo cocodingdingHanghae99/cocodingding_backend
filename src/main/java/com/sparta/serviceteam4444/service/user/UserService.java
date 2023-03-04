@@ -33,6 +33,10 @@ public class UserService {
 
     public void signup(UserSignupDto userSignupDto) {
 
+        if(userSignupDto.getUserPassword().isEmpty()){
+            throw new CheckApiException(ErrorCode.EMPTY_PASSWORD);
+        }
+
         String userEmail = userSignupDto.getUserEmail();
 
         String userNickname = userSignupDto.getUserNickname();

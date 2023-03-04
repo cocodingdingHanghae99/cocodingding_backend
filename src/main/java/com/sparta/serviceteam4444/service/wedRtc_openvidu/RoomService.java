@@ -49,7 +49,7 @@ public class RoomService {
             throws OpenViduJavaClientException, OpenViduHttpException {
         //방 비밀번호가 비어있으면 예외처리.
         if(roomCreateRequestDto.isStatus() && roomCreateRequestDto.getPassword() == null){
-            throw new CheckApiException(ErrorCode.EMPTY_PASSWORD);
+            throw new CheckApiException(ErrorCode.EMPTY_ROOM_PASSWORD);
         }
         //새로운 session 생성
         CreateSessionResponseDto newToken = createNewToken(userDetails.getUser().getUserNickname());
