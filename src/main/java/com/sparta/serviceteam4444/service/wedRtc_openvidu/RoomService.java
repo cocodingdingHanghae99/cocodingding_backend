@@ -142,20 +142,6 @@ public class RoomService {
         //token 발급
         return new CreateEnterRoomTokenDto(connection);
     }
-//    //전체 방 목록 보여주기
-//    public List<GetRoomResponseDto> getAllRooms(int page) {
-//        //방 목록을 6개씩 묶어서 페이지 처리
-//        PageRequest pageable = PageRequest.of(page - 1, 6);
-//        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-//        //페이지 처리된 roomList를 GetRoomResponseDto에 담아서 리턴.
-//        List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
-//        for(Room room : roomList){
-//            GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
-//            getRoomResponseDtos.add(getRoomResponseDto);
-//        }
-//        return getRoomResponseDtos;
-//    }
-
 
     //전체 방 목록 보여주기
     public ResponseDto getAllRooms(int page) {
@@ -215,6 +201,7 @@ public class RoomService {
         }
         return "방을 나갔습니다.";
     }
+
     //방에 있는 모든 사람 닉네임 가져오기.
     public AllRoomMemberDto getAllRoomMember(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(
