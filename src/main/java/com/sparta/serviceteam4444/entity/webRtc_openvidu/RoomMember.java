@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 public class RoomMember {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomMemberId;
     @OneToOne
     @JoinColumn(name = "USER_Id")

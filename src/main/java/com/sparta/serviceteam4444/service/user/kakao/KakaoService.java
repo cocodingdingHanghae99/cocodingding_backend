@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
 import com.sparta.serviceteam4444.entity.user.User;
-import com.sparta.serviceteam4444.exception.CheckApiException;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;

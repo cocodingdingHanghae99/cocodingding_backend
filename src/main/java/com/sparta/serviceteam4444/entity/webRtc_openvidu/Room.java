@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 public class Room extends Timestamp {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long openviduRoomId;
     @Column(nullable = false)
     private String roomTitle;
