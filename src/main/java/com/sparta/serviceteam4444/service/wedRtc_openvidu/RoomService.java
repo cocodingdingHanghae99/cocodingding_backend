@@ -147,11 +147,13 @@ public class RoomService {
         //방 목록을 6개씩 묶어서 페이지 처리
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
         String message = "방 불러오기 성공";
+        int statusCode = 200;
         for(int i = 0; i < page; i++){
             PageRequest pageable = PageRequest.of(i, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
             if(roomList.isEmpty()){
                 message = "불러올 방이 없습니다";
+                statusCode = 204;
                 break;
             }
             for(Room room : roomList){
@@ -159,7 +161,7 @@ public class RoomService {
                 getRoomResponseDtos.add(getRoomResponseDto);
             }
         }
-        return new ResponseDto(getRoomResponseDtos, 200, message);
+        return new ResponseDto(getRoomResponseDtos, statusCode, message);
     }
     //방 나가기
     @Transactional
