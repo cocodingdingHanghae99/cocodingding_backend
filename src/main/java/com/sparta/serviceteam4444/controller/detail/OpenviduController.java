@@ -41,8 +41,8 @@ public class OpenviduController {
     //방 전체 보여주기
     @ApiOperation(value = "방 전체 보여주기")
     @GetMapping("/room/{page}")
-    public List<GetRoomResponseDto> getAllRooms(@PathVariable int page){
-        return roomService.getAllRooms(page);
+    public ResponseEntity<?> getAllRooms(@PathVariable int page){
+        return ResponseEntity.ok(roomService.getAllRooms(page));
     }
 
 

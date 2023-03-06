@@ -143,17 +143,25 @@ public class RoomService {
         return new CreateEnterRoomTokenDto(connection);
     }
     //전체 방 목록 보여주기
-    public List<GetRoomResponseDto> getAllRooms(int page) {
+    public ResponseDto getAllRooms(int page) {
         //방 목록을 6개씩 묶어서 페이지 처리
-        PageRequest pageable = PageRequest.of(page - 1, 6);
-        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-        //페이지 처리된 roomList를 GetRoomResponseDto에 담아서 리턴.
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
-        for(Room room : roomList){
-            GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
-            getRoomResponseDtos.add(getRoomResponseDto);
+        String message = "방 불러오기 성공";
+        int statusCode = 200;
+        for(int i = 0; i < page; i++){
+            PageRequest pageable = PageRequest.of(i, 6);
+            Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
+            if(roomList.isEmpty()){
+                message = "불러올 방이 없습니다";
+                statusCode = 204;
+                break;
+            }
+            for(Room room : roomList){
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
+                getRoomResponseDtos.add(getRoomResponseDto);
+            }
         }
-        return getRoomResponseDtos;
+        return new ResponseDto(getRoomResponseDtos, statusCode, message);
     }
 
 

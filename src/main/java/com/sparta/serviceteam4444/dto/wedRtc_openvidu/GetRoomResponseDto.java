@@ -18,4 +18,5 @@ public class GetRoomResponseDto {
         this.category = room.getCategory();
         this.currentMember = room.getCurrentMember();
     }
+
 }
