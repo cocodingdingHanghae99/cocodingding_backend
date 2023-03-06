@@ -145,13 +145,18 @@ public class RoomService {
     //전체 방 목록 보여주기
     public List<GetRoomResponseDto> getAllRooms(int page) {
         //방 목록을 6개씩 묶어서 페이지 처리
-        PageRequest pageable = PageRequest.of(page - 1, 6);
-        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-        //페이지 처리된 roomList를 GetRoomResponseDto에 담아서 리턴.
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
-        for(Room room : roomList){
-            GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
-            getRoomResponseDtos.add(getRoomResponseDto);
+        for(int i = 0; i < page; i++){
+            PageRequest pageable = PageRequest.of(i, 6);
+            Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
+            if(roomList.isEmpty()){
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(false);
+                getRoomResponseDtos.add(getRoomResponseDto);
+            }
+            for(Room room : roomList){
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, true);
+                getRoomResponseDtos.add(getRoomResponseDto);
+            }
         }
         return getRoomResponseDtos;
     }
