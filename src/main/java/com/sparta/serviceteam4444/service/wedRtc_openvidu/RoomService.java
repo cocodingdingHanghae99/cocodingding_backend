@@ -152,6 +152,7 @@ public class RoomService {
             if(roomList.isEmpty()){
                 GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(false);
                 getRoomResponseDtos.add(getRoomResponseDto);
+                break;
             }
             for(Room room : roomList){
                 GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, true);
