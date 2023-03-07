@@ -138,7 +138,7 @@ public class RoomService {
                 .type(ConnectionType.WEBRTC)
                 .build();
         //connection
-        Connection connection = session.createConnection(properties);
+        Connection connection = session.updateConnection(sessionId, properties);
         //token 발급
         return new CreateEnterRoomTokenDto(connection);
     }
