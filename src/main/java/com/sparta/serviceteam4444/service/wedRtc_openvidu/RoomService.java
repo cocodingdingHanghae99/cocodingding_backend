@@ -74,6 +74,7 @@ public class RoomService {
         //userNickname을 serverData로 session과 connection 만들기
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
+                .role(OpenViduRole.PUBLISHER)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //새로운 openvidu 체팅방 생성
@@ -97,12 +98,21 @@ public class RoomService {
             throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
         }
         //새로운 토큰.
-        CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
+        CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(),
+                userDetails.getUser().getUserNickname(),
+                OpenViduRole.SUBSCRIBER);
         //중복 입장 처리.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
             //중복입장이라면 토큰만 새로 발급 (다른방을 갔다가 왔을수도 있기때문에)
             if(Objects.equals(checkRoomMember.getUser().getId(), userDetails.getUser().getId())){
+                if(checkRoomMember.isRoomMaster()){
+                    //방장이라면 publisher 역할
+                    OpenViduRole openViduRole = OpenViduRole.PUBLISHER;
+                    newEnterRoomToken = createEnterRoomToken(room.getSessoinId(),
+                            userDetails.getUser().getUserNickname(),
+                            openViduRole);
+                }
                 checkRoomMember.updateToken(newEnterRoomToken.getNewEnterRoomToken());
                 return new RoomCreateResponseDto(room, checkRoomMember);
             }
@@ -122,7 +132,7 @@ public class RoomService {
     }
 
     //connection 생성 및 token 발급
-    private CreateEnterRoomTokenDto createEnterRoomToken(String sessionId, String userNickname)
+    private CreateEnterRoomTokenDto createEnterRoomToken(String sessionId, String userNickname, OpenViduRole openViduRole)
             throws OpenViduJavaClientException, OpenViduHttpException{
         openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
         openVidu.fetch();
@@ -135,6 +145,7 @@ public class RoomService {
         //userNickname을 serverData로 connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
+                .role(openViduRole)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //connection
