@@ -74,6 +74,7 @@ public class RoomService {
         //userNickname을 serverData로 session과 connection 만들기
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
+                .role(OpenViduRole.PUBLISHER)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //새로운 openvidu 체팅방 생성
@@ -97,7 +98,8 @@ public class RoomService {
             throw new CheckApiException(ErrorCode.NOT_EQUALS_PASSWORD);
         }
         //새로운 토큰.
-        CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(), userDetails.getUser().getUserNickname());
+        CreateEnterRoomTokenDto newEnterRoomToken = createEnterRoomToken(room.getSessoinId(),
+                userDetails.getUser().getUserNickname());
         //중복 입장 처리.
         List<RoomMember> roomMemberList = roomMemberRepository.findAllBySessionId(room.getSessoinId());
         for(RoomMember checkRoomMember: roomMemberList){
@@ -135,6 +137,7 @@ public class RoomService {
         //userNickname을 serverData로 connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
+                .role(OpenViduRole.PUBLISHER)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //connection
@@ -142,19 +145,33 @@ public class RoomService {
         //token 발급
         return new CreateEnterRoomTokenDto(connection);
     }
+
     //전체 방 목록 보여주기
-    public List<GetRoomResponseDto> getAllRooms(int page) {
+    public ResponseDto getAllRooms(int page) {
         //방 목록을 6개씩 묶어서 페이지 처리
-        PageRequest pageable = PageRequest.of(page - 1, 6);
-        Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-        //페이지 처리된 roomList를 GetRoomResponseDto에 담아서 리턴.
         List<GetRoomResponseDto> getRoomResponseDtos = new ArrayList<>();
-        for(Room room : roomList){
-            GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
-            getRoomResponseDtos.add(getRoomResponseDto);
+        String message = "방 불러오기 성공";
+        int statusCode = 200;
+        for(int i = 0; i < page; i++){
+            PageRequest pageable = PageRequest.of(i, 6);
+            Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
+            if(roomList.isEmpty()){
+                message = "불러올 방이 없습니다";
+                statusCode = 204;
+                break;
+            }
+            for(Room room : roomList){
+                RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
+                        () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
+                );
+                String masterUserNickname = roomMaster.getUser().getUserNickname();
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
+                getRoomResponseDtos.add(getRoomResponseDto);
+            }
         }
-        return getRoomResponseDtos;
+        return new ResponseDto(getRoomResponseDtos, statusCode, message);
     }
+
     //방 나가기
     @Transactional
     public String exitRoom(Long roomId, UserDetailsImpl userDetails) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -191,6 +208,7 @@ public class RoomService {
         }
         return "방을 나갔습니다.";
     }
+
     //방에 있는 모든 사람 닉네임 가져오기.
     public AllRoomMemberDto getAllRoomMember(Long roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(
