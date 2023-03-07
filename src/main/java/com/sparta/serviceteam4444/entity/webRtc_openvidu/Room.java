@@ -27,11 +27,11 @@ public class Room extends Timestamp {
     private String password;
     private Long currentMember;
 
-    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, Long roomMemberId) {
+    public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, Long roomMasterId) {
         this.roomTitle = roomCreateRequestDto.getRoomTitle();
         this.sessoinId = newToken.getSessionId();
         this.category = roomCreateRequestDto.getCategory();
-        this.roomMasterId = roomMemberId;
+        this.roomMasterId = roomMasterId;
         this.status = roomCreateRequestDto.isStatus();
         this.password = roomCreateRequestDto.getPassword();
     }

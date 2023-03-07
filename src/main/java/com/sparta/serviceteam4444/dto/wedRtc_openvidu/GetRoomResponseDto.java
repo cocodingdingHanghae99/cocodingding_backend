@@ -10,13 +10,15 @@ public class GetRoomResponseDto {
     private final Long openviduRoomId;
     private final String category;
     private final Long currentMember;
+    private final String masterUserNickname;
 
-    public GetRoomResponseDto(Room room) {
+    public GetRoomResponseDto(Room room, String masterUserNickname) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
         this.category = room.getCategory();
         this.currentMember = room.getCurrentMember();
+        this.masterUserNickname = masterUserNickname;
     }
 
 }

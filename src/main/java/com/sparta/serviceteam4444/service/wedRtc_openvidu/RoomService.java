@@ -169,7 +169,11 @@ public class RoomService {
                 break;
             }
             for(Room room : roomList){
-                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
+                RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
+                        () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
+                );
+                String masterUserNickname = roomMaster.getUser().getUserNickname();
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
                 getRoomResponseDtos.add(getRoomResponseDto);
             }
         }
