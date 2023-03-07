@@ -74,7 +74,7 @@ public class RoomService {
         //userNickname을 serverData로 session과 connection 만들기
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
-                .role(OpenViduRole.SUBSCRIBER)
+                .role(OpenViduRole.PUBLISHER)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //새로운 openvidu 체팅방 생성
@@ -137,7 +137,7 @@ public class RoomService {
         //userNickname을 serverData로 connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder()
                 .data(userNickname)
-                .role(OpenViduRole.SUBSCRIBER)
+                .role(OpenViduRole.PUBLISHER)
                 .type(ConnectionType.WEBRTC)
                 .build();
         //connection
