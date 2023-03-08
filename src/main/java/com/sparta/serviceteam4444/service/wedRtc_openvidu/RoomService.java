@@ -55,7 +55,7 @@ public class RoomService {
         CreateSessionResponseDto newToken = createNewToken(userDetails.getUser().getUserNickname());
         //roomMember 저장하기(방장권한을 true로)
         RoomMember roomMember = new RoomMember(userDetails.getUser(), true, newToken);
-        roomMember = roomMemberRepository.save(roomMember);
+//        roomMember = roomMemberRepository.save(roomMember);
         //방을 만든 사람의 userId를 roomMaster로 room 빌드
         Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
         //room 저장
