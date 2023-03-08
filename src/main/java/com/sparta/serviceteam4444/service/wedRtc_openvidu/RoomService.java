@@ -154,8 +154,10 @@ public class RoomService {
         int statusCode = 200;
         for(int i = 0; i < page; i++){
             PageRequest pageable = PageRequest.of(i, 6);
+            PageRequest pageable1 = PageRequest.of(i + 1, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-            if(roomList.isEmpty()){
+            Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
+            if(roomList1.isEmpty()){
                 message = "불러올 방이 없습니다";
                 statusCode = 204;
                 break;
