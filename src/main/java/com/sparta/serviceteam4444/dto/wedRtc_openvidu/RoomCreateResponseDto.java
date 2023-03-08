@@ -13,6 +13,7 @@ public class RoomCreateResponseDto {
     private final String roomMemberNickname;
     private final boolean roomMaster;
     private final Long currentMember;
+    private final String youtubeLink;
 
     public RoomCreateResponseDto(Room room, RoomMember roomMember) {
         this.roomTitle = room.getRoomTitle();
@@ -22,5 +23,6 @@ public class RoomCreateResponseDto {
         this.roomMemberNickname = roomMember.getUser().getUserNickname();
         this.roomMaster = roomMember.isRoomMaster();
         this.currentMember = room.getCurrentMember();
+        this.youtubeLink = room.getYoutubeLink();
     }
 }
