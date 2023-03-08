@@ -154,21 +154,22 @@ public class RoomService {
         int statusCode = 200;
         for(int i = 0; i < page; i++){
             PageRequest pageable = PageRequest.of(i, 6);
-            PageRequest pageable1 = PageRequest.of(i + 1, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-            Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
-            if(roomList1.isEmpty()){
-                message = "불러올 방이 없습니다";
-                statusCode = 204;
-                break;
-            }
-            for(Room room : roomList){
+            for(Room room : roomList) {
                 RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
                         () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
                 );
                 String masterUserNickname = roomMaster.getUser().getUserNickname();
                 GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
                 getRoomResponseDtos.add(getRoomResponseDto);
+            }
+            //한번 전에 코드 바꾸기
+            PageRequest pageable1 = PageRequest.of(i + 1, 6);
+            Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
+            if(roomList1.isEmpty()){
+                message = "불러올 방이 없습니다";
+                statusCode = 204;
+                break;
             }
         }
         return new ResponseDto(getRoomResponseDtos, statusCode, message);
