@@ -62,8 +62,8 @@ public class RoomService {
         room = roomRepository.save(room);
 //        //현제 인원 불러오기
 //        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
-//        //현제 인원을 room에 저장.
-//        room.updateCRTMember(currentMember);
+        //현제 인원을 room에 저장.
+        room.updateCRTMember(0L);
         //return
         return new RoomCreateResponseDto(room, roomMember);
     }
