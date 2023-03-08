@@ -221,4 +221,19 @@ public class RoomService {
         }
         return new AllRoomMemberDto(roomMemberNicknameList);
     }
+
+    public List<String> connectionTest(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        openVidu.fetch();
+        Session session = openVidu.getActiveSession(room.getSessoinId());
+        List<Connection> connections = session.getActiveConnections();
+        List<String> testConnection = new ArrayList<>();
+        for(Connection connection1: connections){
+            testConnection.add(connection1.getServerData());
+        }
+        return testConnection;
+    }
 }
