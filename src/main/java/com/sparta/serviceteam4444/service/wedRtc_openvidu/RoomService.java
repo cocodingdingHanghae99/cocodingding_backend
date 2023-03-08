@@ -166,7 +166,7 @@ public class RoomService {
             //한번 전에 코드 바꾸기
             PageRequest pageable1 = PageRequest.of(i + 1, 6);
             Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
-            if(roomList1.isEmpty()){
+            if(roomList1.isEmpty() && page != 1){
                 message = "불러올 방이 없습니다";
                 statusCode = 204;
                 break;
