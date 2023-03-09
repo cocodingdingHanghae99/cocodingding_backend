@@ -11,6 +11,7 @@ public class GetRoomResponseDto {
     private final String category;
     private final Long currentMember;
     private final String masterUserNickname;
+    private final String youtubeLink;
 
     public GetRoomResponseDto(Room room, String masterUserNickname) {
         this.roomTitle = room.getRoomTitle();
@@ -19,6 +20,7 @@ public class GetRoomResponseDto {
         this.category = room.getCategory();
         this.currentMember = room.getCurrentMember();
         this.masterUserNickname = masterUserNickname;
+        this.youtubeLink = room.getYoutubeLink();
     }
 
 }

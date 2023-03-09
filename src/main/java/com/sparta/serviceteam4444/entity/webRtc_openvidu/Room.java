@@ -26,6 +26,7 @@ public class Room extends Timestamp {
     private boolean status;
     private String password;
     private Long currentMember;
+    private String youtubeLink;
 
     public Room(CreateSessionResponseDto newToken, RoomCreateRequestDto roomCreateRequestDto, Long roomMasterId) {
         this.roomTitle = roomCreateRequestDto.getRoomTitle();
@@ -34,6 +35,7 @@ public class Room extends Timestamp {
         this.roomMasterId = roomMasterId;
         this.status = roomCreateRequestDto.isStatus();
         this.password = roomCreateRequestDto.getPassword();
+        this.youtubeLink = roomCreateRequestDto.getYoutubeLink();
     }
 
     public void updateCRTMember(Long currentMember) {

@@ -57,4 +57,10 @@ public class OpenviduController {
     public AllRoomMemberDto getAllRoomMember(@PathVariable Long roomId){
         return roomService.getAllRoomMember(roomId);
     }
+
+    //connection test
+    @GetMapping("/room/test/{roomId}")
+    public List<String> connectionTest(@PathVariable Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+        return roomService.connectionTest(roomId);
+    }
 }

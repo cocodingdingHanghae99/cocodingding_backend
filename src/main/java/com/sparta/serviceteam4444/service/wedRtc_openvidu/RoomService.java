@@ -60,10 +60,10 @@ public class RoomService {
         Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
         //room 저장
         room = roomRepository.save(room);
-        //현제 인원 불러오기
-        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
+//        //현제 인원 불러오기
+//        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
         //현제 인원을 room에 저장.
-        room.updateCRTMember(currentMember);
+        room.updateCRTMember(0L);
         //return
         return new RoomCreateResponseDto(room, roomMember);
     }
@@ -155,18 +155,21 @@ public class RoomService {
         for(int i = 0; i < page; i++){
             PageRequest pageable = PageRequest.of(i, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-            if(roomList.isEmpty()){
-                message = "불러올 방이 없습니다";
-                statusCode = 204;
-                break;
-            }
-            for(Room room : roomList){
+            for(Room room : roomList) {
                 RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
                         () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
                 );
                 String masterUserNickname = roomMaster.getUser().getUserNickname();
                 GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
                 getRoomResponseDtos.add(getRoomResponseDto);
+            }
+            //한번 전에 코드 바꾸기
+            PageRequest pageable1 = PageRequest.of(i + 1, 6);
+            Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
+            if(roomList1.isEmpty() && page != 1){
+                message = "불러올 방이 없습니다";
+                statusCode = 204;
+                break;
             }
         }
         return new ResponseDto(getRoomResponseDtos, statusCode, message);
@@ -220,5 +223,20 @@ public class RoomService {
             roomMemberNicknameList.add(roomMember.getUser().getUserNickname());
         }
         return new AllRoomMemberDto(roomMemberNicknameList);
+    }
+
+    public List<String> connectionTest(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        openVidu.fetch();
+        Session session = openVidu.getActiveSession(room.getSessoinId());
+        List<Connection> connections = session.getActiveConnections();
+        List<String> testConnection = new ArrayList<>();
+        for(Connection connection1: connections){
+            testConnection.add(connection1.getServerData());
+        }
+        return testConnection;
     }
 }

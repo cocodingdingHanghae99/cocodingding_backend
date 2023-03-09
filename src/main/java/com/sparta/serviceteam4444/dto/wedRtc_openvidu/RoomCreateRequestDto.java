@@ -8,4 +8,5 @@ public class RoomCreateRequestDto {
     private String category;
     private boolean status;
     private String password;
+    private String youtubeLink;
 }
