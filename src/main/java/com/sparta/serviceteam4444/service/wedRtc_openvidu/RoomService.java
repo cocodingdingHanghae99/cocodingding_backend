@@ -60,10 +60,10 @@ public class RoomService {
         Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
         //room 저장
         room = roomRepository.save(room);
-//        //현제 인원 불러오기
-//        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
+        //현제 인원 불러오기
+        Long currentMember = roomMemberRepository.countAllBySessionId(roomMember.getSessionId());
         //현제 인원을 room에 저장.
-        room.updateCRTMember(0L);
+        room.updateCRTMember(currentMember);
         //return
         return new RoomCreateResponseDto(room, roomMember);
     }
@@ -132,7 +132,7 @@ public class RoomService {
         Session session = openVidu.getActiveSession(sessionId);
         //session이 활성화가 안되어 있을때
         if(session == null){
-            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+            throw new CheckApiException(ErrorCode.NOT_ACTIVE_SESSION);
         }
         //userNickname을 serverData로 connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder()
