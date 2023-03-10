@@ -28,6 +28,8 @@ public enum ErrorCode {
 
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, 400, "비밀번호를 입력하세요"),
 
+    NOT_ACTIVE_SESSION(HttpStatus.BAD_REQUEST, 400, "활성화된 session이 아닙니다."),
+
     BEN_ROOM(HttpStatus.BAD_REQUEST, 400, "강퇴당한 방입니다.");
 
 
