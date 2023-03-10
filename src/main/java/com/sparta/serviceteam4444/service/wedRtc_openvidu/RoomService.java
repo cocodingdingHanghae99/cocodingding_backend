@@ -182,33 +182,26 @@ public class RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        //user가 방장인지 확인
-        if(roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
-                room.getSessoinId()).isRoomMaster()){
-            //방장이라면 방 멤버와 방을 삭제
-            roomMemberRepository.deleteBySessionId(room.getSessoinId());
+        //openVidu 연결 끊기
+        RoomMember roomMember = roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
+                room.getSessoinId());
+        openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        openVidu.fetch();
+        Session session = openVidu.getActiveSession(room.getSessoinId());
+        session.forceDisconnect(roomMember.getConnectionId());
+        //방 멤버 삭제
+        roomMemberRepository.deleteBySessionIdAndUser(room.getSessoinId(),
+                userDetails.getUser());
+        //현재 인원 count
+        Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
+        //방의 멤버가 0명이라면 방과 session을 삭제
+        if(currentMember == 0L){
             roomRepository.delete(room);
-            //openVidu session 삭제
-            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-            openVidu.fetch();
-            Session session = openVidu.getActiveSession(room.getSessoinId());
             session.close();
             return "체팅방이 삭제되었습니다";
-        }else {
-            //openVidu 연결 끊기
-            RoomMember roomMember = roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
-                    room.getSessoinId());
-            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-            openVidu.fetch();
-            Session session = openVidu.getActiveSession(room.getSessoinId());
-            session.forceDisconnect(roomMember.getConnectionId());
-            //방장이 아니라면 방 멤버만 삭제
-            roomMemberRepository.deleteBySessionIdAndUser(room.getSessoinId(),
-                    userDetails.getUser());
-            //현제 인원을 room에 저장.
-            Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
-            room.updateCRTMember(currentMember);
         }
+        //현재 인원 update
+        room.updateCRTMember(currentMember);
         return "방을 나갔습니다.";
     }
 
