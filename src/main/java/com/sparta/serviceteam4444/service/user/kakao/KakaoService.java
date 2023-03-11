@@ -57,15 +57,18 @@ public class KakaoService {
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUserInfoDto.getEmail()));
 
-        User user = new User(kakaoUserInfoDto);
+        Optional<User> userEmailCheck = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
 
-        userRepository.save(user);
+        if (userEmailCheck.isEmpty()){
+            User user = new User(kakaoUserInfoDto);
+            userRepository.save(user);
+        }
 
-        User userEmailCheck = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail()).orElseThrow(
+        User userFindEmail = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail()).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
         );
 
-        userEmailCheck.updateRefreshToken(refreshToken);
+        userFindEmail.updateRefreshToken(refreshToken);
 
         return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
