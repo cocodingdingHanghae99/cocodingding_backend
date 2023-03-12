@@ -58,7 +58,7 @@ public class WebSecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/user/**").permitAll()
 //                .antMatchers("/detail/**").authenticated()    임시로 주석처리 나중에 권한 변경 해야 함
-                .antMatchers(HttpMethod.GET, "/detail/room").permitAll()
+                .antMatchers(HttpMethod.GET, "/detail/room/{page}").permitAll()
                 //현우
                 // JWT 인증/인가를 사용하기 위한 설정
                 .and().addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

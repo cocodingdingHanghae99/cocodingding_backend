@@ -57,7 +57,7 @@ public class RoomService {
         RoomMember roomMember = new RoomMember(userDetails.getUser(), true, newToken);
         roomMember = roomMemberRepository.save(roomMember);
         //방을 만든 사람의 userId를 roomMaster로 room 빌드
-        Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
+        Room room = new Room(newToken, roomCreateRequestDto, roomMember.getUser().getUserNickname());
         //room 저장
         room = roomRepository.save(room);
         //현제 인원 불러오기
@@ -156,11 +156,7 @@ public class RoomService {
             PageRequest pageable = PageRequest.of(i, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
             for(Room room : roomList) {
-                RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
-                        () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
-                );
-                String masterUserNickname = roomMaster.getUser().getUserNickname();
-                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
                 getRoomResponseDtos.add(getRoomResponseDto);
             }
             //한번 전에 코드 바꾸기
