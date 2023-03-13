@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoResponseDto;
 import com.sparta.serviceteam4444.dto.user.kakao.KakaoUserInfoDto;
 import com.sparta.serviceteam4444.entity.user.User;
+import com.sparta.serviceteam4444.exception.CheckApiException;
+import com.sparta.serviceteam4444.exception.ErrorCode;
 import com.sparta.serviceteam4444.jwt.JwtUtil;
 import com.sparta.serviceteam4444.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,7 @@ public class KakaoService {
     @Value("${client_secret}")
     private String client_secret;
 
-
+//===================================================================================================================//
 
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
@@ -49,15 +51,25 @@ public class KakaoService {
 
         KakaoUserInfoDto kakaoUserInfoDto = getKakaoUserInfo(accessToken);
 
+        String refreshToken = jwtUtil.createRefreshToken();
+
+        response.addHeader(JwtUtil.REFRESH_HEADER, refreshToken);
+
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUserInfoDto.getEmail()));
 
-        //로그인시 user 정보 저장하기.(예외를 처리하지 않고 optional로 받기)
-        Optional<User> userDemo = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
-        //저장되어있는 user정보가 없다면 저장을 하자.
-        if(userDemo.isEmpty()){
+        Optional<User> userEmailCheck = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail());
+
+        if (userEmailCheck.isEmpty()){
             User user = new User(kakaoUserInfoDto);
             userRepository.save(user);
         }
+
+        User userFindEmail = userRepository.findByUserEmail(kakaoUserInfoDto.getEmail()).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
+        );
+
+        userFindEmail.updateRefreshToken(refreshToken);
+
         return new KakaoResponseDto(accessToken, kakaoUserInfoDto);
 
     }

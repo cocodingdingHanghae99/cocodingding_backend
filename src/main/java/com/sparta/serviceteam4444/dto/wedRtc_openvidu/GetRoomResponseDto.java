@@ -11,14 +11,16 @@ public class GetRoomResponseDto {
     private final String category;
     private final Long currentMember;
     private final String masterUserNickname;
+    private final String youtubeLink;
 
-    public GetRoomResponseDto(Room room, String masterUserNickname) {
+    public GetRoomResponseDto(Room room) {
         this.roomTitle = room.getRoomTitle();
         this.sessionId = room.getSessoinId();
         this.openviduRoomId = room.getOpenviduRoomId();
         this.category = room.getCategory();
         this.currentMember = room.getCurrentMember();
-        this.masterUserNickname = masterUserNickname;
+        this.masterUserNickname = room.getRoomMasterNickname();
+        this.youtubeLink = room.getYoutubeLink();
     }
 
 }

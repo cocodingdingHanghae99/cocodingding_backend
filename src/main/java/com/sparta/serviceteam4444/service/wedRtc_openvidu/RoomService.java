@@ -57,7 +57,7 @@ public class RoomService {
         RoomMember roomMember = new RoomMember(userDetails.getUser(), true, newToken);
         roomMember = roomMemberRepository.save(roomMember);
         //방을 만든 사람의 userId를 roomMaster로 room 빌드
-        Room room = new Room(newToken, roomCreateRequestDto, roomMember.getRoomMemberId());
+        Room room = new Room(newToken, roomCreateRequestDto, roomMember.getUser().getUserNickname());
         //room 저장
         room = roomRepository.save(room);
         //현제 인원 불러오기
@@ -132,7 +132,7 @@ public class RoomService {
         Session session = openVidu.getActiveSession(sessionId);
         //session이 활성화가 안되어 있을때
         if(session == null){
-            throw new CheckApiException(ErrorCode.NOT_EXITS_ROOM);
+            throw new CheckApiException(ErrorCode.NOT_ACTIVE_SESSION);
         }
         //userNickname을 serverData로 connection 생성
         ConnectionProperties properties = new ConnectionProperties.Builder()
@@ -155,18 +155,17 @@ public class RoomService {
         for(int i = 0; i < page; i++){
             PageRequest pageable = PageRequest.of(i, 6);
             Page<Room> roomList = roomRepository.findByOrderByModifiedAtDesc(pageable);
-            if(roomList.isEmpty()){
+            for(Room room : roomList) {
+                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room);
+                getRoomResponseDtos.add(getRoomResponseDto);
+            }
+            //한번 전에 코드 바꾸기
+            PageRequest pageable1 = PageRequest.of(i + 1, 6);
+            Page<Room> roomList1 = roomRepository.findByOrderByModifiedAtDesc(pageable1);
+            if(roomList1.isEmpty() && page != 1){
                 message = "불러올 방이 없습니다";
                 statusCode = 204;
                 break;
-            }
-            for(Room room : roomList){
-                RoomMember roomMaster = roomMemberRepository.findById(room.getRoomMasterId()).orElseThrow(
-                        () -> new CheckApiException(ErrorCode.NOT_EXITS_USER)
-                );
-                String masterUserNickname = roomMaster.getUser().getUserNickname();
-                GetRoomResponseDto getRoomResponseDto = new GetRoomResponseDto(room, masterUserNickname);
-                getRoomResponseDtos.add(getRoomResponseDto);
             }
         }
         return new ResponseDto(getRoomResponseDtos, statusCode, message);
@@ -179,33 +178,26 @@ public class RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(
                 () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
         );
-        //user가 방장인지 확인
-        if(roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
-                room.getSessoinId()).isRoomMaster()){
-            //방장이라면 방 멤버와 방을 삭제
-            roomMemberRepository.deleteBySessionId(room.getSessoinId());
+        //openVidu 연결 끊기
+        RoomMember roomMember = roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
+                room.getSessoinId());
+        openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        openVidu.fetch();
+        Session session = openVidu.getActiveSession(room.getSessoinId());
+        session.forceDisconnect(roomMember.getConnectionId());
+        //방 멤버 삭제
+        roomMemberRepository.deleteBySessionIdAndUser(room.getSessoinId(),
+                userDetails.getUser());
+        //현재 인원 count
+        Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
+        //방의 멤버가 0명이라면 방과 session을 삭제
+        if(currentMember == 0L){
             roomRepository.delete(room);
-            //openVidu session 삭제
-            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-            openVidu.fetch();
-            Session session = openVidu.getActiveSession(room.getSessoinId());
             session.close();
             return "체팅방이 삭제되었습니다";
-        }else {
-            //openVidu 연결 끊기
-            RoomMember roomMember = roomMemberRepository.findByUserAndSessionId(userDetails.getUser(),
-                    room.getSessoinId());
-            openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
-            openVidu.fetch();
-            Session session = openVidu.getActiveSession(room.getSessoinId());
-            session.forceDisconnect(roomMember.getConnectionId());
-            //방장이 아니라면 방 멤버만 삭제
-            roomMemberRepository.deleteBySessionIdAndUser(room.getSessoinId(),
-                    userDetails.getUser());
-            //현제 인원을 room에 저장.
-            Long currentMember = roomMemberRepository.countAllBySessionId(room.getSessoinId());
-            room.updateCRTMember(currentMember);
         }
+        //현재 인원 update
+        room.updateCRTMember(currentMember);
         return "방을 나갔습니다.";
     }
 
@@ -220,5 +212,20 @@ public class RoomService {
             roomMemberNicknameList.add(roomMember.getUser().getUserNickname());
         }
         return new AllRoomMemberDto(roomMemberNicknameList);
+    }
+
+    public List<String> connectionTest(Long roomId) throws OpenViduJavaClientException, OpenViduHttpException {
+        Room room = roomRepository.findById(roomId).orElseThrow(
+                () -> new CheckApiException(ErrorCode.NOT_EXITS_ROOM)
+        );
+        openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        openVidu.fetch();
+        Session session = openVidu.getActiveSession(room.getSessoinId());
+        List<Connection> connections = session.getActiveConnections();
+        List<String> testConnection = new ArrayList<>();
+        for(Connection connection1: connections){
+            testConnection.add(connection1.getServerData());
+        }
+        return testConnection;
     }
 }
