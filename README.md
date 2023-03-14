@@ -1,7 +1,7 @@
 
-![readme]("메인 사진 링크")
+![readme](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e5c05ce9-f81a-4b2a-be7c-90ba1af3958e/p1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T131924Z&X-Amz-Expires=86400&X-Amz-Signature=a30762635b77082812f7fe2615220863ecddcaa686901a7cbadf055ac388b393&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22p1.png%22&x-id=GetObject)
 
-# Introduction of Project
+# 링크들
 - [서비스 확인하러 가기](https://coco-test-kappa.vercel.app/)
 - [팀 노션 주소](https://www.notion.so/99-_-a26aba0c26cf479aa67507282b362c41 )
 - [발표 자료](https://www.canva.com/design/DAFcwdozTV4/Q62jR6AZKt97psxmQC59hg/edit?utm_content=DAFcwdozTV4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
@@ -12,21 +12,33 @@
 ### Cocodingding 서비스 화면(미부록된 것들도 추가 중)
 - 메인 화면
   <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9918985a-4c7d-4159-a7ad-dea2a499d94c/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T131332Z&X-Amz-Expires=86400&X-Amz-Signature=408c310b4a02f03dac2688d0652acec3157afe3e8bae7d9d87e81bb86948127d&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
+
+- 로그인 화면
+  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0e3f4adb-724c-4989-8c1d-b2d14351477e/Home_Login.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132444Z&X-Amz-Expires=86400&X-Amz-Signature=586741217c7dd2afe8901c2580210bc23314f9dee4ebd54de4d9931f39a1e26e&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Home_Login.png%22&x-id=GetObject">
+
+- 회원가입 화면
+  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a0c0b8eb-8eae-4bbb-a279-3ee005166c5f/Home_Join.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132505Z&X-Amz-Expires=86400&X-Amz-Signature=623f4f01fbfbcecc3e2215643b337713e81704f282f8e2f726bb00cce30f3347&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Home_Join.png%22&x-id=GetObject">
+
+- 방만들기
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/649fbb3d-2b18-4702-844b-714592ce031e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132637Z&X-Amz-Expires=86400&X-Amz-Signature=91d9bd1f50b47061888d55064b6103fd117caa1d2211b7f8483b2893d3991df7&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
 ### 개발 기간📍
 
 - 2023.02.02 ~ 2023.03.14
 
 #### FE
 김혜성
+
 김지석
 
 #### BE
 김재광
+
 김현우
+
 왕윤종
 
 #### Design
-
+박서연
 
 #### **Front-End**
 <p>
