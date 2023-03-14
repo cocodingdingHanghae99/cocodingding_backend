@@ -26,8 +26,7 @@
 왕윤종
 
 #### Design
-<img width="180"  src="https://img.shields.io/static/v1?label=Design&message=정지현🥦 &color=FF7F50&style=for-the-badge&>"/></a>
-<br />
+
 
 #### **Front-End**
 <p>
