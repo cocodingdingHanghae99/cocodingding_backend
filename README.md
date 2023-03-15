@@ -21,6 +21,10 @@
 
 - 방만들기
 <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/649fbb3d-2b18-4702-844b-714592ce031e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132637Z&X-Amz-Expires=86400&X-Amz-Signature=91d9bd1f50b47061888d55064b6103fd117caa1d2211b7f8483b2893d3991df7&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
+
+- 채팅창 화면
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cde16964-421e-4847-becd-0a796cd31d8f/vlcsnap-2023-03-15-14h16m02s728.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230315%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230315T051831Z&X-Amz-Expires=86400&X-Amz-Signature=314548c6b1345d7af0656644cc081daf7b7cad2bda1633e14aa767208eb6bdf1&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22vlcsnap-2023-03-15-14h16m02s728.png%22&x-id=GetObject">
+
 ### 개발 기간📍
 
 - 2023.02.02 ~ 2023.03.14
