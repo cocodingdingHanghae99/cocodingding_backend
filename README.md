@@ -9,21 +9,19 @@
 ## 프로젝트를 제작하게 된 동기📍
 - 다른 사람들과 함께 공부하면서 자극을 받고 더욱 효율적인 학습을 할 수 있도록 도와주면서, 일상에서 쉽게 접할 수 있는 명언이나 할 일 목록 등의 요소를 통해 하루를 더욱 의미있게 보낼 수 있도록 하기 위해 저희 팀은 코코딩딩 웹서비스를 기획하였습니다.
 
-### Cocodingding 서비스 화면(미부록된 것들도 추가 중)
+### Cocodingding 서비스 화면
 - 메인 화면
-  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9918985a-4c7d-4159-a7ad-dea2a499d94c/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T131332Z&X-Amz-Expires=86400&X-Amz-Signature=408c310b4a02f03dac2688d0652acec3157afe3e8bae7d9d87e81bb86948127d&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
+  <img src="https://file.notion.so/f/s/582fc855-8ae4-4b4e-8845-bdad25148560/Home.png?id=7c2ebbe5-34b8-4be5-8ddf-54e65aab484a&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058540781&signature=QbgbBLL2tVVhL3opYlGSPGo-p7QrkXfBN582R1OpUkA&downloadName=Home.png">
 
 - 로그인 화면
-  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/0e3f4adb-724c-4989-8c1d-b2d14351477e/Home_Login.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132444Z&X-Amz-Expires=86400&X-Amz-Signature=586741217c7dd2afe8901c2580210bc23314f9dee4ebd54de4d9931f39a1e26e&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Home_Login.png%22&x-id=GetObject">
+  <img src="https://file.notion.so/f/s/0e3f4adb-724c-4989-8c1d-b2d14351477e/Home_Login.png?id=57fc926f-9166-42b5-b3f2-598d17d2e8aa&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058567730&signature=TV48jwIMN20BOKyZkpOaSvg68pJ0SrhRbArLaFTExZM&downloadName=Home_Login.png">
 
 - 회원가입 화면
-  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a0c0b8eb-8eae-4bbb-a279-3ee005166c5f/Home_Join.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132505Z&X-Amz-Expires=86400&X-Amz-Signature=623f4f01fbfbcecc3e2215643b337713e81704f282f8e2f726bb00cce30f3347&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Home_Join.png%22&x-id=GetObject">
+  <img src="https://file.notion.so/f/s/a0c0b8eb-8eae-4bbb-a279-3ee005166c5f/Home_Join.png?id=bb5e7fe2-121d-4075-8d6c-1c2ef6704a12&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058592332&signature=Sfy7ZYnQhonK19LdsmJcYjjE9qDqiUidy3WObPOiZuQ&downloadName=Home_Join.png">
 
 - 방만들기
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/649fbb3d-2b18-4702-844b-714592ce031e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T132637Z&X-Amz-Expires=86400&X-Amz-Signature=91d9bd1f50b47061888d55064b6103fd117caa1d2211b7f8483b2893d3991df7&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject">
-
-- 채팅창 화면
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cde16964-421e-4847-becd-0a796cd31d8f/vlcsnap-2023-03-15-14h16m02s728.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230315%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230315T051831Z&X-Amz-Expires=86400&X-Amz-Signature=314548c6b1345d7af0656644cc081daf7b7cad2bda1633e14aa767208eb6bdf1&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22vlcsnap-2023-03-15-14h16m02s728.png%22&x-id=GetObject">
+<img src="https://file.notion.so/f/s/a949ae67-94d1-440f-ba9e-1e4f9a40edbd/Home_CreateRM.Default.png?id=967e9b49-18fd-472f-ba4b-9e0993fdd0a2&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058632282&signature=VBFgrYuId31ttIO-n49lw-dxXZG5X0_NFxq3JBPSP5Y&downloadName=Home_CreateRM.Default.png">
+<img src="https://file.notion.so/f/s/582309ec-dcd5-417e-8728-40f47cc61530/Home_CreateRM.Cate..png?id=10a4ddb0-47a1-46f8-9876-3ced7256bbee&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058673968&signature=26ty-KuksvnGspxQQs8XLY2LKMNsT_4Q_vrdG1xQ3XA&downloadName=Home_CreateRM.Cate..png">
 
 ### 개발 기간📍
 
