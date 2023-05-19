@@ -1,6 +1,5 @@
-
-![readme](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e5c05ce9-f81a-4b2a-be7c-90ba1af3958e/p1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230314%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230314T131924Z&X-Amz-Expires=86400&X-Amz-Signature=a30762635b77082812f7fe2615220863ecddcaa686901a7cbadf055ac388b393&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22p1.png%22&x-id=GetObject)
-
+  <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fp9pzs%2FbtsgtDWSG8I%2Fa3jFKGI1uIMJtgKScl1kd0%2Fimg.png">
+  
 # 링크들
 - [서비스 확인하러 가기](https://coco-test-kappa.vercel.app/)
 - [팀 노션 주소](https://www.notion.so/99-_-a26aba0c26cf479aa67507282b362c41 )
@@ -11,17 +10,17 @@
 
 ### Cocodingding 서비스 화면
 - 메인 화면
-  <img src="https://file.notion.so/f/s/582fc855-8ae4-4b4e-8845-bdad25148560/Home.png?id=7c2ebbe5-34b8-4be5-8ddf-54e65aab484a&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058540781&signature=QbgbBLL2tVVhL3opYlGSPGo-p7QrkXfBN582R1OpUkA&downloadName=Home.png">
+  <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcrruKi%2FbtsguDok6Lo%2F36aezcNPOPDNzZgVbtrKTK%2Fimg.png">
 
 - 로그인 화면
-  <img src="https://file.notion.so/f/s/0e3f4adb-724c-4989-8c1d-b2d14351477e/Home_Login.png?id=57fc926f-9166-42b5-b3f2-598d17d2e8aa&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058567730&signature=TV48jwIMN20BOKyZkpOaSvg68pJ0SrhRbArLaFTExZM&downloadName=Home_Login.png">
+  <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F24tKF%2FbtsguDaO299%2FAXLr21MwagZV07uZpPUY1K%2Fimg.png">
 
 - 회원가입 화면
-  <img src="https://file.notion.so/f/s/a0c0b8eb-8eae-4bbb-a279-3ee005166c5f/Home_Join.png?id=bb5e7fe2-121d-4075-8d6c-1c2ef6704a12&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058592332&signature=Sfy7ZYnQhonK19LdsmJcYjjE9qDqiUidy3WObPOiZuQ&downloadName=Home_Join.png">
+  <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbYWzEs%2FbtsguMr2brW%2F0mEpn6XzVHjpKDVa8HckbK%2Fimg.png">
 
 - 방만들기
-<img src="https://file.notion.so/f/s/a949ae67-94d1-440f-ba9e-1e4f9a40edbd/Home_CreateRM.Default.png?id=967e9b49-18fd-472f-ba4b-9e0993fdd0a2&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058632282&signature=VBFgrYuId31ttIO-n49lw-dxXZG5X0_NFxq3JBPSP5Y&downloadName=Home_CreateRM.Default.png">
-<img src="https://file.notion.so/f/s/582309ec-dcd5-417e-8728-40f47cc61530/Home_CreateRM.Cate..png?id=10a4ddb0-47a1-46f8-9876-3ced7256bbee&table=block&spaceId=1c944271-6073-4a3a-810c-c28369cda247&expirationTimestamp=1684058673968&signature=26ty-KuksvnGspxQQs8XLY2LKMNsT_4Q_vrdG1xQ3XA&downloadName=Home_CreateRM.Cate..png">
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FBa2KW%2FbtsgzUvMFjE%2FTgNZhG4eywjyauWUZ248uK%2Fimg.png">
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fc5zCxG%2FbtsgvXNn0li%2F9l33guxCvfkQl787z5OOKK%2Fimg.png">
 
 ### 개발 기간📍
 
